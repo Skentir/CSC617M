@@ -15,16 +15,18 @@ def get_username():
 if __name__ == "__main__":
 
     while 1:
-        data =  InputStream(input(">>> "))
+        # data = InputStream(input(">>> "))
+        file = input("Input filename.txt: ")
+        with open(file) as f:
+            data = InputStream(f.read())
+
         # lexer
         lexer = MyGrammerLexer(data)
         stream = CommonTokenStream(lexer)
         stream.fill()
         for token in stream.tokens:
-            if token.text != '<EOF>':
+            if token.text != "<EOF>":
                 print(token.text, lexer.symbolicNames[token.type])
-        
-    file = input("Input file")
     
         # parser
         # parser = MyGrammerParser(stream)
