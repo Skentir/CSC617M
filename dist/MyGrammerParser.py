@@ -11,7 +11,7 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\16")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\17")
         buf.write("\7\4\2\t\2\3\2\3\2\3\2\2\2\3\2\2\2\2\5\2\4\3\2\2\2\4\5")
         buf.write("\7\2\2\3\5\3\3\2\2\2\2")
         return buf.getvalue()
@@ -33,7 +33,7 @@ class MyGrammerParser ( Parser ):
 
     symbolicNames = [ "<INVALID>", "KEYWORD", "INTEGER", "FRACTION", "PITCH", 
                       "ACCIDENTAL", "IDENTIFIER", "OPEN_BRACKET", "CLOSE_BRACKET", 
-                      "COMMA_SEP", "OPEN_PAR", "CLOSE_PAR", "WS" ]
+                      "COMMA_SEP", "OPEN_PAR", "CLOSE_PAR", "EQUAL", "WS" ]
 
     RULE_prog = 0
 
@@ -51,7 +51,8 @@ class MyGrammerParser ( Parser ):
     COMMA_SEP=9
     OPEN_PAR=10
     CLOSE_PAR=11
-    WS=12
+    EQUAL=12
+    WS=13
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)

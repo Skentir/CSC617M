@@ -1,4 +1,4 @@
-// Generated from /Users/gabminamedez/Desktop/CSC617M/MyGrammer.g4 by ANTLR 4.8
+// Generated from c:\Users\DeLL\OneDrive\Documents\GitHub\CSC617M\MyGrammer.g4 by ANTLR 4.8
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -18,7 +18,7 @@ public class MyGrammerParser extends Parser {
 	public static final int
 		KEYWORD=1, INTEGER=2, FRACTION=3, PITCH=4, ACCIDENTAL=5, IDENTIFIER=6, 
 		OPEN_BRACKET=7, CLOSE_BRACKET=8, COMMA_SEP=9, OPEN_PAR=10, CLOSE_PAR=11, 
-		WS=12;
+		EQUAL_OPER=12, WS=13;
 	public static final int
 		RULE_prog = 0;
 	private static String[] makeRuleNames() {
@@ -38,7 +38,7 @@ public class MyGrammerParser extends Parser {
 		return new String[] {
 			null, "KEYWORD", "INTEGER", "FRACTION", "PITCH", "ACCIDENTAL", "IDENTIFIER", 
 			"OPEN_BRACKET", "CLOSE_BRACKET", "COMMA_SEP", "OPEN_PAR", "CLOSE_PAR", 
-			"WS"
+			"EQUAL_OPER", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -122,7 +122,7 @@ public class MyGrammerParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\16\7\4\2\t\2\3\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\17\7\4\2\t\2\3\2"+
 		"\3\2\3\2\2\2\3\2\2\2\2\5\2\4\3\2\2\2\4\5\7\2\2\3\5\3\3\2\2\2\2";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());

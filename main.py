@@ -14,28 +14,27 @@ def get_username():
 
 if __name__ == "__main__":
 
-    while 1:
-        # data = InputStream(input(">>> "))
-        file = input("Input filename.txt: ")
-        with open(file) as f:
-            data = InputStream(f.read())
+    # data = InputStream(input(">>> "))
+    file = input("Input filename.sht: ")
+    with open(file + ".sht") as f:
+        data = InputStream(f.read())
 
-        # lexer
-        lexer = MyGrammerLexer(data)
-        stream = CommonTokenStream(lexer)
-        stream.fill()
-        for token in stream.tokens:
-            if token.text != "<EOF>":
-                print(token.text, lexer.symbolicNames[token.type])
+    # lexer
+    lexer = MyGrammerLexer(data)
+    stream = CommonTokenStream(lexer)
+    stream.fill()
+    for token in stream.tokens:
+        if token.text != "<EOF>":
+            print(token.text, lexer.symbolicNames[token.type])
+
+    # parser
+    # parser = MyGrammerParser(stream)
+    # tree = parser.expr()
+    # print(parser.getCurrentToken())
+    # evaluator
+    # visitor = MyGrammerVisitor()
+    # output = visitor.visit(tree)
     
-        # parser
-        # parser = MyGrammerParser(stream)
-        # tree = parser.expr()
-        # print(parser.getCurrentToken())
-        # evaluator
-        # visitor = MyGrammerVisitor()
-        # output = visitor.visit(tree)
-        
-        # printer = MyGrammerListener()
-        # walker = ParseTreeWalker()
-        # walker.walk(printer, tree)
+    # printer = MyGrammerListener()
+    # walker = ParseTreeWalker()
+    # walker.walk(printer, tree)

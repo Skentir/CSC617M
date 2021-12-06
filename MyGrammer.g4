@@ -24,4 +24,6 @@ OPEN_PAR: [(];
 
 CLOSE_PAR: [)];
 
+EQUAL_OPER: [=];
+
 WS: [ \t\n\r]+ -> skip;
