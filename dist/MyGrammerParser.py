@@ -33,7 +33,8 @@ class MyGrammerParser ( Parser ):
 
     symbolicNames = [ "<INVALID>", "KEYWORD", "INTEGER", "FRACTION", "PITCH", 
                       "ACCIDENTAL", "IDENTIFIER", "OPEN_BRACKET", "CLOSE_BRACKET", 
-                      "COMMA_SEP", "OPEN_PAR", "CLOSE_PAR", "EQUAL", "WS" ]
+                      "COMMA_SEP", "OPEN_PAR", "CLOSE_PAR", "EQUAL_OPER", 
+                      "WS" ]
 
     RULE_prog = 0
 
@@ -51,7 +52,7 @@ class MyGrammerParser ( Parser ):
     COMMA_SEP=9
     OPEN_PAR=10
     CLOSE_PAR=11
-    EQUAL=12
+    EQUAL_OPER=12
     WS=13
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):

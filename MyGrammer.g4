@@ -2,11 +2,11 @@ grammar MyGrammer;
 
 prog: EOF;
 
-KEYWORD: 'bpm' | 'staff' | 'measure' | 'accidental' | 'note' | 'repstart' | 'repend' | 'chord' | 'continuous';
+KEYWORD: 'bpm' | 'staff' | 'measure' | 'melody' | 'accidental' | 'note' | 'repstart' | 'repend' | 'chord' | 'continuous';
 
 INTEGER: [0-9]+;
 
-FRACTION: INTEGER'/'INTEGER;
+FRACTION: [1-9][0-9]*WS*'/'WS*[1-9][0-9]*;
 
 PITCH: [A-G];
 

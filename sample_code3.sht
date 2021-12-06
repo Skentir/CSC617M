@@ -1,0 +1,20 @@
+bpm(112)
+
+melody chorus {
+	note(A, 2, 1/4)
+	note(B, 2, 1/4)
+ continuous {
+ note(A, 2, 1/4)
+ chord((A, 2), (B, 2), 1/4)
+ note(B, 2, 1/4)
+ chord((A, 2), (B, 2), 1/4)
+ note(A, 2, 1/4)
+ }
+}
+
+
+staff(3,4){
+	repstart
+	chorus
+	repend
+}

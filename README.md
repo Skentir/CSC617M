@@ -1,7 +1,6 @@
 # CSC617M
 A custom programming language that simulates a music sheet and plays music.
 
-
 1. Clone this repository and go to its directory.
 
 2. Make a virtual environment using Python. Below are the steps:

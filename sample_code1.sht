@@ -1,0 +1,20 @@
+bpm(112)
+sample_chord1 = chord(note(A, 2), note(C, 2), note(D, 2), 1 / 4)
+sampleChord2 = chord(note(A, 2), 1/4)
+sample_note = note(A, 2, 1/4)
+ 
+melody chorus {
+	sample_note
+	sample_chord1
+	note(C, 2, 1/4)
+	note(G, 2, 1/4)
+	sampleChord2
+  continuous {
+  note(A, 2, 1/4)
+  chord((A, 2), (B, 2), 1/4)
+  note(B, 2, 1/4)
+  chord((A, 2), (B, 2), 1/4)
+  note(A, 2, 1/4)
+  }
+}
+ 

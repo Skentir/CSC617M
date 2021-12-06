@@ -1,0 +1,13 @@
+bpm(113)
+note1 = note(A, 2, 1/4)
+_DSD = note(B,3,1/5)
+staff(3, 4) {
+
+	measure {
+	accidental( _A, #B, C)
+	note(A, 2, 1/4)
+	accidental(A, B, F, G)
+	note(#A, 2, 1/4)
+	note(_B__, 2, 1/4)
+}
+}

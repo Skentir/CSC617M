@@ -1,0 +1,15 @@
+bpm(1000) 
+staff(3, 4) {
+	repstart
+	accidental( _A, #_B, C)
+	measure {
+	accidental( _A, #B, C)
+	note(A, 2, 1/4)
+	accidental(A, B, F, H)
+	note(A, 2, 1/4)
+	note(B, 2, 1/4)
+	}
+	repend
+	chorus
+	repend
+}
