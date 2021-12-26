@@ -14,10 +14,5 @@ class MyGrammerVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MyGrammerParser#expr.
-    def visitExpr(self, ctx:MyGrammerParser.ExprContext):
-        return self.visitChildren(ctx)
-
-
 
 del MyGrammerParser

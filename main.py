@@ -1,8 +1,9 @@
 import sys
 from antlr4 import *
+from antlr4.tree.Trees import Trees
 from dist.MyGrammerLexer import MyGrammerLexer
 from dist.MyGrammerParser import MyGrammerParser
-# from dist.MyGrammerVisitor import MyGrammerVisitor
+from dist.MyGrammerVisitor import MyGrammerVisitor
 from dist.MyGrammerListener import MyGrammerListener
 
 
@@ -10,6 +11,10 @@ def get_username():
     from pwd import getpwuid
     from os import getuid
     return getpwuid(getuid())[ 0 ]
+
+class MyGrammerPrintListener(MyGrammerListener):
+    def enterHi(self, ctx):
+        print("Hello: %s" % ctx.ID())
 
 
 if __name__ == "__main__":
@@ -28,13 +33,15 @@ if __name__ == "__main__":
             print(token.text, lexer.symbolicNames[token.type])
 
     # parser
-    # parser = MyGrammerParser(stream)
-    # tree = parser.expr()
-    # print(parser.getCurrentToken())
+    parser = MyGrammerParser(stream)
+    tree = parser.prog()
+    print(parser.getCurrentToken())
+    
+    print(tree.toStringTree())
     # evaluator
     # visitor = MyGrammerVisitor()
     # output = visitor.visit(tree)
     
-    # printer = MyGrammerListener()
+    # printer = MyGrammerPrintListener()
     # walker = ParseTreeWalker()
     # walker.walk(printer, tree)

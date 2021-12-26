@@ -85,6 +85,12 @@ class MyGrammerParser ( Parser ):
             if hasattr( listener, "exitProg" ):
                 listener.exitProg(self)
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitProg" ):
+                return visitor.visitProg(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
