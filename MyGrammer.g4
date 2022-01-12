@@ -21,6 +21,16 @@ expr_var: IDENTIFIER;
 expr_acc: ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
 expr_add_acc: ACCIDENTAL PITCH | ACCIDENTAL PITCH COMMA_SEP expr_add_acc | PITCH | PITCH COMMA_SEP expr_add_acc;
 
+// iterative
+declare_repeat: REPSTART expr declare_repeat_end | expr repeat_end_expr
+declare_repeat_end: repeat_end_expr | repeat_end_expr expr declare_repeat_end
+repeat_end_expr: REPEND OPEN_PAR INTEGER CLOSE_PAR | REPEND OPEN_PAR CLOSE_PAR
+
+// functions
+declare_melody: MELODY IDENTIFIER OPEN_BRACKET expr CLOSE_BRACKET
+declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET expr CLOSE_BRACKET
+declare_measures: MEASURE OPEN_BRACKET expr CLOSE_BRACKET
+
 KEYWORD: BPM | STAFF | MEASURE | MELODY | ACCIDENTAL_KEY | REPSTART | REPEND | CHORD | CONTINUOUS;
 
 BPM: 'bpm';
