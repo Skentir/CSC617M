@@ -6,7 +6,6 @@ from dist.MyGrammerParser import MyGrammerParser
 from dist.MyGrammerVisitor import MyGrammerVisitor
 from dist.MyGrammerListener import MyGrammerListener
 
-
 def get_username():
     from pwd import getpwuid
     from os import getuid

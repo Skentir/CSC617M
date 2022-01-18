@@ -1,8 +1,6 @@
 grammar MyGrammer;
 
-prog: (decl | expr)+;
-
-decl: bpm                                   # BPMDeclaration;
+prog: bpm (declare_note | declare_chord | declare_melody)* (declare_staff | expr_var)+;
 
 bpm: BPM OPEN_PAR INTEGER CLOSE_PAR;
 
@@ -22,14 +20,24 @@ expr_acc: ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
 expr_add_acc: ACCIDENTAL PITCH | ACCIDENTAL PITCH COMMA_SEP expr_add_acc | PITCH | PITCH COMMA_SEP expr_add_acc;
 
 // iterative
-declare_repeat: REPSTART expr declare_repeat_end | expr repeat_end_expr;
-declare_repeat_end: repeat_end_expr | repeat_end_expr expr declare_repeat_end;
+declare_repeat: REPSTART staff_block declare_repeat_end | staff_block repeat_end_expr;
+declare_repeat_end: repeat_end_expr | repeat_end_expr staff_block declare_repeat_end;
 repeat_end_expr: REPEND OPEN_PAR INTEGER CLOSE_PAR | REPEND OPEN_PAR CLOSE_PAR;
 
 // functions
-declare_melody: MELODY IDENTIFIER OPEN_BRACKET (expr)+ CLOSE_BRACKET;
-declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (expr)+ CLOSE_BRACKET;
-declare_measures: MEASURE OPEN_BRACKET (expr)+ CLOSE_BRACKET;
+declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (staff_block)+ CLOSE_BRACKET;
+
+staff_block: expr_acc staff_block | staff_block expr_acc | declare_repeat | declare_measures staff_block | staff_block declare_measures | declare_measures;
+
+declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
+
+// declaration expressions
+declare_note: IDENTIFIER EQUAL_OPER expr_note;
+declare_chord: IDENTIFIER EQUAL_OPER expr_chord;
+
+declare_melody: MELODY IDENTIFIER OPEN_BRACKET (declare_staff)+ CLOSE_BRACKET;
+
+declare_continuous: CONTINUOUS OPEN_BRACKET (expr)+ CLOSE_BRACKET;
 
 KEYWORD: BPM | STAFF | MEASURE | MELODY | ACCIDENTAL_KEY | REPSTART | REPEND | CHORD | CONTINUOUS;
 
