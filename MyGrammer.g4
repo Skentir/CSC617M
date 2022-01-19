@@ -11,7 +11,7 @@ expr: expr_note                             # NoteExpression
 
 expr_note: NOTE_VALUE OPEN_PAR PITCH COMMA_SEP INTEGER CLOSE_PAR | NOTE_VALUE OPEN_PAR PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED;
 
-expr_chord: CHORD OPEN_PAR expr_note expr_add_note COMMA_SEP FRACTION CLOSE_PAR;
+expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR;
 expr_add_note: COMMA_SEP expr_note | COMMA_SEP expr_note expr_add_note;
 
 expr_var: IDENTIFIER;
@@ -27,7 +27,9 @@ repeat_end_expr: REPEND OPEN_PAR INTEGER CLOSE_PAR | REPEND OPEN_PAR CLOSE_PAR;
 // functions
 declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (staff_block)+ CLOSE_BRACKET;
 
-staff_block: expr_acc staff_block | staff_block expr_acc | declare_repeat | declare_measures staff_block | staff_block declare_measures | declare_measures;
+// staff_block: expr_acc staff_block | staff_block expr_acc | declare_repeat | declare_measures staff_block | staff_block declare_measures | declare_measures;
+
+staff_block: expr_acc staff_block | staff_block expr_acc | REPSTART staff_block declare_repeat_end | staff_block repeat_end_expr | declare_measures staff_block | staff_block declare_measures | declare_measures;
 
 declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
 
