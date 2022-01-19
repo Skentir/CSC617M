@@ -15,3 +15,13 @@ repstart_A
 repstart_AA
 
 measure { (A_, 1) }
+
+staff (3,8){
+    measure {
+        sample_note
+        sample_chord1
+        half(C, 2)
+        half(G, 2)
+        sampleChord2
+    }
+}
