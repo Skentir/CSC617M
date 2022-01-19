@@ -20,22 +20,22 @@ CONTINUOUS: 'continuous';
 
 KEYWORD: BPM | STAFF | MEASURE | MELODY | ACCIDENTAL_KEY | REPSTART | REPEND | CHORD | CONTINUOUS;
 
-// DOUBLE: 'double';
+DOUBLE: 'double';
 
-// FULL: 'full';
+FULL: 'full';
 
-// HALF: 'half';
+HALF: 'half';
 
-// QUARTER: 'quarter';
+QUARTER: 'quarter';
 
-// EIGHTH: 'eighth';
+EIGHTH: 'eighth';
 
-// SIXTEENTH: 'sixteenth';
+SIXTEENTH: 'sixteenth';
 
 DOTTED: '*';
 
-// NOTE_VALUE: DOUBLE | FULL | HALF | QUARTER | EIGHTH | SIXTEENTH;
-NOTE_VALUE: 'double' | 'full' | 'half' | 'quarter' | 'eigth' | 'sixteenth';
+note_value: DOUBLE | FULL | HALF | QUARTER | EIGHTH | SIXTEENTH;
+// NOTE_VALUE: 'double' | 'full' | 'half' | 'quarter' | 'eigth' | 'sixteenth';
 
 INTEGER: [0-9]+;
 
@@ -81,7 +81,7 @@ expr: expr_note                             # NoteExpression
     | expr_var                              # VariableExpression
     | expr_acc                              # AccidentalExpression;
 
-expr_note: NOTE_VALUE OPEN_PAR PITCH COMMA_SEP INTEGER CLOSE_PAR | NOTE_VALUE OPEN_PAR PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED;
+expr_note: note_value OPEN_PAR PITCH COMMA_SEP INTEGER CLOSE_PAR | note_value OPEN_PAR PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED;
 
 //expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR;
 expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR;
