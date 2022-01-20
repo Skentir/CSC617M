@@ -64,7 +64,7 @@ WS: [ \t\n\r]+ -> skip;
 bpm: BPM OPEN_PAR INTEGER CLOSE_PAR;
 
 // prog: bpm (declare_note | declare_chord | declare_melody)* (declare_staff | expr_var)+;
-prog: bpm  (declare_note | declare_chord)* EOF;
+prog: bpm  (declare_note | declare_chord | declare_melody)*  (declare_staff | expr_var)+ EOF;
 // prog: bpm (declare_note | declare_chord)*;
 
 
