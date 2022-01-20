@@ -103,4 +103,8 @@ declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (
 
 // staff_block: expr_acc staff_block | staff_block expr_acc | declare_repeat | declare_measures staff_block | staff_block declare_measures | declare_measures;
 
-staff_block: expr_acc staff_block | staff_block expr_acc | REPSTART staff_block declare_repeat_end | staff_block repeat_end_expr | declare_measures staff_block | staff_block declare_measures | declare_measures;
+// staff_block: expr_acc staff_block | staff_block expr_acc | REPSTART staff_block declare_repeat_end | staff_block repeat_end_expr | declare_measures staff_block | staff_block declare_measures | declare_measures;
+// staff_block: REPSTART? staff_block repeat_end_expr (staff_block repeat_end_expr)*;
+// staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | REPSTART staff_block REPEND;
+staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | REPSTART repeat_block REPEND staff_block | staff_block REPSTART repeat_block REPEND | REPSTART repeat_block REPEND;
+repeat_block: expr_acc repeat_block | repeat_block expr_acc | declare_measures repeat_block | repeat_block declare_measures | declare_measures;

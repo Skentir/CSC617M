@@ -1,27 +1,54 @@
-a=note(_A, 2, 1/2)
+bpm(112)
+sample_note = quarter(A, 2)
+sampleChord2 = chord(double(A, 2), half(B, 1))
 
-(_A, 1)
-(#B, 69)
-1/4
-A_
-_A
-A_ _A   
-A__
-__A
-_AA
-A_AA
-A__A A__A
-repstart_A
-repstart_AA
+melody melody1 {
+    staff (4,2) {
+        measure {
+            sample_note
+        }
+    }
+}
 
-measure { (A_, 1) }
 
-staff (3,8){
+staff (3,8) {
     measure {
         sample_note
-        sample_chord1
         half(C, 2)
         half(G, 2)
         sampleChord2
     }
+}
+
+melody1
+
+staff (6,9) {
+    accidental(_C, #G, _A)
+    repstart
+    measure {
+        double(D, 2)
+        half(A, 1)
+        sampleChord2
+
+        continuous {
+            quarter(A, 2)
+            chord(half(A, 2), half(B, 2))
+            quarter(B, 2)
+        }
+    }
+    repend
+    repstart
+    measure {
+        double(D, 2)
+        half(A, 1)
+        sampleChord2
+
+        continuous {
+            quarter(A, 2)
+            chord(half(A, 2), half(B, 2))
+            quarter(B, 2)
+        }
+    }
+    repend
+    accidental(C, G, A)
 }
