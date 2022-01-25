@@ -1,6 +1,6 @@
-bpm(400)
+bpm(200)
 sample_note = quarter(A, 2)
-sample_note = quarter(A, 2)
+sample_kirs = quarter(A, 2)
 sampleChord2 = chord(double(A, 2), half(B, 4))
 
 melody melody1 {

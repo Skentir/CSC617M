@@ -9,7 +9,7 @@ from MusicNodes import *
 
 
 class MyVisitor(MyGrammerVisitor):
-    variables = []
+    variables = {}
 
     # def visitExpr_note(self, ctx: MyGrammerParser.Expr_chordContext):
     #     val = ctx.INTEGER()
@@ -50,24 +50,25 @@ class MyVisitor(MyGrammerVisitor):
 
     def visitDeclaredNotes(self, ctx):
         # DECLARED NOTES
-        declared_notes = {}
         for note in ctx:
             # Get all the DeclareNoteNodes
             temp = MyGrammerVisitor().visitDeclare_note(note)
 
-            if temp.identifier.getText() not in declared_notes:
-                pitch = temp.note.pitch
-                num = temp.note.num
-                declared_notes[temp.identifier.getText()] = (pitch, num)
+            if temp.identifier.getText() not in self.variables:
+                note_value = temp.note.note_value.getText()
+                pitch = temp.note.pitch.getText()
+                num = temp.note.num.getText()
+                dotted = temp.note.dotted
+                self.variables[temp.identifier.getText()] = (note_value, pitch,
+                                                             num, dotted)
             else:
                 line = temp.identifier.getSymbol().line
                 col = temp.identifier.getSymbol().column
-                print(
-                    "[%d,%d] Reassignment is not allowed. Use a different identifier."
-                    % (line, col))
+                raise Exception(
+                    "Reassignment is not allowed. Use a different identifier",
+                    line, col)
 
-        print(declared_notes)
-        return declared_notes
+        print("variables", self.variables)
 
     def visitDeclaredChords(self, ctx):
         print(ctx)
@@ -75,13 +76,14 @@ class MyVisitor(MyGrammerVisitor):
     def visit(self, node):
         # BPM Value
         print("bpm (" + str(node.bpm) + ")")
+
         # DECLARED NOTES
-        declared_notes = self.visitDeclaredNotes(
-            node.notes)  # Returns NoteExpression Objects
+        self.visitDeclaredNotes(node.notes)  # Returns NoteExpression Objects
         # DECLARE CHORDS
-        declared_chords = self.visitDeclaredChords(node.chords)
+        self.visitDeclaredChords(node.chords)
         # for chord in declared_chords:
         # TO DO: Chord
+        return "MIDI FILE"
 
 
 if __name__ == "__main__":
@@ -107,10 +109,12 @@ if __name__ == "__main__":
     # print(tree.toStringTree())
     # evaluator
     # print(type(tree), tree)
-    ast = MyGrammerVisitor().visitProg(tree)
-    # print("BPM", type(ast.bpm))
-    output = MyVisitor().visit(ast)
-    # print("yo", ast)
+    try:
+        ast = MyGrammerVisitor().visitProg(tree)
+        output = MyVisitor().visit(ast)
+    except Exception as err:
+        print("Caught Error: %s in line:%d col:%d" %
+              (err.args[0], err.args[1], err.args[2]))
 
     # printer = MyGrammerPrintListener()
     # walker = ParseTreeWalker()

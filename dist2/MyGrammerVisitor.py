@@ -17,16 +17,17 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#note_value.
     def visitNote_value(self, ctx: MyGrammerParser.Note_valueContext):
-        return self.visitChildren(ctx)
+        return ctx.getChild(0)
 
     # Visit a parse tree produced by MyGrammerParser#bpm.
     def visitBpm(self, ctx: MyGrammerParser.BpmContext):
-        val = ctx.INTEGER()  # TerminalNde INTEGER VALUE
+        val = ctx.INTEGER()
 
         if (int(val.getText()) > 300):
-            val = 300
-            # print("[line:%d,col:%d] BPM value exceeds 300" %
-            #       (ctx.line, ctx.column))
+            line = val.getSymbol().line
+            col = val.getSymbol().column
+
+            raise Exception("Invalid BPM value not in range 300", line, col)
 
         return val
 
@@ -64,7 +65,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
         # Access the expr_note production
         expr = ctx.expr_note()
         # Obtain the pitch and num values
-        note = self.visitNoteExpression(expr)
+        note = self.visitExpr_note(expr)
         # Create an instance of DeclareNoteNode
         node = DeclareNoteNode(ctx.IDENTIFIER(), note)
         return node
@@ -89,10 +90,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#NoteExpression.
     def visitNoteExpression(self, ctx: MyGrammerParser.NoteExpressionContext):
-        pitch = ctx.PITCH().getText()
-        num = int(ctx.INTEGER().getText())
-        node = NoteExpression(pitch, num)
-        return node
+        return self.visitChildren(ctx)
 
     # Visit a parse tree produced by MyGrammerParser#ChordExpression.
     def visitChordExpression(self,
@@ -111,7 +109,12 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#expr_note.
     def visitExpr_note(self, ctx: MyGrammerParser.Expr_noteContext):
-        return self.visitChildren(ctx)
+        note_value = self.visitNote_value(ctx.note_value())
+        pitch = ctx.PITCH()
+        num = ctx.INTEGER()
+        dotted = ctx.DOTTED() if ctx.DOTTED() else None
+        node = ExprNoteNode(note_value, pitch, num, dotted)
+        return node
 
     # Visit a parse tree produced by MyGrammerParser#expr_chord.
     def visitExpr_chord(self, ctx: MyGrammerParser.Expr_chordContext):
