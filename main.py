@@ -1,10 +1,10 @@
 import sys
 from antlr4 import *
 from antlr4.tree.Trees import Trees
-from dist.MyGrammerLexer import MyGrammerLexer
-from dist.MyGrammerParser import MyGrammerParser
-from dist.MyGrammerVisitor import MyGrammerVisitor
-from dist.MyGrammerListener import MyGrammerListener
+from dist2.MyGrammerLexer import MyGrammerLexer
+from dist2.MyGrammerParser import MyGrammerParser
+from dist2.MyGrammerVisitor import MyGrammerVisitor
+from dist2.MyGrammerListener import MyGrammerListener
 from MusicNodes import *
 
 
@@ -78,6 +78,8 @@ class MyVisitor(MyGrammerVisitor):
             # Replace this with midi code
             out = "note(" + note.note.pitch + " , " + str(note.note.num) + ")"
             print(out)
+
+        declared_chords = []
 
 
 if __name__ == "__main__":
