@@ -25,6 +25,16 @@ class MyVisitor(MyGrammerVisitor):
             print("Error: BPM value exceeds 300")
         return self.visitChildren(ctx)
         # return int(val2)
+
+    def visitExpr_note(self, ctx:MyGrammerParser.Expr_chordContext):
+        val = ctx.INTEGER()
+        val2 = val.getText()
+
+        if not (int(val2) != 0 and (int(val2) & (int(val2) - 1)) == 0):
+            print(type(val), val2)
+            print("Error: Note argument is not a power of 2")
+
+        return self.visitChildren(ctx)
     
 
 

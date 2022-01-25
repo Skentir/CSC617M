@@ -2,7 +2,7 @@
 
 bpm(400)
 sample_note = quarter(A, 2)
-sampleChord2 = chord(double(A, 2), half(B, 1))
+sampleChord2 = chord(double(A, 2), half(B, 4))
 
 melody melody1 {
     staff (4,2) {
@@ -16,7 +16,7 @@ melody melody1 {
 staff (3,8) {
     measure {
         sample_note
-        half(C, 2)
+        half(C, 6)
         half(G, 2)
         sampleChord2
     }
@@ -46,9 +46,9 @@ staff (6,9) {
         sampleChord2
 
         continuous {
-            quarter(A, 2)
-            chord(half(A, 2), half(B, 2))
-            quarter(B, 2)
+            quarter(A, 7)
+            chord(half(A, 2), half(B, 1))
+            quarter(B, 5)
         }
     }
     repend
