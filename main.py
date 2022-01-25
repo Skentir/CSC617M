@@ -11,9 +11,9 @@ class MyVisitor(MyGrammerVisitor):
     def visitBpm(self, ctx:MyGrammerParser.BpmContext):
         val = ctx.INTEGER() # TerminalNde
         
-        sourceInterval = ctx.getSourceInterval();
-        firstToken = CommonTokenStream.getToken(0,3);
-        line = firstToken.getLine();
+        # sourceInterval = ctx.getSourceInterval();
+        # firstToken = CommonTokenStream.getToken(0,3);
+        # line = firstToken.getLine();
         
         
         val2 = val.getText()
@@ -22,6 +22,7 @@ class MyVisitor(MyGrammerVisitor):
         if(int(val2)>300):
             # errorlist.append("Error: BPM value exceeds 300")
             print(type(val), val2)
+            print("Error: BPM value exceeds 300")
         return self.visitChildren(ctx)
         # return int(val2)
     
