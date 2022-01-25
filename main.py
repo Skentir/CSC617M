@@ -56,8 +56,9 @@ class MyVisitor(MyGrammerVisitor):
             temp = MyGrammerVisitor().visitDeclare_note(note)
 
             if temp.identifier.getText() not in declared_notes:
-                declared_notes[temp.identifier.getText()] = (temp.note.pitch,
-                                                             temp.note.num)
+                pitch = temp.note.pitch
+                num = temp.note.num
+                declared_notes[temp.identifier.getText()] = (pitch, num)
             else:
                 line = temp.identifier.getSymbol().line
                 col = temp.identifier.getSymbol().column
