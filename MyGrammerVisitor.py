@@ -9,18 +9,44 @@ else:
 
 class MyGrammerVisitor(ParseTreeVisitor):
 
-    # Visit a parse tree produced by MyGrammerParser#prog.
-    def visitProg(self, ctx:MyGrammerParser.ProgContext):
+    # Visit a parse tree produced by MyGrammerParser#keyword.
+    def visitKeyword(self, ctx:MyGrammerParser.KeywordContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MyGrammerParser#BPMDeclaration.
-    def visitBPMDeclaration(self, ctx:MyGrammerParser.BPMDeclarationContext):
+    # Visit a parse tree produced by MyGrammerParser#note_value.
+    def visitNote_value(self, ctx:MyGrammerParser.Note_valueContext):
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by MyGrammerParser#bpm.
     def visitBpm(self, ctx:MyGrammerParser.BpmContext):
+
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MyGrammerParser#declare_note.
+    def visitDeclare_note(self, ctx:MyGrammerParser.Declare_noteContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MyGrammerParser#declare_chord.
+    def visitDeclare_chord(self, ctx:MyGrammerParser.Declare_chordContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MyGrammerParser#declare_melody.
+    def visitDeclare_melody(self, ctx:MyGrammerParser.Declare_melodyContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MyGrammerParser#declare_continuous.
+    def visitDeclare_continuous(self, ctx:MyGrammerParser.Declare_continuousContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MyGrammerParser#declare_measures.
+    def visitDeclare_measures(self, ctx:MyGrammerParser.Declare_measuresContext):
         return self.visitChildren(ctx)
 
 
@@ -89,18 +115,18 @@ class MyGrammerVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MyGrammerParser#declare_melody.
-    def visitDeclare_melody(self, ctx:MyGrammerParser.Declare_melodyContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by MyGrammerParser#declare_staff.
     def visitDeclare_staff(self, ctx:MyGrammerParser.Declare_staffContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MyGrammerParser#declare_measures.
-    def visitDeclare_measures(self, ctx:MyGrammerParser.Declare_measuresContext):
+    # Visit a parse tree produced by MyGrammerParser#staff_block.
+    def visitStaff_block(self, ctx:MyGrammerParser.Staff_blockContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MyGrammerParser#repeat_block.
+    def visitRepeat_block(self, ctx:MyGrammerParser.Repeat_blockContext):
         return self.visitChildren(ctx)
 
 

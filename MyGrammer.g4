@@ -18,7 +18,7 @@ CHORD: 'chord';
 
 CONTINUOUS: 'continuous';
 
-KEYWORD: BPM | STAFF | MEASURE | MELODY | ACCIDENTAL_KEY | REPSTART | REPEND | CHORD | CONTINUOUS;
+keyword: BPM | STAFF | MEASURE | MELODY | ACCIDENTAL_KEY | REPSTART | REPEND | CHORD | CONTINUOUS;
 
 DOUBLE: 'double';
 
@@ -66,6 +66,7 @@ bpm: BPM OPEN_PAR INTEGER CLOSE_PAR;
 // prog: bpm (declare_note | declare_chord | declare_melody)* (declare_staff | expr_var)+;
 prog: bpm  (declare_note | declare_chord | declare_melody)*  (declare_staff | expr_var)+ EOF;
 // prog: bpm (declare_note | declare_chord)*;
+
 
 
 //Declaration

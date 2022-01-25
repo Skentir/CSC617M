@@ -8,21 +8,21 @@ else:
 # This class defines a complete listener for a parse tree produced by MyGrammerParser.
 class MyGrammerListener(ParseTreeListener):
 
-    # Enter a parse tree produced by MyGrammerParser#prog.
-    def enterProg(self, ctx:MyGrammerParser.ProgContext):
+    # Enter a parse tree produced by MyGrammerParser#keyword.
+    def enterKeyword(self, ctx:MyGrammerParser.KeywordContext):
         pass
 
-    # Exit a parse tree produced by MyGrammerParser#prog.
-    def exitProg(self, ctx:MyGrammerParser.ProgContext):
+    # Exit a parse tree produced by MyGrammerParser#keyword.
+    def exitKeyword(self, ctx:MyGrammerParser.KeywordContext):
         pass
 
 
-    # Enter a parse tree produced by MyGrammerParser#BPMDeclaration.
-    def enterBPMDeclaration(self, ctx:MyGrammerParser.BPMDeclarationContext):
+    # Enter a parse tree produced by MyGrammerParser#note_value.
+    def enterNote_value(self, ctx:MyGrammerParser.Note_valueContext):
         pass
 
-    # Exit a parse tree produced by MyGrammerParser#BPMDeclaration.
-    def exitBPMDeclaration(self, ctx:MyGrammerParser.BPMDeclarationContext):
+    # Exit a parse tree produced by MyGrammerParser#note_value.
+    def exitNote_value(self, ctx:MyGrammerParser.Note_valueContext):
         pass
 
 
@@ -32,6 +32,51 @@ class MyGrammerListener(ParseTreeListener):
 
     # Exit a parse tree produced by MyGrammerParser#bpm.
     def exitBpm(self, ctx:MyGrammerParser.BpmContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#declare_note.
+    def enterDeclare_note(self, ctx:MyGrammerParser.Declare_noteContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#declare_note.
+    def exitDeclare_note(self, ctx:MyGrammerParser.Declare_noteContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#declare_chord.
+    def enterDeclare_chord(self, ctx:MyGrammerParser.Declare_chordContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#declare_chord.
+    def exitDeclare_chord(self, ctx:MyGrammerParser.Declare_chordContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#declare_melody.
+    def enterDeclare_melody(self, ctx:MyGrammerParser.Declare_melodyContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#declare_melody.
+    def exitDeclare_melody(self, ctx:MyGrammerParser.Declare_melodyContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#declare_continuous.
+    def enterDeclare_continuous(self, ctx:MyGrammerParser.Declare_continuousContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#declare_continuous.
+    def exitDeclare_continuous(self, ctx:MyGrammerParser.Declare_continuousContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#declare_measures.
+    def enterDeclare_measures(self, ctx:MyGrammerParser.Declare_measuresContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#declare_measures.
+    def exitDeclare_measures(self, ctx:MyGrammerParser.Declare_measuresContext):
         pass
 
 
@@ -152,15 +197,6 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MyGrammerParser#declare_melody.
-    def enterDeclare_melody(self, ctx:MyGrammerParser.Declare_melodyContext):
-        pass
-
-    # Exit a parse tree produced by MyGrammerParser#declare_melody.
-    def exitDeclare_melody(self, ctx:MyGrammerParser.Declare_melodyContext):
-        pass
-
-
     # Enter a parse tree produced by MyGrammerParser#declare_staff.
     def enterDeclare_staff(self, ctx:MyGrammerParser.Declare_staffContext):
         pass
@@ -170,12 +206,21 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MyGrammerParser#declare_measures.
-    def enterDeclare_measures(self, ctx:MyGrammerParser.Declare_measuresContext):
+    # Enter a parse tree produced by MyGrammerParser#staff_block.
+    def enterStaff_block(self, ctx:MyGrammerParser.Staff_blockContext):
         pass
 
-    # Exit a parse tree produced by MyGrammerParser#declare_measures.
-    def exitDeclare_measures(self, ctx:MyGrammerParser.Declare_measuresContext):
+    # Exit a parse tree produced by MyGrammerParser#staff_block.
+    def exitStaff_block(self, ctx:MyGrammerParser.Staff_blockContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#repeat_block.
+    def enterRepeat_block(self, ctx:MyGrammerParser.Repeat_blockContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#repeat_block.
+    def exitRepeat_block(self, ctx:MyGrammerParser.Repeat_blockContext):
         pass
 
 

@@ -6,18 +6,30 @@ from dist.MyGrammerParser import MyGrammerParser
 from dist.MyGrammerVisitor import MyGrammerVisitor
 from dist.MyGrammerListener import MyGrammerListener
 
-def get_username():
-    from pwd import getpwuid
-    from os import getuid
-    return getpwuid(getuid())[ 0 ]
+class MyVisitor(MyGrammerVisitor):
+    # errorlist = []
+    def visitBpm(self, ctx:MyGrammerParser.BpmContext):
+        val = ctx.INTEGER() # TerminalNde
+        
+        sourceInterval = ctx.getSourceInterval();
+        firstToken = CommonTokenStream.getToken(0,3);
+        line = firstToken.getLine();
+        
+        
+        val2 = val.getText()
+        # accept, depth, getAltNumber, getPayload, getRuleContext, getRuleIndex, getText, isEmpty, setAltNumber, setParent, toString, toString, toString, toString, toString, toStringTree, toStringTree, toStringTree
 
-class MyGrammerPrintListener(MyGrammerListener):
-    def enterHi(self, ctx):
-        print("Hello: %s" % ctx.ID())
+        if(int(val2)>300):
+            # errorlist.append("Error: BPM value exceeds 300")
+            print(type(val), val2)
+        return self.visitChildren(ctx)
+        # return int(val2)
+    
+
 
 
 if __name__ == "__main__":
-
+    
     # data = InputStream(input(">>> "))
     file = input("Input filename.sht: ")
     with open(file + ".sht") as f:
@@ -26,20 +38,21 @@ if __name__ == "__main__":
     # lexer
     lexer = MyGrammerLexer(data)
     stream = CommonTokenStream(lexer)
-    stream.fill()
-    for token in stream.tokens:
-        if token.text != "<EOF>":
-            print(token.text, lexer.symbolicNames[token.type])
+    # stream.fill()
+    # for token in stream.tokens:
+    #     if token.text != "<EOF>":
+    #         print(token.text, lexer.symbolicNames[token.type])
 
     # parser
     parser = MyGrammerParser(stream)
     tree = parser.prog()
-    print(parser.getCurrentToken())
+    # print(parser.getCurrentToken())
     
-    print(tree.toStringTree())
+    # print(tree.toStringTree())
     # evaluator
-    # visitor = MyGrammerVisitor()
-    # output = visitor.visit(tree)
+    visitor = MyVisitor()
+    output = visitor.visit(tree)
+    print(output)
     
     # printer = MyGrammerPrintListener()
     # walker = ParseTreeWalker()
