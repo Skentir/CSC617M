@@ -1,10 +1,13 @@
+from typing import Any
+
+
 class ProgNode():
     def __init__(self,
                  bpm,
                  notes=None,
                  chords=None,
                  melodies=None,
-                 staffs=None):
+                 staffs=Any):
         self.bpm = bpm
         self.notes = notes
         self.chords = chords
@@ -15,7 +18,7 @@ class ProgNode():
 class DeclareNoteNode():
     def __init__(self, identifier, note):
         self.identifier = str(identifier)
-        self.note = note
+        self.note = note  #NoteExpression
 
 
 class NoteExpression():

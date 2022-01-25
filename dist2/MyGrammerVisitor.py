@@ -21,7 +21,14 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#bpm.
     def visitBpm(self, ctx: MyGrammerParser.BpmContext):
-        return self.visitChildren(ctx)
+        val = ctx.INTEGER()  # TerminalNde INTEGER VALUE
+
+        if (int(val.getText()) > 300):
+            val = 300
+            # print("[line:%d,col:%d] BPM value exceeds 300" %
+            #       (ctx.line, ctx.column))
+
+        return val
 
     # Visit a parse tree produced by MyGrammerParser#prog.
     def visitProg(self, ctx: MyGrammerParser.ProgContext):
@@ -31,12 +38,11 @@ class MyGrammerVisitor(ParseTreeVisitor):
         staffs = []
         melodies = []
 
-        # print(node.bpm)
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
-            print(node_type, child_node)
+            # print(node_type, child_node)
             if node_type == "BpmContext":
-                bpm = child_node
+                bpm = self.visitBpm(child_node)
             elif node_type == "Declare_noteContext":
                 notes.append(child_node)
             elif node_type == "Declare_chordContext":

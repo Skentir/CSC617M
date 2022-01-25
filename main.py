@@ -11,19 +11,19 @@ from MusicNodes import *
 class MyVisitor(MyGrammerVisitor):
     variables = []
 
-    def visitBpm(self, ctx: MyGrammerParser.BpmContext):
-        val = ctx.INTEGER()  # TerminalNde INTEGER VALUE
-        val2 = val.getText()
-        # accept, depth, getAltNumber, getPayload, getRuleContext, getRuleIndex, getText, isEmpty, setAltNumber, setParent, toString, toString, toString, toString, toString, toStringTree, toStringTree, toStringTree
+    # def visitBpm(self, ctx: MyGrammerParser.BpmContext):
+    #     val = ctx.INTEGER()  # TerminalNde INTEGER VALUE
+    #     val2 = val.getText()
+    #     # accept, depth, getAltNumber, getPayload, getRuleContext, getRuleIndex, getText, isEmpty, setAltNumber, setParent, toString, toString, toString, toString, toString, toStringTree, toStringTree, toStringTree
 
-        if (int(val2) > 300):
-            # errorlist.append("Error: BPM value exceeds 300")
-            # print(type(val), val2)
-            print("[line:%d,col:%d] BPM value exceeds 300" %
-                  (val.getPayload().line, val.getPayload().column))
-        # print(val2)
-        # return value
-        return int(val2)
+    #     if (int(val2) > 300):
+    #         # errorlist.append("Error: BPM value exceeds 300")
+    #         # print(type(val), val2)
+    #         print("[line:%d,col:%d] BPM value exceeds 300" %
+    #               (val.getPayload().line, val.getPayload().column))
+    #     # print(val2)
+    #     # return value
+    #     return int(val2)
 
     # def visitExpr_note(self, ctx: MyGrammerParser.Expr_chordContext):
     #     val = ctx.INTEGER()
@@ -61,16 +61,10 @@ class MyVisitor(MyGrammerVisitor):
     #         print("Error: Note argument is not a power of 2 (" +
     #               str(note_value_line) + "," + str(note_value_column) + ")")
     #     return self.visitChildren(ctx)
-
-    def visit(self, node):
-
-        if type(node) == ProgNode:
-            # Get the BPM value
-            out = self.visitBpm(node.bpm)
-            print("bpm (" + str(out) + ")")
-
+    def visitDeclaredNotes(self, ctx):
+        # DECLARED NOTES
         declared_notes = []
-        for note in node.notes:
+        for note in ctx:
             # Get all the DeclareNoteNodes
             declared_notes.append(MyGrammerVisitor().visitDeclare_note(note))
 
@@ -79,9 +73,20 @@ class MyVisitor(MyGrammerVisitor):
             out = note.identifier + " = note(" + note.note.pitch + " , " + str(
                 note.note.num) + ")"
             print(out)
+        return declared_notes
 
-        declared_chords = []
-        print(node.chords)
+    def visitDeclaredChords(self, ctx):
+        print(ctx)
+
+    def visit(self, node):
+
+        # if type(node) == ProgNode:
+        # BPM Value
+        print("bpm (" + str(node.bpm) + ")")
+        # DECLARED NOTES
+        declared_notes = self.visitDeclaredNotes(node.notes)
+        # DECLARE CHORDS
+        declared_chords = self.visitDeclaredChords(node.chords)
         # for chord in declared_chords:
         # TO DO: Chord
 
