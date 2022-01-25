@@ -11,20 +11,6 @@ from MusicNodes import *
 class MyVisitor(MyGrammerVisitor):
     variables = []
 
-    # def visitBpm(self, ctx: MyGrammerParser.BpmContext):
-    #     val = ctx.INTEGER()  # TerminalNde INTEGER VALUE
-    #     val2 = val.getText()
-    #     # accept, depth, getAltNumber, getPayload, getRuleContext, getRuleIndex, getText, isEmpty, setAltNumber, setParent, toString, toString, toString, toString, toString, toStringTree, toStringTree, toStringTree
-
-    #     if (int(val2) > 300):
-    #         # errorlist.append("Error: BPM value exceeds 300")
-    #         # print(type(val), val2)
-    #         print("[line:%d,col:%d] BPM value exceeds 300" %
-    #               (val.getPayload().line, val.getPayload().column))
-    #     # print(val2)
-    #     # return value
-    #     return int(val2)
-
     # def visitExpr_note(self, ctx: MyGrammerParser.Expr_chordContext):
     #     val = ctx.INTEGER()
     #     val2 = val.getText()
@@ -61,30 +47,36 @@ class MyVisitor(MyGrammerVisitor):
     #         print("Error: Note argument is not a power of 2 (" +
     #               str(note_value_line) + "," + str(note_value_column) + ")")
     #     return self.visitChildren(ctx)
+
     def visitDeclaredNotes(self, ctx):
         # DECLARED NOTES
-        declared_notes = []
+        declared_notes = {}
         for note in ctx:
             # Get all the DeclareNoteNodes
-            declared_notes.append(MyGrammerVisitor().visitDeclare_note(note))
+            temp = MyGrammerVisitor().visitDeclare_note(note)
 
-        for note in declared_notes:
-            # Replace this with midi code
-            out = note.identifier + " = note(" + note.note.pitch + " , " + str(
-                note.note.num) + ")"
-            print(out)
+            if temp.identifier.getText() not in declared_notes:
+                declared_notes[temp.identifier.getText()] = (temp.note.pitch,
+                                                             temp.note.num)
+            else:
+                line = temp.identifier.getSymbol().line
+                col = temp.identifier.getSymbol().column
+                print(
+                    "[%d,%d] Reassignment is not allowed. Use a different identifier."
+                    % (line, col))
+
+        print(declared_notes)
         return declared_notes
 
     def visitDeclaredChords(self, ctx):
         print(ctx)
 
     def visit(self, node):
-
-        # if type(node) == ProgNode:
         # BPM Value
         print("bpm (" + str(node.bpm) + ")")
         # DECLARED NOTES
-        declared_notes = self.visitDeclaredNotes(node.notes)
+        declared_notes = self.visitDeclaredNotes(
+            node.notes)  # Returns NoteExpression Objects
         # DECLARE CHORDS
         declared_chords = self.visitDeclaredChords(node.chords)
         # for chord in declared_chords:

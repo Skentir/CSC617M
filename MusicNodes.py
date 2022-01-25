@@ -17,11 +17,11 @@ class ProgNode():
 
 class DeclareNoteNode():
     def __init__(self, identifier, note):
-        self.identifier = str(identifier)
+        self.identifier = identifier
         self.note = note  #NoteExpression
 
 
 class NoteExpression():
     def __init__(self, pitch, num):
-        self.pitch = str(pitch)
-        self.num = int(num)
+        self.pitch = pitch
+        self.num = num

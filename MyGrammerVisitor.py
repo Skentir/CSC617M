@@ -60,7 +60,8 @@ class MyGrammerVisitor(ParseTreeVisitor):
         # Obtain the pitch and num values
         note = self.visitNoteExpression(expr)
         # Create an instance of DeclareNoteNode
-        node = DeclareNoteNode(ctx.IDENTIFIER().getText(), note)
+        print(ctx.IDENTIFIER)
+        node = DeclareNoteNode(ctx.IDENTIFIER(), note)
         return node
 
     # Visit a parse tree produced by MyGrammerParser#declare_chord.
