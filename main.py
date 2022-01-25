@@ -76,9 +76,8 @@ class MyVisitor(MyGrammerVisitor):
 
         for note in declared_notes:
             # Replace this with midi code
-            out = str(
-                note.identifier) + " = note(" + note.note.pitch + " , " + str(
-                    note.note.num) + ")"
+            out = note.identifier + " = note(" + note.note.pitch + " , " + str(
+                note.note.num) + ")"
             print(out)
 
         declared_chords = []
