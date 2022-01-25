@@ -6,41 +6,40 @@ from dist.MyGrammerParser import MyGrammerParser
 from dist.MyGrammerVisitor import MyGrammerVisitor
 from dist.MyGrammerListener import MyGrammerListener
 
+
 class MyVisitor(MyGrammerVisitor):
     # errorlist = []
-    def visitBpm(self, ctx:MyGrammerParser.BpmContext):
-        val = ctx.INTEGER() # TerminalNde
-        
+    def visitBpm(self, ctx: MyGrammerParser.BpmContext):
+        val = ctx.INTEGER()  # TerminalNde
         # sourceInterval = ctx.getSourceInterval();
         # firstToken = CommonTokenStream.getToken(0,3);
         # line = firstToken.getLine();
-        
-        
+
         val2 = val.getText()
         # accept, depth, getAltNumber, getPayload, getRuleContext, getRuleIndex, getText, isEmpty, setAltNumber, setParent, toString, toString, toString, toString, toString, toStringTree, toStringTree, toStringTree
 
-        if(int(val2)>300):
+        if (int(val2) > 300):
             # errorlist.append("Error: BPM value exceeds 300")
-            print(type(val), val2)
-            print("Error: BPM value exceeds 300")
+            # print(type(val), val2)
+            print("[line:%d,col:%d] BPM value exceeds 300" %
+                  (val.getPayload().line, val.getPayload().column))
         return self.visitChildren(ctx)
         # return int(val2)
 
-    def visitExpr_note(self, ctx:MyGrammerParser.Expr_chordContext):
+    def visitExpr_note(self, ctx: MyGrammerParser.Expr_chordContext):
         val = ctx.INTEGER()
         val2 = val.getText()
 
         if not (int(val2) != 0 and (int(val2) & (int(val2) - 1)) == 0):
-            print(type(val), val2)
-            print("Error: Note argument is not a power of 2")
+            # print(type(val), val2)
+            print("[line:%d,col:%d] Note argument is not a power of 2" %
+                  (val.getPayload().line, val.getPayload().column))
 
         return self.visitChildren(ctx)
-    
-
 
 
 if __name__ == "__main__":
-    
+
     # data = InputStream(input(">>> "))
     file = input("Input filename.sht: ")
     with open(file + ".sht") as f:
@@ -58,13 +57,13 @@ if __name__ == "__main__":
     parser = MyGrammerParser(stream)
     tree = parser.prog()
     # print(parser.getCurrentToken())
-    
+
     # print(tree.toStringTree())
     # evaluator
     visitor = MyVisitor()
     output = visitor.visit(tree)
     print(output)
-    
+
     # printer = MyGrammerPrintListener()
     # walker = ParseTreeWalker()
     # walker.walk(printer, tree)
