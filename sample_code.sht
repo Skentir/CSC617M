@@ -6,7 +6,26 @@ sampleChord2 = chord(double(A, 2), half(B, 4), double(C,5))
 
 
 staff (3,8) {
-    accidental(_C, #G, _A)
+    accidental(_C, G, #A)
+    measure {
+        sample_note
+        half(C, 6)
+        half(G, 2)
+        chord(double(A, 2), half(B, 4), double(C,5))
+        sampleChord2
+    }
+    accidental(C, _G, A)
+    measure {
+        sample_note
+        half(C, 6)
+        half(G, 2)
+        chord(double(A, 2), half(B, 4), double(C,5))
+        sampleChord2
+    }
+}
+
+
+staff (3,8) {
     measure {
         sample_note
         half(C, 6)

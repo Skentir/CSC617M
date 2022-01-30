@@ -4,11 +4,22 @@ from MusicNodes import *
 from music21 import *
 
 
+def printExprNote(note:ExprNoteNode):
+    print(note.note_value, note.pitch,note.num, note.dotted)
+    
+def printExprChord(chord:ExprChordNode):
+    print("chord (")
+    for note in chord.notes:
+        printExprNote(note)
+    print(")")
+
+
 class MusicEvaluator(MyGrammerVisitor):
     variables = {}
     music_stream = stream.Stream()
-   
-    def visitDeclaredNotes(self, ctx: MyGrammerParser.Declare_noteContext):
+
+    
+    def evaluateDeclaredNotes(self, ctx: MyGrammerParser.Declare_noteContext):
         # DECLARED NOTES
         for note in ctx:
             # Get all the DeclareNoteNodes
@@ -34,7 +45,7 @@ class MusicEvaluator(MyGrammerVisitor):
         # print("variables", self.variables)
         return self.variables
 
-    def visitDeclaredChords(self, ctx: MyGrammerParser.Declare_chordContext):
+    def evaluateDeclaredChords(self, ctx: MyGrammerParser.Declare_chordContext):
 
         #declare a list 
         notes = []
@@ -61,11 +72,11 @@ class MusicEvaluator(MyGrammerVisitor):
                     "Reassignment is not allowed. Use a different identifier",
                     line, col)
 
-        print(self.variables)
+        # print(self.variables)
         #return self.variables
 
 
-    def visitDeclaredStaffs(self, ctx: MyGrammerParser.Declare_staffContext):
+    def evaluateDeclaredStaffs(self, ctx: MyGrammerParser.Declare_staffContext):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
 
         for i in ctx:
@@ -74,37 +85,34 @@ class MusicEvaluator(MyGrammerVisitor):
             top = staff.beats_per_measure
             bottom = staff.note_value
             
+            for expr in staff.expressions:
+                for x in expr:
+                    if  isinstance (x, DeclareMeasuresNode):
+                        for m_expr in x.expressions:
+                            if isinstance(m_expr, ExprNoteNode):
+                                printExprNote(m_expr)
+                            elif isinstance(m_expr, ExprChordNode):
+                                printExprChord(m_expr)
+                    elif isinstance(x, AccidentalExpressionNode):
+                        print("accidental")
+                        for acc_expr in x.accidentals:
+                            print(acc_expr.accidental, acc_expr.pitch)
+
             # Check the contents of each staff
-            print("staff blocks",len(staff.staff_blocks), " found") # Always 1? 
-
-            for j in staff.staff_blocks:
-                block = MyGrammerVisitor().visitStaff_block(j)
-                # print("evaluator acc",block.accidentals)
-                # print("evaluator dec_measure",block.measures)
-                # print("evaluator reps",block.repeats)
-
-                # Metadata of the staff block
-                # for child in j.getChildren(): 
-                    # k = child.__class__.__name__
-                    # print(k)
-                    # if k == "Declare_measuresContext":
-                    #     print("meesur")
-                    #     # self.visitDeclare_measures(top, bottom, k)
-                    # elif k == "Expr_accContext":
-                    #     print("accidental")
-                    # elif k == "Staff_blockContext":
-                    #     print("another staff block")
+            # print("staff blocks",len(staff.staff_blocks), " found") # Always 1? 
+    
+            
     
     # def visitDeclaredMeasure(top,bottom,notes):
     #     pass
 
-    def visit(self, node):
+    def evaluate(self, node):
         # BPM Value
         notes = []
         print("bpm (" + str(node.bpm) + ")")
 
         # DECLARED NOTES
-        note_vars = self.visitDeclaredNotes(node.notes)  # Returns NoteExpression Objects
+        note_vars = self.evaluateDeclaredNotes(node.notes)  # Returns NoteExpression Objects
         
         for x in note_vars:
             num  = note_vars[x][2]
@@ -133,11 +141,11 @@ class MusicEvaluator(MyGrammerVisitor):
 
 
         # DECLARE CHORDS
-        self.visitDeclaredChords(node.chords)
+        self.evaluateDeclaredChords(node.chords)
         # for chord in declared_chords:
         # TO DO: Chord
 
-        self.visitDeclaredStaffs(node.staffs)
+        self.evaluateDeclaredStaffs(node.staffs)
 
 
         #add to stream

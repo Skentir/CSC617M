@@ -38,18 +38,19 @@ class ExprChordNode():
         self.notes = notes
 
 class DeclareStaffNode():
-    def __init__(self, beats_per_measure, staff_blocks, note_value, expressions):
-        self.staff_blocks = staff_blocks
+    def __init__(self, beats_per_measure, expressions, note_value):
         self.beats_per_measure= beats_per_measure
         self.note_value = note_value
-        self.expressions = expressions
-
-class StaffBlockNode():
-    def __init__(self, accidentals, measures, repeats):
-        self.accidentals = accidentals
-        self.measures = measures
-        self.repeats = repeats
+        self.expressions = expressions # StaffBlocks or Expr_var of melody
 
 class DeclareMeasuresNode():
     def __init__(self, expressions):
         self.expressions = expressions
+
+class AccidentalExpressionNode():
+    def __init__(self, accidentals):
+        self.accidentals = accidentals
+class AccidentalNode():
+    def __init__(self, pitch, accidental=None):
+        self.accidental = accidental
+        self.pitch = pitch

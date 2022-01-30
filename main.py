@@ -43,7 +43,7 @@ if __name__ == "__main__":
         try:
             
             ast = MyGrammerVisitor().visitProg(tree)
-            output = MusicEvaluator().visit(ast)
+            output = MusicEvaluator().evaluate(ast)
         
         except Exception as err:
             print("Caught Error: %s in line:%d col:%d" %
