@@ -1,15 +1,8 @@
-bpm(200)
+bpm(300)
 sample_note = quarter(A, 2)
 sample_kirs = quarter(A, 2)
-sampleChord2 = chord(double(A, 2), half(B, 4))
+sampleChord2 = chord(double(A, 2), half(B, 4), double(C,5))
 
-melodyz melody1 {
-    staff (4,2) {
-        measure {
-            sample_note
-        }
-    }
-}
 
 
 staff (3,8) {
@@ -21,35 +14,3 @@ staff (3,8) {
     }
 }
 
-melody1
-
-staff (6,9) {
-    accidental(_C, #G, _A)
-    repstart
-    measure {
-        double(D, 2)
-        half(A, 1)
-        sampleChord2
-
-        continuous {
-            quarter(A, 2)
-            chord(half(A, 2), half(B, 2))
-            quarter(B, 2)
-        }
-    }
-    repend
-    repstart
-    measure {
-        double(D, 2)
-        half(A, 1)
-        sampleChord2
-
-        continuous {
-            quarter(A, 7)
-            chord(half(A, 2), half(B, 1))
-            quarter(B, 5)
-        }
-    }
-    repend
-    accidental(C, G, A)
-}

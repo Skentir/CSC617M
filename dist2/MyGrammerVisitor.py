@@ -28,6 +28,12 @@ class MyGrammerVisitor(ParseTreeVisitor):
             col = val.getSymbol().column
 
             raise Exception("Invalid BPM value not in range 300", line, col)
+        
+        elif (int(val.getText()) <0):
+            line = val.getSymbol().line
+            col = val.getSymbol().column
+
+            raise Exception("Invalid BPM value, cannot be less than 0", line, col)
 
         return val
 
@@ -72,7 +78,12 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#declare_chord.
     def visitDeclare_chord(self, ctx: MyGrammerParser.Declare_chordContext):
-        return self.visitChildren(ctx)
+        expr = ctx.expr_chord()
+        
+        notes = self.visitExpr_chord(expr)
+        node = DeclareChordNode(ctx.IDENTIFIER(), notes)
+        return node
+        # return self.visitChildren(ctx)
 
     # Visit a parse tree produced by MyGrammerParser#declare_melody.
     def visitDeclare_melody(self, ctx: MyGrammerParser.Declare_melodyContext):
@@ -84,8 +95,27 @@ class MyGrammerVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by MyGrammerParser#declare_measures.
-    def visitDeclare_measures(self,
-                              ctx: MyGrammerParser.Declare_measuresContext):
+    def visitDeclare_measures(self, ctx: MyGrammerParser.Declare_measuresContext):
+        print("visitor declare measure", ctx.getChildren())
+        for child_node in ctx.getChildren():
+            node_type = child_node.__class__.__name__
+            
+            if node_type == "NoteExpressionContext":
+                # Obtain the pitch and num values
+                expr = child_node.expr_note()
+                note = self.visitExpr_note(expr)
+                print("note in measure", note) # ExprNoteNode() object
+            # elif node_type == "ChordExpressionContext":
+            #     chords.append(child_node)
+            elif node_type == "VariableExpressionContext":
+                expr = child_node.expr_var()
+                print(expr,type(expr))
+                var = self.visitExpr_var(expr)
+                print("var in measure",var)
+            else:
+                pass
+
+
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by MyGrammerParser#NoteExpression.
@@ -118,11 +148,46 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#expr_chord.
     def visitExpr_chord(self, ctx: MyGrammerParser.Expr_chordContext):
-        return self.visitChildren(ctx)
+        # list for all notes in an expr chord
+        notes = []
+        # empty list to pass to function add_expr_note
+        add_notes = []
+        
+        #get a MusicNodes.ExprNoteNode Context from the chord declaration
+        note = self.visitExpr_note(ctx.expr_note())
+
+        #append it to the list
+        notes.append(note)
+
+        #get the additional note declarations
+        add_note = self.visitExpr_add_note(ctx.expr_add_note(), add_notes)
+
+        #combine the two lists
+        notes = notes + add_note
+        
+        #store in a node containing the notes for a chord expression
+        node = ExprChordNode(notes)
+
+        #return
+        return node
+        # return self.visitChildren(ctx)
 
     # Visit a parse tree produced by MyGrammerParser#expr_add_note.
-    def visitExpr_add_note(self, ctx: MyGrammerParser.Expr_add_noteContext):
-        return self.visitChildren(ctx)
+    def visitExpr_add_note(self, ctx: MyGrammerParser.Expr_add_noteContext, notes):
+        #recursive function that adds to a list after visting each additional add note production
+        
+        #copy the list 
+        noteList = notes
+
+        #append the MusicNodes.ExprNote.Node from the expr_note production
+        noteList.append(self.visitExpr_note(ctx.expr_note()))
+        
+        #if there is an add_note production produced visit that as well
+        if ctx.expr_add_note() is not None:
+            self.visitExpr_add_note(ctx.expr_add_note(), noteList)
+
+        #return the list of notes
+        return noteList
 
     # Visit a parse tree produced by MyGrammerParser#expr_var.
     def visitExpr_var(self, ctx: MyGrammerParser.Expr_varContext):
@@ -152,11 +217,34 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#declare_staff.
     def visitDeclare_staff(self, ctx: MyGrammerParser.Declare_staffContext):
-        return self.visitChildren(ctx)
+        print("In visitor", ctx.getChildren())
+        # for child in ctx.getChildren():
+
+        staff_blocks = ctx.staff_block()
+        # expressions = self.visitStaff_block(s)
+        beats_per_measure = int(ctx.INTEGER(0).getText())
+        beats_per_measure_line = ctx.INTEGER(0).getSymbol().line
+        beats_per_measure_column = ctx.INTEGER(0).getSymbol().column
+        note_value = int(ctx.INTEGER(1).getText())
+        note_value_line = ctx.INTEGER(1).getSymbol().line
+        note_value_column = ctx.INTEGER(1).getSymbol().column
+        if not (note_value != 0 and (note_value & (note_value - 1)) == 0):
+           raise Exception("Error: Note argument is not a power of 2",
+                  note_value_line, note_value_column)
+        
+       
+        node = DeclareStaffNode(beats_per_measure, staff_blocks, note_value, None)
+        return node
+
+        # return self.visitChildren(ctx)
 
     # Visit a parse tree produced by MyGrammerParser#staff_block.
     def visitStaff_block(self, ctx: MyGrammerParser.Staff_blockContext):
-        return self.visitChildren(ctx)
+        print("Visitor staff block")
+        measures = self.visitDeclare_measures(ctx.declare_measures())
+        node = StaffBlockNode(None, measures, None)
+        return node
+        # return self.visitChildren(ctx)
 
     # Visit a parse tree produced by MyGrammerParser#repeat_block.
     def visitRepeat_block(self, ctx: MyGrammerParser.Repeat_blockContext):
