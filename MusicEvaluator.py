@@ -79,9 +79,9 @@ class MusicEvaluator(MyGrammerVisitor):
 
             for j in staff.staff_blocks:
                 block = MyGrammerVisitor().visitStaff_block(j)
-                print("evaluator acc",block.accidentals)
-                print("evaluator dec_measure",block.measures)
-                print("evaluator reps",block.repeats)
+                # print("evaluator acc",block.accidentals)
+                # print("evaluator dec_measure",block.measures)
+                # print("evaluator reps",block.repeats)
 
                 # Metadata of the staff block
                 # for child in j.getChildren(): 
