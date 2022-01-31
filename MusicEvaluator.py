@@ -13,6 +13,26 @@ def printExprChord(chord:ExprChordNode):
         printExprNote(note)
     print(")")
 
+def valToBeat(cur_val, bottom, dotted):
+    beat_num = 0
+
+    if cur_val == "sixteenth":
+        beat_num = bottom / 16
+    elif cur_val == "eighth":
+        beat_num = bottom / 8
+    elif cur_val == "quarter":
+        beat_num = bottom / 4
+    elif cur_val == "half":
+        beat_num = bottom / 2
+    elif cur_val == "full":
+        beat_num = bottom
+    elif cur_val == "double":
+        beat_num = bottom * 2
+
+    if dotted:
+        beat_num += beat_num / 2
+
+    return beat_num
 
 class MusicEvaluator(MyGrammerVisitor):
     variables = {}
@@ -82,14 +102,26 @@ class MusicEvaluator(MyGrammerVisitor):
         for i in ctx:
             # Gets a staff from music sheet
             staff = MyGrammerVisitor().visitDeclare_staff(i)
-            top = staff.beats_per_measure
-            bottom = staff.note_value
+            top = staff.beats_per_measure # 2
+            bottom = staff.note_value # 8
             
             for expr in staff.expressions:
                 for x in expr:
-                    if  isinstance (x, DeclareMeasuresNode):
+                    if isinstance(x, DeclareMeasuresNode):
+                        cur_beats = 0
+
                         for m_expr in x.expressions:
                             if isinstance(m_expr, ExprNoteNode):
+                                val = m_expr.note_value
+                                dotted = m_expr.dotted
+
+                                cur_beats += valToBeat(str(val), float(bottom), bool(dotted))
+                                if cur_beats > float(top):
+                                    line = m_expr.note_value.getSymbol().line
+                                    col = m_expr.note_value.getSymbol().column
+
+                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+
                                 printExprNote(m_expr)
                             elif isinstance(m_expr, ExprChordNode):
                                 printExprChord(m_expr)
@@ -138,7 +170,7 @@ class MusicEvaluator(MyGrammerVisitor):
             v= note.Note(pitch+num)
             #update note duration
             if val == "eighth":
-                d = duration.Duration(type="eigth")
+                d = duration.Duration(type="eighth")
                 v.quarterLength = d.quarterLength
             if val == "sixteenth":
                 v.quarterLength = 0.25
@@ -146,8 +178,7 @@ class MusicEvaluator(MyGrammerVisitor):
                 d = duration.Duration(type="whole")
                 v.quarterLength = d.quarterLength
             if val == "double":
-                d = duration.Duration(type="double")
-                v.quarterLength = d.quarterLength
+                v.quarterLength = 2.0
             if val == "half":
                 d = duration.Duration(type="half")
                 v.quarterLength = d.quarterLength
@@ -167,7 +198,7 @@ class MusicEvaluator(MyGrammerVisitor):
                 v = note.Note(pitch+num)
                 #update note duration
                 if val == "eighth":
-                    d = duration.Duration(type="eigth")
+                    d = duration.Duration(type="eighth")
                     v.quarterLength = d.quarterLength
                 if val == "sixteenth":
                     v.quarterLength = 0.25
@@ -175,8 +206,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     d = duration.Duration(type="whole")
                     v.quarterLength = d.quarterLength
                 if val == "double":
-                    d = duration.Duration(type="double")
-                    v.quarterLength = d.quarterLength
+                    v.quarterLength = 2.0
                 if val == "half":
                     d = duration.Duration(type="half")
                     v.quarterLength = d.quarterLength
