@@ -1,4 +1,4 @@
-bpm(300)
+bpm(500)
 sample_note = quarter(A, 2)
 sample_kirs = quarter(A, 2)
 sampleChord2 = chord(double(A, 2), half(B, 4), double(C,5))

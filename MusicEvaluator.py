@@ -109,7 +109,21 @@ class MusicEvaluator(MyGrammerVisitor):
     def evaluate(self, node):
         # BPM Value
         notes = []
-        print("bpm (" + str(node.bpm) + ")")
+        bpm = node.bpm
+
+        if (int(bpm.getText()) > 300):
+            line = bpm.getSymbol().line
+            col = bpm.getSymbol().column
+
+            raise Exception("Invalid BPM value not in range 300", line, col)
+        
+        elif (int(bpm.getText()) < 0):
+            line = bpm.getSymbol().line
+            col = bpm.getSymbol().column
+
+            raise Exception("Invalid BPM value, cannot be less than 0", line, col)
+        else:
+            print("bpm (" + str(bpm) + ")")
 
         # DECLARED NOTES
         note_vars = self.evaluateDeclaredNotes(node.notes)  # Returns NoteExpression Objects

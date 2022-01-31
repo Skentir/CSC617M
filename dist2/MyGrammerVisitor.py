@@ -49,7 +49,8 @@ class MyGrammerVisitor(ParseTreeVisitor):
             node_type = child_node.__class__.__name__
             # print(node_type, child_node)
             if node_type == "BpmContext":
-                bpm = self.visitBpm(child_node)
+                # bpm = self.visitBpm(child_node)
+                bpm = child_node.INTEGER()
             elif node_type == "Declare_noteContext":
                 notes.append(child_node)
             elif node_type == "Declare_chordContext":
