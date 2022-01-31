@@ -43,7 +43,7 @@ class MusicEvaluator(MyGrammerVisitor):
             
            
         # print("variables", self.variables)
-        return self.variables
+        # return self.variables
 
     def evaluateDeclaredChords(self, ctx: MyGrammerParser.Declare_chordContext):
 
@@ -93,6 +93,8 @@ class MusicEvaluator(MyGrammerVisitor):
                                 printExprNote(m_expr)
                             elif isinstance(m_expr, ExprChordNode):
                                 printExprChord(m_expr)
+                            else:
+                                print(m_expr)
                     elif isinstance(x, AccidentalExpressionNode):
                         print("accidental")
                         for acc_expr in x.accidentals:
@@ -101,10 +103,40 @@ class MusicEvaluator(MyGrammerVisitor):
             # Check the contents of each staff
             # print("staff blocks",len(staff.staff_blocks), " found") # Always 1? 
     
-            
+    def evaluateDeclaredMelody(self, ctx: MyGrammerParser.Declare_melodyContext):
+        # print("Declaring Melody", len(ctx.getChildren(), " found"))
+
+        for i in ctx:
+            # Gets a staff from music sheet
+            melody = MyGrammerVisitor().visitDeclare_melody(i)
+            identifier = melody.identifier
+            staffs = melody.staffs
+            print(identifier)
+            for staff in staffs:
+                top = staff.beats_per_measure
+                bottom = staff.note_value
+                
+                print(top, bottom)
+                for expr in staff.expressions:
+                    for x in expr:
+                        if  isinstance (x, DeclareMeasuresNode):
+                            for m_expr in x.expressions:
+                                if isinstance(m_expr, ExprNoteNode):
+                                    printExprNote(m_expr)
+                                elif isinstance(m_expr, ExprChordNode):
+                                    printExprChord(m_expr)
+                        elif isinstance(x, AccidentalExpressionNode):
+                            print("accidental")
+                            for acc_expr in x.accidentals:
+                                print(acc_expr.accidental, acc_expr.pitch)
+
+            # Check the contents of each staff
+            # print("staff blocks",len(staff.staff_blocks), " found") # Always 1?
+
+
+    def evaluateMelodyVar(self, ctx: MyGrammerParser.Expr_varContext):
+        pass
     
-    # def visitDeclaredMeasure(top,bottom,notes):
-    #     pass
 
     def evaluate(self, node):
         # BPM Value
@@ -112,12 +144,13 @@ class MusicEvaluator(MyGrammerVisitor):
         print("bpm (" + str(node.bpm) + ")")
 
         # DECLARED NOTES
-        note_vars = self.evaluateDeclaredNotes(node.notes)  # Returns NoteExpression Objects
+        self.evaluateDeclaredNotes(node.notes)  # Returns NoteExpression Objects
         
-        for x in note_vars:
-            num  = note_vars[x][2]
-            pitch = note_vars[x][1]
-            val = note_vars[x][0]
+        for x in self.variables:
+            print(x)
+            num  = self.variables[x][2]
+            pitch = self.variables[x][1]
+            val = self.variables[x][0]
 
             # create notes
             v= note.Note(pitch+num)
@@ -145,8 +178,9 @@ class MusicEvaluator(MyGrammerVisitor):
         # for chord in declared_chords:
         # TO DO: Chord
 
-        self.evaluateDeclaredStaffs(node.staffs)
+        self.evaluateDeclaredMelody(node.melodies)
 
+        self.evaluateDeclaredStaffs(node.staffs)
 
         #add to stream
         for x in notes:

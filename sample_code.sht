@@ -1,37 +1,13 @@
 bpm(300)
 sample_note = quarter(A, 2)
 sample_kirs = quarter(A, 2)
-sampleChord2 = chord(double(A, 2), half(B, 4), double(C,5))
+sampleChord2 = chord(half(A, 2), half(B, 4), half(C,5))
 
-
-
-staff (3,8) {
-    accidental(_C, G, #A)
+staff (4,4) {
     measure {
-        sample_note
-        half(C, 6)
-        half(G, 2)
-        chord(double(A, 2), half(B, 4), double(C,5))
-        sampleChord2
-    }
-    accidental(C, _G, A)
-    measure {
-        sample_note
-        half(C, 6)
-        half(G, 2)
-        chord(double(A, 2), half(B, 4), double(C,5))
-        sampleChord2
+        quarter(A, 2)
+        quarter(B, 2)
+        quarter(C, 2)
+        quarter(D, 2)
     }
 }
-
-
-staff (3,8) {
-    measure {
-        sample_note
-        half(C, 6)
-        half(G, 2)
-        chord(double(A, 2), half(B, 4), double(C,5))
-        sampleChord2
-    }
-}
-

@@ -21,6 +21,12 @@ class DeclareNoteNode():
         self.note = note  #NoteExpression
 
 
+class DeclareMelodyNode():
+    def __init__(self, identifier, staffs=Any):
+        self.identifier = identifier
+        self.staffs = staffs
+
+
 class ExprNoteNode():
     def __init__(self, note_value, pitch, num, dotted=False):
         self.note_value = note_value

@@ -6,7 +6,7 @@ from dist2.MyGrammerParser import MyGrammerParser
 from dist2.MyGrammerVisitor import MyGrammerVisitor
 # from dist2.MyGrammerListener import MyGrammerListener
 # from MusicNodes import *
-# from music21 import *
+from music21 import *
 
 from MusicEvaluator import MusicEvaluator
 
@@ -51,6 +51,15 @@ if __name__ == "__main__":
     else:
         print("Failed to parse")
 
+    fp = 'test.midi'
+    mf = midi.MidiFile()
+    mf.open(fp)
+    mf.read()
+    mf.close()
+    print(mf.tracks[0])
+    sp = converter.parse('test.midi')
+    sp = midi.realtime.StreamPlayer(sp)
+    sp.play()
 
 
     # try:
