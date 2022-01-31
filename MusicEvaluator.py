@@ -46,12 +46,11 @@ class MusicEvaluator(MyGrammerVisitor):
         return self.variables
 
     def evaluateDeclaredChords(self, ctx: MyGrammerParser.Declare_chordContext):
-
-        #declare a list 
+        declared_chords = {}
         notes = []
+
         #for each chord in declare chord
         for chord in ctx:
-        
             #use visitor method to traverse the visit declare chord subtree
             temp = MyGrammerVisitor().visitDeclare_chord(chord)
          
@@ -63,6 +62,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     notes.append((x.note_value.getText(), x.pitch.getText(), x.num.getText(), x.dotted))
                 
                 self.variables[temp.identifier.getText()] = (notes)
+                declared_chords[temp.identifier.getText()] = (notes)
             
             #else if reassignment of a chord variable is attempted raise an exception 
             else:
@@ -73,7 +73,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     line, col)
 
         # print(self.variables)
-        #return self.variables
+        return declared_chords
 
 
     def evaluateDeclaredStaffs(self, ctx: MyGrammerParser.Declare_staffContext):
@@ -109,6 +109,7 @@ class MusicEvaluator(MyGrammerVisitor):
     def evaluate(self, node):
         # BPM Value
         notes = []
+        chords = []
         bpm = node.bpm
 
         if (int(bpm.getText()) > 300):
@@ -152,15 +153,38 @@ class MusicEvaluator(MyGrammerVisitor):
                 v.quarterLength = d.quarterLength
             notes.append(v)
                 
-
-
         # DECLARE CHORDS
-        self.evaluateDeclaredChords(node.chords)
-        # for chord in declared_chords:
-        # TO DO: Chord
+        chord_vars = self.evaluateDeclaredChords(node.chords)
+        
+        for x in chord_vars:
+            cur_notes = []
+            for n in chord_vars[x]:
+                num = n[2]
+                pitch = n[1]
+                val = n[0]
+
+                # create notes
+                v = note.Note(pitch+num)
+                #update note duration
+                if val == "eighth":
+                    d = duration.Duration(type="eigth")
+                    v.quarterLength = d.quarterLength
+                if val == "sixteenth":
+                    v.quarterLength = 0.25
+                if val == "full":
+                    d = duration.Duration(type="whole")
+                    v.quarterLength = d.quarterLength
+                if val == "double":
+                    d = duration.Duration(type="double")
+                    v.quarterLength = d.quarterLength
+                if val == "half":
+                    d = duration.Duration(type="half")
+                    v.quarterLength = d.quarterLength
+                cur_notes.append(v)
+
+            chords.append(chord.Chord(cur_notes))
 
         self.evaluateDeclaredStaffs(node.staffs)
-
 
         #add to stream
         for x in notes:
