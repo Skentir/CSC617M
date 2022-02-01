@@ -36,6 +36,8 @@ MEASURE: M E A S U R E;
 MELODY: M E L O D Y;
 
 ACCIDENTAL_KEY: A C C I D E N T A L;
+// STAFF_ACCIDENTAL_KEY: S T A F F A C C I D E N T A L;
+// MEASURE_ACCIDENTAL_KEY: M E A S U R E A C C I D E N T A L;
 
 REPSTART: R E P S T A R T;
 
@@ -137,7 +139,7 @@ declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKE
 expr: expr_note                             # NoteExpression
     | expr_chord                            # ChordExpression
     | expr_var                              # VariableExpression
-    | expr_acc                              # AccidentalExpression;
+    | expr_acc                     # AccidentalExpression;
 
 expr_note: note_value OPEN_PAR PITCH COMMA_SEP INTEGER CLOSE_PAR | note_value OPEN_PAR PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED;
 
@@ -149,6 +151,8 @@ expr_add_note: COMMA_SEP expr_note | COMMA_SEP expr_note expr_add_note;
 expr_var: IDENTIFIER;
 
 expr_acc: ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
+// expr_staff_acc: STAFF_ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
+// expr__measure_acc: MEASURE_ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
 expr_add_acc: ACCIDENTAL PITCH | ACCIDENTAL PITCH COMMA_SEP expr_add_acc | PITCH | PITCH COMMA_SEP expr_add_acc;
 
 // Iteratives

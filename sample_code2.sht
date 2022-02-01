@@ -1,15 +1,20 @@
-bpm(1000) 
+bpm(300)
+instrument(ACoustic GuitaR)
 staff(3, 4) {
-	repstart
-	accidental( _A, #_B, C)
+
+	accidental( #A, _B, C)
+
 	measure {
-	accidental( _A, #B, C)
-	note(A, 2, 1/4)
-	accidental(A, B, F, H)
-	note(A, 2, 1/4)
-	note(B, 2, 1/4)
+		accidental( _A, #B, C)
+		continuous {
+			quarter(A, 2)
+			chord(half(A, 2), half(B, 2))
+			quarter(B, 2)
+		}
+		accidental(A, B, F)
+		quarter(C, 0)
+		half(B, 3)
 	}
-	repend
-	chorus
-	repend
+	
+
 }

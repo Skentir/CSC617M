@@ -1,48 +1,39 @@
 bpm(112)
-sample_chord1 = chord(note(A, 2), note(C, 2), note(D, 2), 1 / 4)
-sampleChord2 = chord(note(A, 2), 1/4)
-sample_note = note(A, 2, 1/4)
+instrument(Xylophone)
+
+sample_chord1 = chord(double(A, 2), double(C, 2), double(D, 2))
+sampleChord2 = chord(quarter(A, 2), quarter(D, 7))
+sample_note = full(B, 3)
+some_note = half(A, 4)
  
 melody chorus {
-    staff (3,8) {
-        accidental(_C, G, #A)
-        measure {
-            sample_note
-            half(C, 6)
-            half(G, 2)
-            chord(double(A, 2), half(B, 4), double(C,5))
-            sampleChord2
-        }
-        accidental(C, _G, A)
-        measure {
-            sample_note
-            half(C, 6)
-            half(G, 2)
-            chord(double(A, 2), half(B, 4), double(C,5))
-            sampleChord2
-        }
-    }
     staff (3,4) {
         measure {
             sample_note
             half(C, 6)
             half(G, 2)
-            chord(double(A, 2), half(B, 4), double(C,5))
+            chord(double(A, 2), half(B, 4), double(C, 5))
             sampleChord2
         }
     }
 }
 
-melody_chorus 
 staff (3,8) {
     measure {
         sample_note
-        half(C, 6)
-        half(G, 2)
-        chord(double(A, 2), half(B, 4), double(C,5))
+        chord(double(A, 2), double(B, 4), double(C, 5))
         sampleChord2
     }
+
+    measure {
+        quarter(A, 2)
+        quarter(B, 2)
+        chord(half(A, 2), half(B, 4), half(C,5))
+    }
 }
+
+chorus
+
 staff (4,4) {
     measure {
         quarter(A, 2)
@@ -50,3 +41,5 @@ staff (4,4) {
         chord(half(A, 2), half(B, 4), half(C,5))
     }
 }
+
+chorus

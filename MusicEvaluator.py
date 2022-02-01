@@ -1,5 +1,5 @@
-from dist2.MyGrammerParser import MyGrammerParser
-from dist2.MyGrammerVisitor import MyGrammerVisitor
+from MyGrammerParser import MyGrammerParser
+from MyGrammerVisitor import MyGrammerVisitor
 from MusicNodes import *
 from music21 import *
 
@@ -108,73 +108,67 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateDeclaredStaffs(self, ctx: list):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
-        for expr in ctx:
-            if expr.__class__.__name__ == 'Declare_staffContext':
-                # Gets a staff from music sheet
-                staff = MyGrammerVisitor().visitDeclare_staff(expr)
-                top = staff.beats_per_measure
-                bottom = staff.note_value
-                for block in staff.expressions:
-                    self.evaluateStaffBlock(block)
-            else:
-                self.checkInList(expr)
                 
         for i in ctx:
             # Gets a staff from music sheet
-            staff = MyGrammerVisitor().visitDeclare_staff(i)
-            top = staff.beats_per_measure
-            bottom = staff.note_value
-            for expr in staff.expressions:
-                for x in expr:
-                    if isinstance(x, DeclareMeasuresNode):
-                        cur_beats = 0
+            if i.__class__.__name__ == 'Declare_staffContext':
+                staff = MyGrammerVisitor().visitDeclare_staff(i)
+                top = staff.beats_per_measure
+                bottom = staff.note_value
+                for expr in staff.expressions:
+                    self.evaluateStaffBlock(expr)
+                    for x in expr:
+                        if isinstance(x, DeclareMeasuresNode):
+                            cur_beats = 0
 
-                        for m_expr in x.expressions:
-                            if isinstance(m_expr, ExprNoteNode):
-                                val = m_expr.note_value
-                                dotted = m_expr.dotted
+                            for m_expr in x.expressions:
+                                if isinstance(m_expr, ExprNoteNode):
+                                    val = m_expr.note_value
+                                    dotted = m_expr.dotted
 
-                                cur_beats += valToBeat(str(val), float(bottom), bool(dotted))
-                                if cur_beats > float(top):
-                                    line = m_expr.note_value.getSymbol().line
-                                    col = m_expr.note_value.getSymbol().column
+                                    cur_beats += valToBeat(str(val), float(bottom), bool(dotted))
+                                    if cur_beats > float(top):
+                                        line = m_expr.note_value.getSymbol().line
+                                        col = m_expr.note_value.getSymbol().column
 
-                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                                        raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
 
-                                printExprNote(m_expr)
+                                    printExprNote(m_expr)
 
-                            elif isinstance(m_expr, ExprChordNode):
-                                notes = m_expr.notes
-                                expected_note_val = ""
-                                is_dotted = False
+                                elif isinstance(m_expr, ExprChordNode):
+                                    notes = m_expr.notes
+                                    expected_note_val = ""
+                                    is_dotted = False
 
-                                for idx, n in enumerate(notes): # Checking if all notes in chord have same note_value
-                                    if bool(n.dotted):
-                                        is_dotted = True
-                                        
-                                    if idx == 0:
-                                        expected_note_val = str(n.note_value)
-                                    else:
-                                        if str(n.note_value) != expected_note_val:
-                                            line = n.note_value.getSymbol().line
-                                            col = n.note_value.getSymbol().column
+                                    for idx, n in enumerate(notes): # Checking if all notes in chord have same note_value
+                                        if bool(n.dotted):
+                                            is_dotted = True
+                                            
+                                        if idx == 0:
+                                            expected_note_val = str(n.note_value)
+                                        else:
+                                            if str(n.note_value) != expected_note_val:
+                                                line = n.note_value.getSymbol().line
+                                                col = n.note_value.getSymbol().column
 
-                                            raise Exception("Mismatch in note values, all notes within a chord must have the same note value", line, col)
+                                                raise Exception("Mismatch in note values, all notes within a chord must have the same note value", line, col)
 
-                                cur_beats += valToBeat(expected_note_val, float(bottom), is_dotted)
-                                if cur_beats > float(top):
-                                    line = m_expr.note_value.getSymbol().line
-                                    col = m_expr.note_value.getSymbol().column
+                                    cur_beats += valToBeat(expected_note_val, float(bottom), is_dotted)
+                                    if cur_beats > float(top):
+                                        line = m_expr.notes[0].note_value.getSymbol().line
+                                        col = m_expr.notes[0].note_value.getSymbol().column
 
-                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
-                                
-                                printExprChord(m_expr)
-                            else:
-                                print(m_expr)
-                    elif isinstance(x, AccidentalExpressionNode):
-                        print("accidental")
-                        for acc_expr in x.accidentals:
-                            print(acc_expr.accidental, acc_expr.pitch)
+                                        raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                                    
+                                    printExprChord(m_expr)
+                                else:
+                                    print(m_expr)
+                        elif isinstance(x, AccidentalExpressionNode):
+                            print("accidental")
+                            for acc_expr in x.accidentals:
+                                print(acc_expr.accidental, acc_expr.pitch)
+            else:
+                self.checkInList(expr)
             self.staffs.append(staff)
             
     def checkInList(self, ctx):
@@ -228,8 +222,7 @@ class MusicEvaluator(MyGrammerVisitor):
         chords = []
         self.bpm = node.bpm
         self.instrument = node.instrument
-        print("bpm (" + str(node.bpm) + ")")
-        print(node.instrument.getText())
+        # print("bpm (" + str(node.bpm) + ")")
 
         if (int(self.bpm.getText()) > 300):
             line = self.bpm.getSymbol().line
@@ -243,8 +236,9 @@ class MusicEvaluator(MyGrammerVisitor):
 
             raise Exception("Invalid BPM value, cannot be less than 0", line, col)
         else:
-            print("bpm (" + str(bpm) + ")")
+            print("bpm (" + str(self.bpm) + ")")
 
+        print(node.instrument.getText())
         # DECLARED NOTES
         self.evaluateDeclaredNotes(
             node.notes)  # Returns NoteExpression Objects
