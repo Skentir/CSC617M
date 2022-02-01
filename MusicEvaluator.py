@@ -65,7 +65,7 @@ class MusicEvaluator(MyGrammerVisitor):
             if temp.identifier.getText() not in self.variables:
                 note_value, pitch, num, dotted = self.evaluateExprNoteNode(
                     temp.note)
-                print("yo", self.evaluateExprNoteNode(temp.note))
+
                 self.variables[temp.identifier.getText()] = (note_value, pitch,
                                                              num, dotted)
             else:
@@ -75,8 +75,6 @@ class MusicEvaluator(MyGrammerVisitor):
                     "Reassignment is not allowed. Use a different identifier",
                     line, col)
 
-        # print("variables", self.variables)
-        # return self.variables
 
     def evaluateDeclaredChords(self, ctx: MyGrammerParser.Declare_chordContext):
         declared_chords = {}
@@ -108,10 +106,19 @@ class MusicEvaluator(MyGrammerVisitor):
         # print(self.variables)
         return declared_chords
 
-    def evaluateDeclaredStaffs(self,
-                               ctx: MyGrammerParser.Declare_staffContext):
+    def evaluateDeclaredStaffs(self, ctx: list):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
-
+        for expr in ctx:
+            if expr.__class__.__name__ == 'Declare_staffContext':
+                # Gets a staff from music sheet
+                staff = MyGrammerVisitor().visitDeclare_staff(expr)
+                top = staff.beats_per_measure
+                bottom = staff.note_value
+                for block in staff.expressions:
+                    self.evaluateStaffBlock(block)
+            else:
+                self.checkInList(expr)
+                
         for i in ctx:
             # Gets a staff from music sheet
             staff = MyGrammerVisitor().visitDeclare_staff(i)
@@ -169,8 +176,12 @@ class MusicEvaluator(MyGrammerVisitor):
                         for acc_expr in x.accidentals:
                             print(acc_expr.accidental, acc_expr.pitch)
             self.staffs.append(staff)
-            # Check the contents of each staff
-            # print("staff blocks",len(staff.staff_blocks), " found") # Always 1?
+            
+    def checkInList(self, ctx):
+        line = ctx.IDENTIFIER().getSymbol().line
+        col = ctx.IDENTIFIER().getSymbol().column
+        if ctx.IDENTIFIER().getText() not in self.variables:
+            raise Exception("Variable called but not declared", line, col)
 
     def evaluateDeclaredMelody(self,
                                ctx: MyGrammerParser.Declare_melodyContext):
@@ -188,23 +199,28 @@ class MusicEvaluator(MyGrammerVisitor):
 
                 print(top, bottom)
                 for expr in staff.expressions:
-                    for x in expr:
-                        if isinstance(x, DeclareMeasuresNode):
-                            for m_expr in x.expressions:
-                                if isinstance(m_expr, ExprNoteNode):
-                                    printExprNote(m_expr)
-                                elif isinstance(m_expr, ExprChordNode):
-                                    printExprChord(m_expr)
-                        elif isinstance(x, AccidentalExpressionNode):
-                            print("accidental")
-                            for acc_expr in x.accidentals:
-                                print(acc_expr.accidental, acc_expr.pitch)
-
+                    self.evaluateStaffBlock(expr)
             # Check the contents of each staff
             # print("staff blocks",len(staff.staff_blocks), " found") # Always 1?
 
     def evaluateMelodyVar(self, ctx: MyGrammerParser.Expr_varContext):
         pass
+
+    def evaluateStaffBlock(self,
+                           ctx: list):  # List of Expressions of a staff block
+        for x in ctx:
+            if isinstance(x, DeclareMeasuresNode):
+                for m_expr in x.expressions:
+                    if isinstance(m_expr, ExprNoteNode):
+                        printExprNote(m_expr)
+                    elif isinstance(m_expr, ExprChordNode):
+                        printExprChord(m_expr)
+                    else:
+                        print(m_expr)
+            elif isinstance(x, AccidentalExpressionNode):
+                print("accidental")
+                for acc_expr in x.accidentals:
+                    print(acc_expr.accidental, acc_expr.pitch)
 
     def evaluate(self, node):
         # BPM Value
