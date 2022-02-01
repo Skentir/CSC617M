@@ -1,4 +1,4 @@
-# Generated from MyGrammer.g4 by ANTLR 4.9.2
+# Generated from MyGrammer.g4 by ANTLR 4.9.3
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .MyGrammerParser import MyGrammerParser
@@ -7,15 +7,6 @@ else:
 
 # This class defines a complete listener for a parse tree produced by MyGrammerParser.
 class MyGrammerListener(ParseTreeListener):
-
-    # Enter a parse tree produced by MyGrammerParser#keyword.
-    def enterKeyword(self, ctx:MyGrammerParser.KeywordContext):
-        pass
-
-    # Exit a parse tree produced by MyGrammerParser#keyword.
-    def exitKeyword(self, ctx:MyGrammerParser.KeywordContext):
-        pass
-
 
     # Enter a parse tree produced by MyGrammerParser#note_value.
     def enterNote_value(self, ctx:MyGrammerParser.Note_valueContext):
@@ -26,12 +17,30 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MyGrammerParser#instruments.
+    def enterInstruments(self, ctx:MyGrammerParser.InstrumentsContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#instruments.
+    def exitInstruments(self, ctx:MyGrammerParser.InstrumentsContext):
+        pass
+
+
     # Enter a parse tree produced by MyGrammerParser#bpm.
     def enterBpm(self, ctx:MyGrammerParser.BpmContext):
         pass
 
     # Exit a parse tree produced by MyGrammerParser#bpm.
     def exitBpm(self, ctx:MyGrammerParser.BpmContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#instrument.
+    def enterInstrument(self, ctx:MyGrammerParser.InstrumentContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#instrument.
+    def exitInstrument(self, ctx:MyGrammerParser.InstrumentContext):
         pass
 
 
@@ -194,15 +203,6 @@ class MyGrammerListener(ParseTreeListener):
 
     # Exit a parse tree produced by MyGrammerParser#declare_repeat_end.
     def exitDeclare_repeat_end(self, ctx:MyGrammerParser.Declare_repeat_endContext):
-        pass
-
-
-    # Enter a parse tree produced by MyGrammerParser#repeat_end_expr.
-    def enterRepeat_end_expr(self, ctx:MyGrammerParser.Repeat_end_exprContext):
-        pass
-
-    # Exit a parse tree produced by MyGrammerParser#repeat_end_expr.
-    def exitRepeat_end_expr(self, ctx:MyGrammerParser.Repeat_end_exprContext):
         pass
 
 

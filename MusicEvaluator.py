@@ -13,9 +13,18 @@ def printExprChord(chord:ExprChordNode):
         printExprNote(note)
     print(")")
 
+class Staff():
+    def __init__(self, beats_per_measure, note_value, expressions):
+        self.beats_per_measure = beats_per_measure
+        self.note_value = note_value
+        self.expressions = expressions
+
 
 class MusicEvaluator(MyGrammerVisitor):
+    bpm = None
+    instrument = None
     variables = {}
+    staffs = []
     music_stream = stream.Stream()
 
     
@@ -84,7 +93,6 @@ class MusicEvaluator(MyGrammerVisitor):
             staff = MyGrammerVisitor().visitDeclare_staff(i)
             top = staff.beats_per_measure
             bottom = staff.note_value
-            
             for expr in staff.expressions:
                 for x in expr:
                     if  isinstance (x, DeclareMeasuresNode):
@@ -99,7 +107,7 @@ class MusicEvaluator(MyGrammerVisitor):
                         print("accidental")
                         for acc_expr in x.accidentals:
                             print(acc_expr.accidental, acc_expr.pitch)
-
+            self.staffs.append(staff)
             # Check the contents of each staff
             # print("staff blocks",len(staff.staff_blocks), " found") # Always 1? 
     
@@ -141,13 +149,17 @@ class MusicEvaluator(MyGrammerVisitor):
     def evaluate(self, node):
         # BPM Value
         notes = []
+        self.bpm = node.bpm
+        self.instrument = node.instrument.getText()
         print("bpm (" + str(node.bpm) + ")")
+        print(node.instrument.getText())
 
         # DECLARED NOTES
         self.evaluateDeclaredNotes(node.notes)  # Returns NoteExpression Objects
         
+
         for x in self.variables:
-            print(x)
+            print(x, self.variables[x])
             num  = self.variables[x][2]
             pitch = self.variables[x][1]
             val = self.variables[x][0]

@@ -4,11 +4,13 @@ from typing import Any
 class ProgNode():
     def __init__(self,
                  bpm,
+                 instrument,
                  notes=None,
                  chords=None,
                  melodies=None,
                  staffs=Any):
         self.bpm = bpm
+        self.instrument = instrument
         self.notes = notes
         self.chords = chords
         self.melodies = melodies
