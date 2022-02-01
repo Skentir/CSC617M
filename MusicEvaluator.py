@@ -123,7 +123,32 @@ class MusicEvaluator(MyGrammerVisitor):
                                     raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
 
                                 printExprNote(m_expr)
+
                             elif isinstance(m_expr, ExprChordNode):
+                                notes = m_expr.notes
+                                expected_note_val = ""
+                                is_dotted = False
+
+                                for idx, n in enumerate(notes): # Checking if all notes in chord have same note_value
+                                    if bool(n.dotted):
+                                        is_dotted = True
+                                        
+                                    if idx == 0:
+                                        expected_note_val = str(n.note_value)
+                                    else:
+                                        if str(n.note_value) != expected_note_val:
+                                            line = n.note_value.getSymbol().line
+                                            col = n.note_value.getSymbol().column
+
+                                            raise Exception("Mismatch in note values, all notes within a chord must have the same note value", line, col)
+
+                                cur_beats += valToBeat(expected_note_val, float(bottom), is_dotted)
+                                if cur_beats > float(top):
+                                    line = m_expr.note_value.getSymbol().line
+                                    col = m_expr.note_value.getSymbol().column
+
+                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                                
                                 printExprChord(m_expr)
                     elif isinstance(x, AccidentalExpressionNode):
                         print("accidental")
