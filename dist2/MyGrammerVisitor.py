@@ -11,10 +11,6 @@ else:
 
 class MyGrammerVisitor(ParseTreeVisitor):
 
-    # Visit a parse tree produced by MyGrammerParser#keyword.
-    def visitKeyword(self, ctx: MyGrammerParser.KeywordContext):
-        return self.visitChildren(ctx)
-
     # Visit a parse tree produced by MyGrammerParser#note_value.
     def visitNote_value(self, ctx: MyGrammerParser.Note_valueContext):
         return ctx.getChild(0)
@@ -38,9 +34,14 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
         return val
 
+    def visitInstrument(self, ctx: MyGrammerParser.InstrumentContext):
+        val = ctx.instruments()
+        return val
+
     # Visit a parse tree produced by MyGrammerParser#prog.
     def visitProg(self, ctx: MyGrammerParser.ProgContext):
         bpm = None
+        instrument = None
         notes = []
         chords = []
         staffs = []
@@ -50,7 +51,9 @@ class MyGrammerVisitor(ParseTreeVisitor):
             node_type = child_node.__class__.__name__
             # print(node_type, child_node)
             if node_type == "BpmContext":
-                bpm = self.visitBpm(child_node)
+                bpm = child_node.INTEGER()
+            elif node_type == "InstrumentContext":
+                instrument = self.visitInstrument(child_node)
             elif node_type == "Declare_noteContext":
                 notes.append(child_node)
             elif node_type == "Declare_chordContext":
@@ -62,7 +65,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
             else:
                 pass
 
-        node = ProgNode(bpm, notes, chords, melodies, staffs)
+        node = ProgNode(bpm, instrument, notes, chords, melodies, staffs)
         return node
         # print(node)
         # return self.visitChildren(ctx)
@@ -263,11 +266,6 @@ class MyGrammerVisitor(ParseTreeVisitor):
             self, ctx: MyGrammerParser.Declare_repeat_endContext):
         return self.visitChildren(ctx)
 
-    # Visit a parse tree produced by MyGrammerParser#repeat_end_expr.
-    def visitRepeat_end_expr(self,
-                             ctx: MyGrammerParser.Repeat_end_exprContext):
-        return self.visitChildren(ctx)
-
     # Visit a parse tree produced by MyGrammerParser#declare_staff.
     def visitDeclare_staff(self, ctx: MyGrammerParser.Declare_staffContext):
 
@@ -299,6 +297,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
         # print("Visitor staff block")
 
         for child_node in ctx.getChildren():
+            # gets ALL children; grandchildren and descendants
             node_type = child_node.__class__.__name__
             # print("child : ", child_node, type(child_node))
 
