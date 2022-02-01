@@ -1,41 +1,96 @@
 grammar MyGrammer;
 
-BPM: 'bpm';
+fragment A : [aA];
+fragment B : [bB];
+fragment C : [cC];
+fragment D : [dD];
+fragment E : [eE];
+fragment F : [fF];
+fragment G : [gG];
+fragment H : [hH];
+fragment I : [iI];
+fragment J : [jJ];
+fragment K : [kK];
+fragment L : [lL];
+fragment M : [mM];
+fragment N : [nN];
+fragment O : [oO];
+fragment P : [pP];
+fragment Q : [qQ];
+fragment R : [rR];
+fragment S : [sS];
+fragment T : [tT];
+fragment U : [uU];
+fragment V : [vV];
+fragment W : [wW];
+fragment X : [xX];
+fragment Y : [yY];
+fragment Z : [zZ];
 
-STAFF: 'staff';
+BPM: B P M;
 
-MEASURE: 'measure';
+STAFF: S T A F F;
 
-MELODY: 'melody';
+MEASURE: M E A S U R E;
 
-ACCIDENTAL_KEY: 'accidental';
+MELODY: M E L O D Y;
 
-REPSTART: 'repstart';
+ACCIDENTAL_KEY: A C C I D E N T A L;
 
-REPEND: 'repend';
+REPSTART: R E P S T A R T;
 
-CHORD: 'chord';
+REPEND: R E P E N D;
 
-CONTINUOUS: 'continuous';
+CHORD: C H O R D;
+ 
+CONTINUOUS: C O N T I N U O U S;
 
-keyword: BPM | STAFF | MEASURE | MELODY | ACCIDENTAL_KEY | REPSTART | REPEND | CHORD | CONTINUOUS;
+DOUBLE: D O U B L E;
 
-DOUBLE: 'double';
+FULL: F U L L;
+ 
+HALF: H A L F;
+ 
+QUARTER: Q U A R T E R;
 
-FULL: 'full';
+EIGHTH: E I G H T H;
 
-HALF: 'half';
+SIXTEENTH: S I X T E E N T H;
 
-QUARTER: 'quarter';
-
-EIGHTH: 'eighth';
-
-SIXTEENTH: 'sixteenth';
+INSTRUMENT: I N S T R U M E N T;
 
 DOTTED: '*';
 
 note_value: DOUBLE | FULL | HALF | QUARTER | EIGHTH | SIXTEENTH;
-// NOTE_VALUE: 'double' | 'full' | 'half' | 'quarter' | 'eigth' | 'sixteenth';
+// NOTE_VALUE: D O U B L E | F U L L | H A L F | Q U A R T E R | E I G H T H | S I X T E E N T H;
+
+CLARINET: C L A R I N E T;
+
+FLUTE: F L U T E;
+ 
+ORGAN: O R G A N;
+ 
+PIANO: P I A N O;
+ 
+RECORDER: R E C O R D E R;
+
+SAXOPHONE: S A X O P H O N E;
+
+TRUMPET: T R U M P E T;
+
+GUITAR: G U I T A R;
+
+ACOUSTICGUITAR: A C O U S T I C WS G U I T A R;
+
+ELECTRICGUITAR: E L E C T R I C WS G U I T A R;
+
+UKULELE: U K U L E L E;
+
+VIOLIN: V I O L I N;
+
+XYLOPHONE: X Y L O P H O N E;
+
+instruments: CLARINET | FLUTE | ORGAN | PIANO | RECORDER | SAXOPHONE | TRUMPET | GUITAR | ACOUSTICGUITAR | ELECTRICGUITAR | UKULELE | VIOLIN | XYLOPHONE;
 
 INTEGER: [0-9]+;
 
@@ -63,8 +118,10 @@ WS: [ \t\n\r]+ -> skip;
 
 bpm: BPM OPEN_PAR INTEGER CLOSE_PAR;
 
+instrument: INSTRUMENT OPEN_PAR instruments CLOSE_PAR;
+
 // prog: bpm (declare_note | declare_chord | declare_melody)* (declare_staff | expr_var)+;
-prog: bpm  (declare_note | declare_chord | declare_melody)*  (declare_staff | expr_var)+ EOF;
+prog: bpm instrument (declare_note | declare_chord | declare_melody)*  (declare_staff | expr_var)+ EOF;
 // prog: bpm (declare_note | declare_chord)*;
 
 
@@ -95,9 +152,8 @@ expr_acc: ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
 expr_add_acc: ACCIDENTAL PITCH | ACCIDENTAL PITCH COMMA_SEP expr_add_acc | PITCH | PITCH COMMA_SEP expr_add_acc;
 
 // Iteratives
-declare_repeat: REPSTART staff_block declare_repeat_end | staff_block repeat_end_expr;
-declare_repeat_end: repeat_end_expr | repeat_end_expr staff_block declare_repeat_end;
-repeat_end_expr: REPEND OPEN_PAR INTEGER CLOSE_PAR | REPEND OPEN_PAR CLOSE_PAR;
+declare_repeat: REPSTART OPEN_PAR INTEGER? CLOSE_PAR;
+declare_repeat_end: REPEND;
 
 // Functions
 declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (staff_block)+ CLOSE_BRACKET;
@@ -107,5 +163,5 @@ declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (
 // staff_block: expr_acc staff_block | staff_block expr_acc | REPSTART staff_block declare_repeat_end | staff_block repeat_end_expr | declare_measures staff_block | staff_block declare_measures | declare_measures;
 // staff_block: REPSTART? staff_block repeat_end_expr (staff_block repeat_end_expr)*;
 // staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | REPSTART staff_block REPEND;
-staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | REPSTART repeat_block REPEND staff_block | staff_block REPSTART repeat_block REPEND | REPSTART repeat_block REPEND;
+staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | declare_repeat repeat_block declare_repeat_end staff_block | staff_block declare_repeat repeat_block declare_repeat_end | declare_repeat repeat_block declare_repeat_end;
 repeat_block: expr_acc repeat_block | repeat_block expr_acc | declare_measures repeat_block | repeat_block declare_measures | declare_measures;
