@@ -34,29 +34,41 @@ class ExprNoteNode():
         self.num = num
         self.dotted = dotted
 
+
 class DeclareChordNode():
     def __init__(self, identifier, chord):
         self.identifier = identifier
         self.chord = chord
 
+
 class ExprChordNode():
     def __init__(self, notes):
         self.notes = notes
 
+
 class DeclareStaffNode():
     def __init__(self, beats_per_measure, expressions, note_value):
-        self.beats_per_measure= beats_per_measure
+        self.beats_per_measure = beats_per_measure
         self.note_value = note_value
-        self.expressions = expressions # StaffBlocks or Expr_var of melody
+        self.expressions = expressions  # StaffBlocks or Expr_var of melody
+
 
 class DeclareMeasuresNode():
     def __init__(self, expressions):
         self.expressions = expressions
 
+
 class AccidentalExpressionNode():
     def __init__(self, accidentals):
         self.accidentals = accidentals
+
+
 class AccidentalNode():
     def __init__(self, pitch, accidental=None):
         self.accidental = accidental
         self.pitch = pitch
+
+
+class DeclareContinousNode():
+    def __init__(self, expressions):
+        self.expressions = expressions

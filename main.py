@@ -10,7 +10,6 @@ from music21 import *
 
 from MusicEvaluator import MusicEvaluator
 
-
 if __name__ == "__main__":
 
     # data = InputStream(input(">>> "))
@@ -18,8 +17,8 @@ if __name__ == "__main__":
     with open(file + ".sht") as f:
         data = InputStream(f.read())
 
-    # lexer
-    # try:
+        # lexer
+        # try:
         lexer = MyGrammerLexer(data)
     # except Exception as err:
     #     print(err)
@@ -31,41 +30,40 @@ if __name__ == "__main__":
     #         print(token.text, lexer.symbolicNames[token.type])
 
     # parser
-    
+
     parser = MyGrammerParser(stream)
     tree = parser.prog()
-    if parser._syntaxErrors==0:
+    if parser._syntaxErrors == 0:
         # print(parser.getCurrentToken())
 
         # print(tree.toStringTree())
         # evaluator
         # print(type(tree), tree)
         try:
-            
+
             ast = MyGrammerVisitor().visitProg(tree)
             output = MusicEvaluator().evaluate(ast)
-        
+
         except Exception as err:
             print("Caught Error: %s in line:%d col:%d" %
-                (err.args[0], err.args[1], err.args[2]))
+                  (err.args[0], err.args[1], err.args[2]))
     else:
         print("Failed to parse")
 
-    fp = 'test.midi'
-    mf = midi.MidiFile()
-    mf.open(fp)
-    mf.read()
-    mf.close()
-    print(mf.tracks[0])
-    sp = converter.parse('test.midi')
-    sp = midi.realtime.StreamPlayer(sp)
-    sp.play()
-
+    # fp = 'test.midi'
+    # mf = midi.MidiFile()
+    # mf.open(fp)
+    # mf.read()
+    # mf.close()
+    # print(mf.tracks[0])
+    # sp = converter.parse('test.midi')
+    # sp = midi.realtime.StreamPlayer(sp)
+    # sp.play()
 
     # try:
     #     ast = MyGrammerVisitor().visitProg(tree)
     #     output = MyVisitor().visit(ast)
-        
+
     # except Exception as err:
     #     print("Caught Error: %s in line:%d col:%d" %
     #         (err.args[0], err.args[1], err.args[2]))
