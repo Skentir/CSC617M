@@ -88,7 +88,15 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#declare_melody.
     def visitDeclare_melody(self, ctx: MyGrammerParser.Declare_melodyContext):
-        return self.visitChildren(ctx)
+        expr = ctx.declare_staff()
+        staffs = []
+        if isinstance(expr, list):
+            for staff in expr:
+                staffs.append(self.visitDeclare_staff(staff))
+        else:
+            staffs = self.visitDeclare_staff(expr)
+        node = DeclareMelodyNode(ctx.IDENTIFIER(), staffs)
+        return node
 
     # Visit a parse tree produced by MyGrammerParser#declare_continuous.
     def visitDeclare_continuous(

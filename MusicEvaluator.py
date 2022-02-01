@@ -1,13 +1,14 @@
 from dist2.MyGrammerParser import MyGrammerParser
 from dist2.MyGrammerVisitor import MyGrammerVisitor
-from MusicNodes import * 
+from MusicNodes import *
 from music21 import *
 
 
-def printExprNote(note:ExprNoteNode):
-    print(note.note_value, note.pitch,note.num, note.dotted)
-    
-def printExprChord(chord:ExprChordNode):
+def printExprNote(note: ExprNoteNode):
+    print(note.note_value, note.pitch, note.num, note.dotted)
+
+
+def printExprChord(chord: ExprChordNode):
     print("chord (")
     for note in chord.notes:
         printExprNote(note)
@@ -38,7 +39,14 @@ class MusicEvaluator(MyGrammerVisitor):
     variables = {}
     music_stream = stream.Stream()
 
-    
+    def evaluateExprNoteNode(self, ctx: ExprNoteNode):
+        note_value = ctx.note.note_value.getText()
+        pitch = ctx.note.pitch.getText()
+        num = ctx.note.num.getText()
+        dotted = ctx.note.dotted
+
+        return note_value, pitch, num, dotted
+
     def evaluateDeclaredNotes(self, ctx: MyGrammerParser.Declare_noteContext):
         # DECLARED NOTES
         for note in ctx:
@@ -46,12 +54,9 @@ class MusicEvaluator(MyGrammerVisitor):
             temp = MyGrammerVisitor().visitDeclare_note(note)
 
             if temp.identifier.getText() not in self.variables:
-                note_value = temp.note.note_value.getText()
-                pitch = temp.note.pitch.getText()
-
-                num = temp.note.num.getText()
-
-                dotted = temp.note.dotted
+                note_value, pitch, num, dotted = self.evaluateExprNoteNode(
+                    temp.note)
+                print("yo", self.evaluateExprNoteNode(temp.note))
                 self.variables[temp.identifier.getText()] = (note_value, pitch,
                                                              num, dotted)
             else:
@@ -60,10 +65,9 @@ class MusicEvaluator(MyGrammerVisitor):
                 raise Exception(
                     "Reassignment is not allowed. Use a different identifier",
                     line, col)
-            
-           
+
         # print("variables", self.variables)
-        return self.variables
+        # return self.variables
 
     def evaluateDeclaredChords(self, ctx: MyGrammerParser.Declare_chordContext):
         declared_chords = {}
@@ -73,14 +77,14 @@ class MusicEvaluator(MyGrammerVisitor):
         for chord in ctx:
             #use visitor method to traverse the visit declare chord subtree
             temp = MyGrammerVisitor().visitDeclare_chord(chord)
-         
+
             # check if the identifier for the chord has already been declared
             if temp.identifier.getText() not in self.variables:
                 #if not then store the corresponding notes of a chord in a list
                 #each note is stored as tuple of values for each property of a note
                 for x in temp.chord.notes:
-                    notes.append((x.note_value.getText(), x.pitch.getText(), x.num.getText(), x.dotted))
-                
+                    notes.append(self.evaluateExprNoteNode(x))
+
                 self.variables[temp.identifier.getText()] = (notes)
                 declared_chords[temp.identifier.getText()] = (notes)
             
@@ -95,15 +99,15 @@ class MusicEvaluator(MyGrammerVisitor):
         # print(self.variables)
         return declared_chords
 
-
-    def evaluateDeclaredStaffs(self, ctx: MyGrammerParser.Declare_staffContext):
+    def evaluateDeclaredStaffs(self,
+                               ctx: MyGrammerParser.Declare_staffContext):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
 
         for i in ctx:
             # Gets a staff from music sheet
             staff = MyGrammerVisitor().visitDeclare_staff(i)
-            top = staff.beats_per_measure # 2
-            bottom = staff.note_value # 8
+            top = staff.beats_per_measure
+            bottom = staff.note_value
             
             for expr in staff.expressions:
                 for x in expr:
@@ -150,18 +154,49 @@ class MusicEvaluator(MyGrammerVisitor):
                                     raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                                 
                                 printExprChord(m_expr)
+                            else:
+                                print(m_expr)
                     elif isinstance(x, AccidentalExpressionNode):
                         print("accidental")
                         for acc_expr in x.accidentals:
                             print(acc_expr.accidental, acc_expr.pitch)
 
             # Check the contents of each staff
-            # print("staff blocks",len(staff.staff_blocks), " found") # Always 1? 
-    
-            
-    
-    # def visitDeclaredMeasure(top,bottom,notes):
-    #     pass
+            # print("staff blocks",len(staff.staff_blocks), " found") # Always 1?
+
+    def evaluateDeclaredMelody(self,
+                               ctx: MyGrammerParser.Declare_melodyContext):
+        # print("Declaring Melody", len(ctx.getChildren(), " found"))
+
+        for i in ctx:
+            # Gets a staff from music sheet
+            melody = MyGrammerVisitor().visitDeclare_melody(i)
+            identifier = melody.identifier
+            staffs = melody.staffs
+            print(identifier)
+            for staff in staffs:
+                top = staff.beats_per_measure
+                bottom = staff.note_value
+
+                print(top, bottom)
+                for expr in staff.expressions:
+                    for x in expr:
+                        if isinstance(x, DeclareMeasuresNode):
+                            for m_expr in x.expressions:
+                                if isinstance(m_expr, ExprNoteNode):
+                                    printExprNote(m_expr)
+                                elif isinstance(m_expr, ExprChordNode):
+                                    printExprChord(m_expr)
+                        elif isinstance(x, AccidentalExpressionNode):
+                            print("accidental")
+                            for acc_expr in x.accidentals:
+                                print(acc_expr.accidental, acc_expr.pitch)
+
+            # Check the contents of each staff
+            # print("staff blocks",len(staff.staff_blocks), " found") # Always 1?
+
+    def evaluateMelodyVar(self, ctx: MyGrammerParser.Expr_varContext):
+        pass
 
     def evaluate(self, node):
         # BPM Value
@@ -184,15 +219,17 @@ class MusicEvaluator(MyGrammerVisitor):
             print("bpm (" + str(bpm) + ")")
 
         # DECLARED NOTES
-        note_vars = self.evaluateDeclaredNotes(node.notes)  # Returns NoteExpression Objects
-        
-        for x in note_vars:
-            num  = note_vars[x][2]
-            pitch = note_vars[x][1]
-            val = note_vars[x][0]
+        self.evaluateDeclaredNotes(
+            node.notes)  # Returns NoteExpression Objects
+
+        for x in self.variables:
+            print(x)
+            num = self.variables[x][2]
+            pitch = self.variables[x][1]
+            val = self.variables[x][0]
 
             # create notes
-            v= note.Note(pitch+num)
+            v = note.Note(pitch + num)
             #update note duration
             if val == "eighth":
                 d = duration.Duration(type="eighth")
@@ -239,10 +276,12 @@ class MusicEvaluator(MyGrammerVisitor):
 
             chords.append(chord.Chord(cur_notes))
 
+        self.evaluateDeclaredMelody(node.melodies)
+
         self.evaluateDeclaredStaffs(node.staffs)
 
         #add to stream
-        for x in notes:
-            self.music_stream.append(x)
-        self.music_stream.write('midi', fp='test.midi')
-        return "MIDI FILE"
+        # for x in notes:
+        #     self.music_stream.append(x)
+        # self.music_stream.write('midi', fp='test.midi')
+        # return "MIDI FILE"
