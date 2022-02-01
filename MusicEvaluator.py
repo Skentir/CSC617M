@@ -40,10 +40,10 @@ class MusicEvaluator(MyGrammerVisitor):
     music_stream = stream.Stream()
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
-        note_value = ctx.note.note_value.getText()
-        pitch = ctx.note.pitch.getText()
-        num = ctx.note.num.getText()
-        dotted = ctx.note.dotted
+        note_value = ctx.note_value.getText()
+        pitch = ctx.pitch.getText()
+        num = ctx.num.getText()
+        dotted = ctx.dotted
 
         return note_value, pitch, num, dotted
 
