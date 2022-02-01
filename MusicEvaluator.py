@@ -34,9 +34,18 @@ def valToBeat(cur_val, bottom, dotted):
         beat_num += beat_num / 2
 
     return beat_num
+  
+class Staff():
+    def __init__(self, beats_per_measure, note_value, expressions):
+        self.beats_per_measure = beats_per_measure
+        self.note_value = note_value
+        self.expressions = expressions
 
 class MusicEvaluator(MyGrammerVisitor):
+    bpm = None
+    instrument = None
     variables = {}
+    staffs = []
     music_stream = stream.Stream()
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
@@ -108,7 +117,6 @@ class MusicEvaluator(MyGrammerVisitor):
             staff = MyGrammerVisitor().visitDeclare_staff(i)
             top = staff.beats_per_measure
             bottom = staff.note_value
-            
             for expr in staff.expressions:
                 for x in expr:
                     if isinstance(x, DeclareMeasuresNode):
@@ -160,7 +168,7 @@ class MusicEvaluator(MyGrammerVisitor):
                         print("accidental")
                         for acc_expr in x.accidentals:
                             print(acc_expr.accidental, acc_expr.pitch)
-
+            self.staffs.append(staff)
             # Check the contents of each staff
             # print("staff blocks",len(staff.staff_blocks), " found") # Always 1?
 
@@ -202,17 +210,20 @@ class MusicEvaluator(MyGrammerVisitor):
         # BPM Value
         notes = []
         chords = []
-        bpm = node.bpm
+        self.bpm = node.bpm
+        self.instrument = node.instrument
+        print("bpm (" + str(node.bpm) + ")")
+        print(node.instrument.getText())
 
-        if (int(bpm.getText()) > 300):
-            line = bpm.getSymbol().line
-            col = bpm.getSymbol().column
+        if (int(self.bpm.getText()) > 300):
+            line = self.bpm.getSymbol().line
+            col = self.bpm.getSymbol().column
 
             raise Exception("Invalid BPM value not in range 300", line, col)
         
-        elif (int(bpm.getText()) < 0):
-            line = bpm.getSymbol().line
-            col = bpm.getSymbol().column
+        elif (int(self.bpm.getText()) < 0):
+            line = self.bpm.getSymbol().line
+            col = self.bpm.getSymbol().column
 
             raise Exception("Invalid BPM value, cannot be less than 0", line, col)
         else:
@@ -223,7 +234,7 @@ class MusicEvaluator(MyGrammerVisitor):
             node.notes)  # Returns NoteExpression Objects
 
         for x in self.variables:
-            print(x)
+            print(x, self.variables[x])
             num = self.variables[x][2]
             pitch = self.variables[x][1]
             val = self.variables[x][0]
