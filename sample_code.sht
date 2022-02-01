@@ -7,15 +7,15 @@ sampleChord2 = chord(half(A, 2), half(B, 4), half(C,5))
 staff (4,4) {
     repstart(3)
     measure {
-        quarter(A, 2)
+        sample_kirs
         quarter(B, 2)
-        quarter(C, 2)
+        chord(quarter(A, 2), quarter(B, 4), quarter(C, 5))
         quarter(D, 2)
     }
     repend
     repstart()
     measure {
-        quarter(A, 2)
+        sample_note
         quarter(B, 2)
         quarter(C, 2)
         quarter(D, 2)
