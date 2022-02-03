@@ -313,7 +313,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
         for child_node in ctx.getChildren():
             # gets ALL children; grandchildren and descendants
             node_type = child_node.__class__.__name__
-            print("child : ", child_node, type(child_node))
+            # print("child : ", child_node, type(child_node))
 
             if node_type == 'Expr_accContext':
                 accidentals = self.visitExpr_acc(
@@ -354,7 +354,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
         for child_node in ctx.getChildren():
             # gets ALL children; grandchildren and descendants
             node_type = child_node.__class__.__name__
-            print("child : ", child_node, type(child_node))
+            # print("child : ", child_node, type(child_node))
 
             if node_type == 'Expr_accContext':
                 accidentals = self.visitExpr_acc(child_node)  # AccidentalNode()
