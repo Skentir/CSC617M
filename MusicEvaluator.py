@@ -36,10 +36,16 @@ def valToBeat(cur_val, bottom, dotted):
     return beat_num
   
 class Staff():
-    def __init__(self, beats_per_measure, note_value, expressions):
+    def __init__(self, variable):
+        self.variable = variable
+        self.beats_per_measure = None
+        self.note_value = None
+        self.expressions = Any
+    def __init__(self, beats_per_measure, note_value):
+        self.variable = None
         self.beats_per_measure = beats_per_measure
         self.note_value = note_value
-        self.expressions = expressions
+        self.expressions = []
 
 class MusicEvaluator(MyGrammerVisitor):
     bpm = None
@@ -115,6 +121,7 @@ class MusicEvaluator(MyGrammerVisitor):
                 staff = MyGrammerVisitor().visitDeclare_staff(i)
                 top = staff.beats_per_measure
                 bottom = staff.note_value
+                newStaff = Staff(top, bottom)
                 for expr in staff.expressions:
                     self.evaluateStaffBlock(expr)
                     for x in expr:
@@ -167,15 +174,21 @@ class MusicEvaluator(MyGrammerVisitor):
                             print("accidental")
                             for acc_expr in x.accidentals:
                                 print(acc_expr.accidental, acc_expr.pitch)
+                        print(x)
+                        newStaff.expressions.append(x)
+                self.staffs.append(newStaff)
             else:
-                self.checkInList(expr)
-            self.staffs.append(staff)
+                if (self.checkInList(expr)):
+                    self.staffs.append(Staff(expr))
+                
             
     def checkInList(self, ctx):
         line = ctx.IDENTIFIER().getSymbol().line
         col = ctx.IDENTIFIER().getSymbol().column
         if ctx.IDENTIFIER().getText() not in self.variables:
             raise Exception("Variable called but not declared", line, col)
+        return False
+        # check if the variable is not a melody
 
     def evaluateDeclaredMelody(self,
                                ctx: MyGrammerParser.Declare_melodyContext):
@@ -209,7 +222,7 @@ class MusicEvaluator(MyGrammerVisitor):
                         printExprNote(m_expr)
                     elif isinstance(m_expr, ExprChordNode):
                         printExprChord(m_expr)
-                    else:
+                    else: # continuous and variable_expr
                         print(m_expr)
             elif isinstance(x, AccidentalExpressionNode):
                 print("accidental")
@@ -301,6 +314,17 @@ class MusicEvaluator(MyGrammerVisitor):
 
         self.evaluateDeclaredStaffs(node.staffs)
 
+
+        
+        for i in self.staffs:
+            if (i.variable is None):
+                print("Staff")
+                print(i.beats_per_measure)
+                print(i.note_value)
+                print(i.expressions)
+            else:
+                print("Variable")
+                print(i.variable)
         #add to stream
         # for x in notes:
         #     self.music_stream.append(x)
