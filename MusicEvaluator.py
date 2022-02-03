@@ -17,7 +17,7 @@ def printExprChord(chord:ExprChordNode):
 class MusicEvaluator(MyGrammerVisitor):
     variables = {}
     music_stream = stream.Stream()
-
+    
     
     def evaluateDeclaredNotes(self, ctx: MyGrammerParser.Declare_noteContext):
         # DECLARED NOTES
@@ -78,24 +78,28 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateDeclaredStaffs(self, ctx: MyGrammerParser.Declare_staffContext):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
-
         for i in ctx:
             # Gets a staff from music sheet
             staff = MyGrammerVisitor().visitDeclare_staff(i)
             top = staff.beats_per_measure
             bottom = staff.note_value
+            m1 = stream.Measure()
+            n = note.Note('C') #sample note only
             
             for expr in staff.expressions:
                 for x in expr:
                     if  isinstance (x, DeclareMeasuresNode):
                         for m_expr in x.expressions:
                             if isinstance(m_expr, ExprNoteNode):
+                                m1.append(n)
                                 printExprNote(m_expr)
                             elif isinstance(m_expr, ExprChordNode):
+                                m1.append(n)
                                 printExprChord(m_expr)
                             else:
+                                m1.append(n)
                                 print(m_expr)
-                    elif isinstance(x, AccidentalExpressionNode):
+                    elif isinstance(x, AcScidentalExpressionNode):
                         print("accidental")
                         for acc_expr in x.accidentals:
                             print(acc_expr.accidental, acc_expr.pitch)
