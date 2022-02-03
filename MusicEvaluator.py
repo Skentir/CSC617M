@@ -83,9 +83,9 @@ class MusicEvaluator(MyGrammerVisitor):
             staff = MyGrammerVisitor().visitDeclare_staff(i)
             top = staff.beats_per_measure
             bottom = staff.note_value
-            m1 = stream.Measure()
+            m1 = music_stream.Measure()
             n = note.Note('C') #sample note only
-            
+
             for expr in staff.expressions:
                 for x in expr:
                     if  isinstance (x, DeclareMeasuresNode):
