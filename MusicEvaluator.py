@@ -258,7 +258,6 @@ class MusicEvaluator(MyGrammerVisitor):
                                 print("Continuous Accidental")
 
                             else:
-                                # TODO: Variable Expression error checking; must not be melody; note value checking as well
                                 if (not self.checkInListNode(continuous_expr)): # Error checking identifier and if melody
                                     if isinstance(self.variables[continuous_expr.getText()][0], Staff):
                                         line = continuous_expr.getSymbol().line
@@ -285,7 +284,6 @@ class MusicEvaluator(MyGrammerVisitor):
                         print(m_expr.expressions)
                         print(m_expr)
                     else:
-                        # TODO: Variable Expression error checking; must not be melody; note value checking as well
                         if (not self.checkInListNode(m_expr)): # Error checking identifier and if melody
                             if isinstance(self.variables[m_expr.getText()][0], Staff):
                                 line = m_expr.getSymbol().line
