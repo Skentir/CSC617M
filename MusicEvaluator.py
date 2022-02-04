@@ -1,3 +1,4 @@
+from html.entities import name2codepoint
 from numpy import isin
 from MyGrammerParser import MyGrammerParser
 from MyGrammerVisitor import MyGrammerVisitor
@@ -35,6 +36,38 @@ def valToBeat(cur_val, bottom, dotted):
         beat_num += beat_num / 2
 
     return beat_num
+
+def processExprChord(chord_notes, type):
+    expected_note_val = ""
+    is_dotted = False
+
+    for idx, n in enumerate(chord_notes): # Checking if all notes in chord have same note_value
+        if type == "EXPR":
+            if bool(n.dotted):
+                is_dotted = True
+                
+            if idx == 0:
+                expected_note_val = str(n.note_value)
+            else:
+                if str(n.note_value) != expected_note_val:
+                    line = n.note_value.getSymbol().line
+                    col = n.note_value.getSymbol().column
+
+                    raise Exception("Mismatch in note values, all notes within a chord must have the same note value", line, col)
+        else:
+            if bool(n[3]):
+                is_dotted = True
+                
+            if idx == 0:
+                expected_note_val = str(n[0])
+            else:
+                if str(n[0]) != expected_note_val:
+                    line = chord_notes.getSymbol().line
+                    col = chord_notes.getSymbol().column
+
+                    raise Exception("Mismatch in note values, all notes within a chord must have the same note value", line, col)
+
+    return expected_note_val, is_dotted
   
 class Staff():
     def __init__(self, beats_per_measure, note_value, melodyVariable):
@@ -68,8 +101,8 @@ class MusicEvaluator(MyGrammerVisitor):
                 note_value, pitch, num, dotted = self.evaluateExprNoteNode(
                     temp.note)
 
-                self.variables[temp.identifier.getText()] = (note_value, pitch,
-                                                             num, dotted)
+                self.variables[temp.identifier.getText()] = ("NOTE", note_value, pitch,
+                                num, dotted)
             else:
                 line = temp.identifier.getSymbol().line
                 col = temp.identifier.getSymbol().column
@@ -79,34 +112,19 @@ class MusicEvaluator(MyGrammerVisitor):
 
 
     def evaluateDeclaredChords(self, ctx: MyGrammerParser.Declare_chordContext):
-        declared_chords = {}
         notes = []
 
-        #for each chord in declare chord
         for chord in ctx:
-            #use visitor method to traverse the visit declare chord subtree
             temp = MyGrammerVisitor().visitDeclare_chord(chord)
 
-            # check if the identifier for the chord has already been declared
             if temp.identifier.getText() not in self.variables:
-                #if not then store the corresponding notes of a chord in a list
-                #each note is stored as tuple of values for each property of a note
                 for x in temp.chord.notes:
                     notes.append(self.evaluateExprNoteNode(x))
-
-                self.variables[temp.identifier.getText()] = (notes)
-                declared_chords[temp.identifier.getText()] = (notes)
-            
-            #else if reassignment of a chord variable is attempted raise an exception 
+                self.variables[temp.identifier.getText()] = ("CHORD", notes)
             else:
                 line = temp.identifier.getSymbol().line
                 col = temp.identifier.getSymbol().column
-                raise Exception(
-                    "Reassignment is not allowed. Use a different identifier",
-                    line, col)
-
-        # print(self.variables)
-        return declared_chords
+                raise Exception("Reassignment is not allowed. Use a different identifier", line, col)
 
     def evaluateDeclaredStaffs(self, ctx: list):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
@@ -137,7 +155,6 @@ class MusicEvaluator(MyGrammerVisitor):
                             raise Exception("Variable must be melody but a chord is called", line, col)
                 self.staffs.append(Staff(None, None, melodyVariable))
                         
-            
     def checkInListContext(self, ctx):
         line = ctx.IDENTIFIER().getSymbol().line
         col = ctx.IDENTIFIER().getSymbol().column
@@ -152,8 +169,7 @@ class MusicEvaluator(MyGrammerVisitor):
             raise Exception("Variable called but not declared", line, col)
         return False
 
-    def evaluateDeclaredMelody(self,
-                               ctx: MyGrammerParser.Declare_melodyContext):
+    def evaluateDeclaredMelody(self, ctx: MyGrammerParser.Declare_melodyContext):
         # print("Declaring Melody", len(ctx.getChildren(), " found"))
         for i in ctx:
             # Gets a staff from music sheet
@@ -163,9 +179,7 @@ class MusicEvaluator(MyGrammerVisitor):
             melodyStaffs = []
             print(identifier)
 
-            if melody.identifier.getText() not in self.variables:
-                #if not then store the corresponding notes of a chord in a list
-                #each note is stored as tuple of values for each property of a note
+            if melody.identifier.getText() not in self.variables: # If not then store the corresponding notes of a chord in a list each note is stored as tuple of values for each property of a note
                 for staff in staffs:
                     top = staff.beats_per_measure
                     bottom = staff.note_value
@@ -177,8 +191,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     melodyStaffs.append(newStaff)
 
                 self.variables[melody.identifier.getText()] = melodyStaffs
-            #else if reassignment of a chord variable is attempted raise an exception 
-            else:
+            else: # Else if reassignment of a chord variable is attempted raise an exception 
                 line = melody.identifier.getSymbol().line
                 col = melody.identifier.getSymbol().column
                 raise Exception(
@@ -188,16 +201,13 @@ class MusicEvaluator(MyGrammerVisitor):
     def evaluateMelodyVar(self, ctx: MyGrammerParser.Expr_varContext):
         pass
 
-    def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value):  # List of Expressions of a staff block
+    def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value): # List of Expressions of a staff block
         for x in ctx:
             if isinstance(x, DeclareMeasuresNode):
                 cur_beats = 0
                 for m_expr in x.expressions:
                     if isinstance(m_expr, ExprNoteNode):
-                        val = m_expr.note_value
-                        dotted = m_expr.dotted
-
-                        cur_beats += valToBeat(str(val), float(note_value), bool(dotted))
+                        cur_beats += valToBeat(str(m_expr.note_value), float(note_value), bool(m_expr.dotted))
                         if cur_beats > float(beats_per_measure):
                             line = m_expr.note_value.getSymbol().line
                             col = m_expr.note_value.getSymbol().column
@@ -207,23 +217,7 @@ class MusicEvaluator(MyGrammerVisitor):
                         printExprNote(m_expr)
 
                     elif isinstance(m_expr, ExprChordNode):
-                        notes = m_expr.notes
-                        expected_note_val = ""
-                        is_dotted = False
-
-                        for idx, n in enumerate(notes): # Checking if all notes in chord have same note_value
-                            if bool(n.dotted):
-                                is_dotted = True
-                                
-                            if idx == 0:
-                                expected_note_val = str(n.note_value)
-                            else:
-                                if str(n.note_value) != expected_note_val:
-                                    line = n.note_value.getSymbol().line
-                                    col = n.note_value.getSymbol().column
-
-                                    raise Exception("Mismatch in note values, all notes within a chord must have the same note value", line, col)
-
+                        expected_note_val, is_dotted = processExprChord(m_expr.notes, "EXPR")
                         cur_beats += valToBeat(expected_note_val, float(note_value), is_dotted)
                         if cur_beats > float(beats_per_measure):
                             line = m_expr.notes[0].note_value.getSymbol().line
@@ -232,28 +226,62 @@ class MusicEvaluator(MyGrammerVisitor):
                             raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                         
                         printExprChord(m_expr)
+
                     elif isinstance(m_expr, AccidentalExpressionNode):
                         print("accidental")
                         print(m_expr)
+
                     elif isinstance(m_expr, DeclareContinousNode):
-                        # TODO: Continuous Expression error checking; note value checking as well; Variable Expressions error checking
-                        print("continuous")
                         for continuous_expr in m_expr.expressions:
                             if isinstance(continuous_expr, ExprNoteNode):
-                                print("Continuous Note")
+                                cur_beats += valToBeat(str(continuous_expr.note_value), float(note_value), bool(continuous_expr.dotted))
+                                if cur_beats > float(beats_per_measure):
+                                    line = continuous_expr.note_value.getSymbol().line
+                                    col = continuous_expr.note_value.getSymbol().column
+
+                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+
+                                printExprNote(continuous_expr)
+
                             elif isinstance(continuous_expr, ExprChordNode):
-                                print("Continuous Chord")
+                                expected_note_val, is_dotted = processExprChord(continuous_expr.notes, "EXPR")
+                                cur_beats += valToBeat(expected_note_val, float(note_value), is_dotted)
+                                if cur_beats > float(beats_per_measure):
+                                    line = m_expr.notes[0].note_value.getSymbol().line
+                                    col = m_expr.notes[0].note_value.getSymbol().column
+
+                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                                
+                                printExprChord(continuous_expr)
+
                             elif isinstance(continuous_expr, AccidentalExpressionNode):
                                 print("Continuous Accidental")
+
                             else:
+                                # TODO: Variable Expression error checking; must not be melody; note value checking as well
                                 if (not self.checkInListNode(continuous_expr)): # Error checking identifier and if melody
                                     if isinstance(self.variables[continuous_expr.getText()][0], Staff):
                                         line = continuous_expr.getSymbol().line
                                         col = continuous_expr.getSymbol().column
                                         raise Exception("Variable must be note or chord but a melody is called", line, col)
-                                    else:
-                                        # TODO: Note Value checking here
-                                        print("note or chord")
+
+                                    elif self.variables[continuous_expr.getText()][0] == "NOTE":
+                                        cur_beats += valToBeat(str(self.variables[continuous_expr.getText()][1]), float(note_value), bool(self.variables[continuous_expr.getText()][4]))
+                                        if cur_beats > float(beats_per_measure):
+                                            line = continuous_expr.getSymbol().line
+                                            col = continuous_expr.getSymbol().column
+
+                                            raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+
+                                    elif self.variables[continuous_expr.getText()][0] == "CHORD":
+                                        expected_note_val, is_dotted = processExprChord(self.variables[continuous_expr.getText()][1], "VAR")
+                                        cur_beats += valToBeat(expected_note_val, float(note_value), is_dotted)
+                                        if cur_beats > float(beats_per_measure):
+                                            line = continuous_expr.getSymbol().line
+                                            col = continuous_expr.getSymbol().column
+
+                                            raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+
                         print(m_expr.expressions)
                         print(m_expr)
                     else:
@@ -263,14 +291,31 @@ class MusicEvaluator(MyGrammerVisitor):
                                 line = m_expr.getSymbol().line
                                 col = m_expr.getSymbol().column
                                 raise Exception("Variable must be note or chord but a melody is called", line, col)
-                            else:
-                                # TODO: Note Value checking here
-                                print("note or chord")
+
+                            elif self.variables[m_expr.getText()][0] == "NOTE":
+                                cur_beats += valToBeat(str(self.variables[m_expr.getText()][1]), float(note_value), bool(self.variables[m_expr.getText()][4]))
+                                if cur_beats > float(beats_per_measure):
+                                    line = m_expr.getSymbol().line
+                                    col = m_expr.getSymbol().column
+
+                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+
+                            elif self.variables[m_expr.getText()][0] == "CHORD":
+                                expected_note_val, is_dotted = processExprChord(self.variables[m_expr.getText()][1], "VAR")
+                                cur_beats += valToBeat(expected_note_val, float(note_value), is_dotted)
+                                if cur_beats > float(beats_per_measure):
+                                    line = m_expr.getSymbol().line
+                                    col = m_expr.getSymbol().column
+
+                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+
                         print(m_expr)
+
             elif isinstance(x, AccidentalExpressionNode):
                 print("accidental")
                 for acc_expr in x.accidentals:
                     print(acc_expr.accidental, acc_expr.pitch)
+
             elif isinstance(x, DeclareRepeatStartNode):
                 if x.times is not None and int(x.times.getText()) > 100:
                     line = x.times.getSymbol().line
@@ -281,6 +326,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     col = x.times.getSymbol().column
                     raise Exception("Number must be greater than 0", line, col)
                 print("declare repeat start")
+
             elif isinstance(x, DeclareRepeatEndNode):
                 print("declare repeat end")
 
@@ -307,46 +353,19 @@ class MusicEvaluator(MyGrammerVisitor):
             print("bpm (" + str(self.bpm) + ")")
 
         print(node.instrument.getText())
-        # DECLARED NOTES
-        self.evaluateDeclaredNotes(
-            node.notes)  # Returns NoteExpression Objects
+
+        self.evaluateDeclaredNotes(node.notes)  # Returns NoteExpression Objects
+        self.evaluateDeclaredChords(node.chords)  # Returns ChordExpression Objects
 
         for x in self.variables:
-            print(x, self.variables[x])
-            num = self.variables[x][2]
-            pitch = self.variables[x][1]
-            val = self.variables[x][0]
-
-            # create notes
-            v = note.Note(pitch + num)
-            #update note duration
-            if val == "eighth":
-                d = duration.Duration(type="eighth")
-                v.quarterLength = d.quarterLength
-            if val == "sixteenth":
-                v.quarterLength = 0.25
-            if val == "full":
-                d = duration.Duration(type="whole")
-                v.quarterLength = d.quarterLength
-            if val == "double":
-                v.quarterLength = 2.0
-            if val == "half":
-                d = duration.Duration(type="half")
-                v.quarterLength = d.quarterLength
-            notes.append(v)
-                
-        # DECLARE CHORDS
-        chord_vars = self.evaluateDeclaredChords(node.chords)
-        
-        for x in chord_vars:
-            cur_notes = []
-            for n in chord_vars[x]:
-                num = n[2]
-                pitch = n[1]
-                val = n[0]
+            if self.variables[x][0] == "NOTE":
+                print(x, self.variables[x])
+                num = self.variables[x][3]
+                pitch = self.variables[x][2]
+                val = self.variables[x][1]
 
                 # create notes
-                v = note.Note(pitch+num)
+                v = note.Note(pitch + num)
                 #update note duration
                 if val == "eighth":
                     d = duration.Duration(type="eighth")
@@ -361,9 +380,34 @@ class MusicEvaluator(MyGrammerVisitor):
                 if val == "half":
                     d = duration.Duration(type="half")
                     v.quarterLength = d.quarterLength
-                cur_notes.append(v)
+                notes.append(v)
 
-            chords.append(chord.Chord(cur_notes))
+            elif self.variables[x][0] == "CHORD":
+                cur_notes = []
+                for n in self.variables[x][1]:
+                    num = n[2]
+                    pitch = n[1]
+                    val = n[0]
+
+                    # create notes
+                    v = note.Note(pitch+num)
+                    #update note duration
+                    if val == "eighth":
+                        d = duration.Duration(type="eighth")
+                        v.quarterLength = d.quarterLength
+                    if val == "sixteenth":
+                        v.quarterLength = 0.25
+                    if val == "full":
+                        d = duration.Duration(type="whole")
+                        v.quarterLength = d.quarterLength
+                    if val == "double":
+                        v.quarterLength = 2.0
+                    if val == "half":
+                        d = duration.Duration(type="half")
+                        v.quarterLength = d.quarterLength
+                    cur_notes.append(v)
+
+                chords.append(chord.Chord(cur_notes))
 
         self.evaluateDeclaredMelody(node.melodies)
 
