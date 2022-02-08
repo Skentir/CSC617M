@@ -5,6 +5,29 @@ from MyGrammerVisitor import MyGrammerVisitor
 from MusicNodes import *
 from music21 import *
 
+def createChord(note_arr, val):
+    arr = []
+    for num, pitch in note_arr:
+        arr.append(str(pitch) + str(num))
+    new_chord = chord.Chord(arr)
+    if val == "eighth":
+        d = duration.Duration(type="eighth")
+        new_chord.quarterLength = d.quarterLength
+    if val == "sixteenth":
+        new_chord.quarterLength = 0.25
+    if val == "full":
+        d = duration.Duration(type="whole")
+        new_chord.quarterLength = d.quarterLength
+    if val == "double":
+        new_chord.quarterLength = 2.0
+    if val == "half":
+        d = duration.Duration(type="half")
+        new_chord.quarterLength = d.quarterLength
+    return new_chord
+def createNote(num, pitch, val):
+    m_note = note.Note(pitch + num)
+        #update note duration
+    return m_note
 
 def printExprNote(note: ExprNoteNode):
     print(note.note_value, note.pitch, note.num, note.dotted)
@@ -362,50 +385,16 @@ class MusicEvaluator(MyGrammerVisitor):
                 pitch = self.variables[x][2]
                 val = self.variables[x][1]
 
-                # create notes
-                v = note.Note(pitch + num)
-                #update note duration
-                if val == "eighth":
-                    d = duration.Duration(type="eighth")
-                    v.quarterLength = d.quarterLength
-                if val == "sixteenth":
-                    v.quarterLength = 0.25
-                if val == "full":
-                    d = duration.Duration(type="whole")
-                    v.quarterLength = d.quarterLength
-                if val == "double":
-                    v.quarterLength = 2.0
-                if val == "half":
-                    d = duration.Duration(type="half")
-                    v.quarterLength = d.quarterLength
-                notes.append(v)
+                self.variables[x] = createNote(num, pitch, val)
 
             elif self.variables[x][0] == "CHORD":
                 cur_notes = []
+                val = self.variables[x][1][0] # get first note value; all same note value
                 for n in self.variables[x][1]:
                     num = n[2]
                     pitch = n[1]
-                    val = n[0]
-
-                    # create notes
-                    v = note.Note(pitch+num)
-                    #update note duration
-                    if val == "eighth":
-                        d = duration.Duration(type="eighth")
-                        v.quarterLength = d.quarterLength
-                    if val == "sixteenth":
-                        v.quarterLength = 0.25
-                    if val == "full":
-                        d = duration.Duration(type="whole")
-                        v.quarterLength = d.quarterLength
-                    if val == "double":
-                        v.quarterLength = 2.0
-                    if val == "half":
-                        d = duration.Duration(type="half")
-                        v.quarterLength = d.quarterLength
-                    cur_notes.append(v)
-
-                chords.append(chord.Chord(cur_notes))
+                    cur_notes.append((num, pitch))
+                self.variables[x] = createChord(cur_notes, val)
 
         self.evaluateDeclaredMelody(node.melodies)
 
