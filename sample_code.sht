@@ -1,30 +1,71 @@
-bpM(300)
-instrument(Electric Guitar)
-sample_note = QuArTeR(A, 2)
-sample_kirs = quarter(A, 2)
-sampleChord2 = chord(half(A, 2), half(B, 4), half(C,5))
+bpM(150)
+instrument(Piano)
 
 staff (4,4) {
-    repstart(3)
     measure {
-        quarter(A, 2)
-        quarter(B, 2)
-        quarter(C, 2)
-        quarter(D, 2)
+        quarter(C, 3)
+        quarter(C, 3)
+        quarter(G, 3)
+        quarter(G, 3)
     }
     measure {
-        quarter(A, 2)
-        quarter(B, 2)
-        quarter(C, 2)
-        quarter(D, 2)
+        quarter(A, 3)
+        quarter(A, 3)
+        half(G, 3)
     }
-    repend
-    repstart()
     measure {
-        quarter(A, 2)
-        quarter(B, 2)
-        quarter(C, 2)
-        quarter(D, 2)
+        quarter(F, 3)
+        quarter(F, 3)
+        quarter(E, 3)
+        quarter(E, 3)
     }
-    repend
+    measure {
+        quarter(D, 3)
+        quarter(D, 3)
+        half(C, 3)
+    }
+    measure {
+        quarter(G, 3)
+        quarter(G, 3)
+        quarter(F, 3)
+        quarter(F, 3)
+    }
+    measure {
+        quarter(E, 3)
+        quarter(E, 3)
+        half(D, 3)
+    }
+    measure {
+        quarter(G, 3)
+        quarter(G, 3)
+        quarter(F, 3)
+        quarter(F, 3)
+    }
+    measure {
+        quarter(E, 3)
+        quarter(E, 3)
+        half(D, 3)
+    }
+    measure {
+        quarter(C, 3)
+        quarter(C, 3)
+        quarter(G, 3)
+        quarter(G, 3)
+    }
+    measure {
+        quarter(A, 3)
+        quarter(A, 3)
+        half(G, 3)
+    }
+    measure {
+        quarter(F, 3)
+        quarter(F, 3)
+        quarter(E, 3)
+        quarter(E, 3)
+    }
+    measure {
+        quarter(D, 3)
+        quarter(D, 3)
+        half(C, 3)
+    }
 }
