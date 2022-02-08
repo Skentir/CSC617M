@@ -12,6 +12,12 @@ staff (4,4) {
         quarter(C, 2)
         quarter(D, 2)
     }
+    measure {
+        quarter(A, 2)
+        quarter(B, 2)
+        quarter(C, 2)
+        quarter(D, 2)
+    }
     repend
     repstart()
     measure {

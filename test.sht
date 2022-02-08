@@ -19,3 +19,16 @@ staff (4,4) {
         quarter(D, 2)
     }
 }
+
+melody chorus {
+    staff (3,4) {
+        measure {
+            quarter(C, 2)
+            quarter(D, 2)
+            continuous {
+                quarter(C, 2)
+                quarter(D, 2)
+            }
+        }
+    }
+}

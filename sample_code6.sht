@@ -1,22 +1,21 @@
-bpm(200)
-sample_note = quarter(C, 5)
-sample_note1 = quarter(C, 5)
-sample_note2 = quarter(G, 5)
-sample_note3 = quarter(G, 5)
-sample_note4 = quarter(A, 5)
-sample_note5 = quarter(A, 5)
-sample_note6 = quarter(G, 5)
-sample_note7 = quarter(F, 5)
-sample_note8= quarter(F, 5)
-sample_note9 = quarter(E, 5)
-sample_note10 = quarter(E, 5)
-sample_note11 = quarter(D, 5)
-sample_note12 = quarter(D, 5)
-sample_note13 = quarter(C, 5)
+bpM(300)
+instrument(Electric Guitar)
+sample_note = QuArTeR(A, 2)
+sample_kirs = quarter(A, 2)
+sampleChord2 = chord(quarter(A, 2), quarter(B, 4), quarter(C,5))
 
+melody chorus {
+    staff (4,4) {
+        measure {
+            quarter(A, 2)
+            sample_kirs
+            continuous {
+                quarter(A, 2)
+                sampleChord2
+                sampleChord2
+            }
+        }
+    }
+}
 
-
-
-
-
-
+chorus

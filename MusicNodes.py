@@ -74,3 +74,11 @@ class AccidentalNode():
 class DeclareContinousNode():
     def __init__(self, expressions):
         self.expressions = expressions
+
+class DeclareRepeatStartNode():
+    def __init__(self, times):
+        self.times = times
+
+class DeclareRepeatEndNode():
+    def __init__(self):
+        pass
