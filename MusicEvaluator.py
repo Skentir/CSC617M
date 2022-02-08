@@ -41,6 +41,27 @@ class Staff():
         self.note_value = note_value
         self.expressions = expressions
 
+def createNote(num, pitch, val):
+    m_note = note.Note(pitch + num)
+        #update note duration
+    if val == "eighth":
+        d = duration.Duration(type="eighth")
+        m_note.quarterLength = d.quarterLength
+    if val == "sixteenth":
+        m_note.quarterLength = 0.25
+    if val == "full":
+        d = duration.Duration(type="whole")
+        m_note.quarterLength = d.quarterLength
+    if val == "double":
+        m_note.quarterLength = 2.0
+    if val == "half":
+        d = duration.Duration(type="half")
+        m_note.quarterLength = d.quarterLength
+    return m_note
+
+def applyAccidental():
+    pass
+
 class MusicEvaluator(MyGrammerVisitor):
     bpm = None
     instrument = None
@@ -115,12 +136,14 @@ class MusicEvaluator(MyGrammerVisitor):
                 staff = MyGrammerVisitor().visitDeclare_staff(i)
                 top = staff.beats_per_measure
                 bottom = staff.note_value
+               
                 for expr in staff.expressions:
                     self.evaluateStaffBlock(expr)
                     for x in expr:
                         if isinstance(x, DeclareMeasuresNode):
                             cur_beats = 0
-
+                            measure = stream.Measure()
+                            measure.insert(0, meter.TimeSignature(top +"/" +bottom))
                             for m_expr in x.expressions:
                                 if isinstance(m_expr, ExprNoteNode):
                                     val = m_expr.note_value
@@ -199,6 +222,9 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateMelodyVar(self, ctx: MyGrammerParser.Expr_varContext):
         pass
+
+         
+
 
     def evaluateStaffBlock(self,
                            ctx: list):  # List of Expressions of a staff block
