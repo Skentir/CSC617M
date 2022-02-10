@@ -5,8 +5,10 @@ staff (4,4) {
     measure {
         quarter(C, 3)
         quarter(C, 3)
-        quarter(G, 3)
-        quarter(G, 3)
+        continuous {
+            quarter(G, 3)       
+            quarter(G, 3)   
+        }
     }
     measure {
         quarter(A, 3)

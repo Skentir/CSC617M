@@ -277,6 +277,8 @@ class MusicEvaluator(MyGrammerVisitor):
                         print(m_expr)
 
                     elif isinstance(m_expr, DeclareContinousNode):
+                        slurs = []
+
                         for continuous_expr in m_expr.expressions:
                             if isinstance(continuous_expr, ExprNoteNode):
                                 cur_beats += valToBeat(str(continuous_expr.note_value), float(note_value), bool(continuous_expr.dotted))
@@ -286,7 +288,7 @@ class MusicEvaluator(MyGrammerVisitor):
 
                                     raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                                 else:
-                                    measure.append(createNote(str(continuous_expr.num), str(continuous_expr.pitch), str(continuous_expr.note_value)))
+                                    slurs.append(createNote(str(continuous_expr.num), str(continuous_expr.pitch), str(continuous_expr.note_value)))
                                     printExprNote(continuous_expr)
 
                             elif isinstance(continuous_expr, ExprChordNode):
@@ -301,7 +303,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     new_notes = []
                                     for n in continuous_expr.notes:
                                         new_notes.append((str(n.num), str(n.pitch)))
-                                    measure.append(createChord(new_notes, expected_note_val))
+                                    slurs.append(createChord(new_notes, expected_note_val))
                                     printExprChord(continuous_expr)
 
                             elif isinstance(continuous_expr, AccidentalExpressionNode):
@@ -322,7 +324,7 @@ class MusicEvaluator(MyGrammerVisitor):
 
                                             raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                                         else:
-                                            measure.append(createNote(str(self.variables[continuous_expr.getText()][3]), str(self.variables[continuous_expr.getText()][2]), str(self.variables[continuous_expr.getText()][1])))
+                                            slurs.append(createNote(str(self.variables[continuous_expr.getText()][3]), str(self.variables[continuous_expr.getText()][2]), str(self.variables[continuous_expr.getText()][1])))
 
                                     elif self.variables[continuous_expr.getText()][0] == "CHORD":
                                         expected_note_val, is_dotted = processExprChord(self.variables[continuous_expr.getText()][1], "VAR")
@@ -336,8 +338,9 @@ class MusicEvaluator(MyGrammerVisitor):
                                             new_notes = []
                                             for n in self.variables[continuous_expr.getText()][1]:
                                                 new_notes.append((str(n[2]), str(n[1])))
-                                            measure.append(createChord(new_notes, expected_note_val))
+                                            slurs.append(createChord(new_notes, expected_note_val))
 
+                        measure.append(spanner.Slur(slurs))
                         print(m_expr.expressions)
                         print(m_expr)
                     else:
