@@ -210,12 +210,11 @@ class MusicEvaluator(MyGrammerVisitor):
                         line = i.IDENTIFIER().getSymbol().line
                         col = i.IDENTIFIER().getSymbol().column
                         raise Exception("Variable must be melody but a note is called", line, col)
-                    else:
-                        if isinstance(self.variables[melodyVariable.getText()][0], tuple): #chord
-                            line = i.IDENTIFIER().getSymbol().line
-                            col = i.IDENTIFIER().getSymbol().column
-                            raise Exception("Variable must be melody but a chord is called", line, col)
-                self.staffs.append(Staff(None, None, melodyVariable))
+                    elif isinstance(self.variables[melodyVariable.getText()][0], tuple): #chord:
+                        line = i.IDENTIFIER().getSymbol().line
+                        col = i.IDENTIFIER().getSymbol().column
+                        raise Exception("Variable must be melody but a chord is called", line, col)
+                self.staffs.append(Staff(None, None, melodyVariable.getText()))
                         
     def checkInListContext(self, ctx):
         line = ctx.IDENTIFIER().getSymbol().line
@@ -260,7 +259,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     "Reassignment is not allowed. Use a different identifier",
                     line, col)
 
-    def evaluateMelodyVar(self, ctx: MyGrammerParser.Expr_varContext):
+    def evaluateMelodyVar(self, ctx: list):
         pass
 
     def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value, staff): # List of Expressions of a staff block
@@ -442,23 +441,23 @@ class MusicEvaluator(MyGrammerVisitor):
         self.evaluateDeclaredNotes(node.notes)  # Returns NoteExpression Objects
         self.evaluateDeclaredChords(node.chords)  # Returns ChordExpression Objects
 
-        for x in self.variables:
-            if self.variables[x][0] == "NOTE":
-                print(x, self.variables[x])
-                num = self.variables[x][3]
-                pitch = self.variables[x][2]
-                val = self.variables[x][1]
+        # for x in self.variables:
+        #     if self.variables[x][0] == "NOTE":
+        #         print(x, self.variables[x])
+        #         num = self.variables[x][3]
+        #         pitch = self.variables[x][2]
+        #         val = self.variables[x][1]
 
-                self.variables[x] = createNote(num, pitch, val)
+        #         self.variables[x] = createNote(num, pitch, val)
 
-            elif self.variables[x][0] == "CHORD":
-                cur_notes = []
-                val = self.variables[x][1][0] # get first note value; all same note value
-                for n in self.variables[x][1]:
-                    num = n[2]
-                    pitch = n[1]
-                    cur_notes.append((num, pitch))
-                self.variables[x] = createChord(cur_notes, val)
+        #     elif self.variables[x][0] == "CHORD":
+        #         cur_notes = []
+        #         val = self.variables[x][1][0] # get first note value; all same note value
+        #         for n in self.variables[x][1]:
+        #             num = n[2]
+        #             pitch = n[1]
+        #             cur_notes.append((num, pitch))
+        #         self.variables[x] = createChord(cur_notes, val)
 
         self.evaluateDeclaredMelody(node.melodies)
 
@@ -467,8 +466,17 @@ class MusicEvaluator(MyGrammerVisitor):
 
         
         for i in self.staffs:
-            for j in i:
-                self.music_stream.append(j)
+            if isinstance(i, layout.Staff):
+                for j in i:
+                    self.music_stream.append(j)
+            else:
+                if isinstance(i, Staff):
+                    if i.melodyVariable is not None:
+                        for staff in self.variables[i.melodyVariable]:
+                            for j in staff.expressions:
+                                self.music_stream.append(j)
+                    else:
+                        pass
         #add to stream
         # for x in notes:
         #     self.music_stream.append(x)

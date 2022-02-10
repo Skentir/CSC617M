@@ -50,15 +50,15 @@ if __name__ == "__main__":
     else:
         print("Failed to parse")
 
-    # fp = 'test.midi'
-    # mf = midi.MidiFile()
-    # mf.open(fp)
-    # mf.read()
-    # mf.close()
-    # print(mf.tracks[0])
-    # sp = converter.parse('test.midi')
-    # sp = midi.realtime.StreamPlayer(sp)
-    # sp.play()
+    fp = 'test.midi'
+    mf = midi.MidiFile()
+    mf.open(fp)
+    mf.read()
+    mf.close()
+    print(mf.tracks[0])
+    sp = converter.parse('test.midi')
+    sp = midi.realtime.StreamPlayer(sp)
+    sp.play()
 
     # try:
     #     ast = MyGrammerVisitor().visitProg(tree)
