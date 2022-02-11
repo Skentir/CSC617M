@@ -71,3 +71,9 @@ staff (4,4) {
         half(C, 3)
     }
 }
+
+staff (0, 1) {
+    measure {
+        quarter(D, 3)
+    }
+}

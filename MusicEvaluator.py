@@ -170,11 +170,19 @@ class MusicEvaluator(MyGrammerVisitor):
             if i.__class__.__name__ == 'Declare_staffContext':
                 staff = MyGrammerVisitor().visitDeclare_staff(i)
                 top = staff.beats_per_measure
+                if int(top.getText()) <= 0:
+                    line = top.getSymbol().line
+                    col = top.getSymbol().column
+                    raise Exception("Number of beats in staff must be greater than 0", line, col)
                 bottom = staff.note_value
-                newStaff = Staff(top, bottom, None)
+                if int(bottom.getText()) <= 0:
+                    line = bottom.getSymbol().line
+                    col = bottom.getSymbol().column
+                    raise Exception("Note value of whole beats in staff must be greater than 0", line, col)
+                newStaff = Staff(top.getText(), bottom.getText(), None)
                 staff1 = layout.Staff()
                 for expr in staff.expressions:
-                    self.evaluateStaffBlock(expr, top, bottom, newStaff)
+                    self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), newStaff)
                     # for x in expr:
                     #     newStaff.expressions.append(x)
                 for measure in newStaff.expressions:
