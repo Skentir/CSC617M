@@ -324,12 +324,12 @@ class MyGrammerVisitor(ParseTreeVisitor):
                     child_node)  # DeclareMeasureNode()
                 sbl.append(measures)
                 # print("sub measure", measures)
-            elif node_type == 'Declare_repeatContext':
-                repstart = self.visitDeclare_repeat(child_node)
-                sbl.append(repstart)
-            elif node_type == 'Declare_repeat_endContext':
-                repend = self.visitDeclare_repeat_end(child_node)
-                sbl.append(repend)
+            # elif node_type == 'Declare_repeatContext':
+            #     repstart = self.visitDeclare_repeat(child_node)
+            #     sbl.append(repstart)
+            # elif node_type == 'Declare_repeat_endContext':
+            #     repend = self.visitDeclare_repeat_end(child_node)
+            #     sbl.append(repend)
             elif node_type == 'Staff_blockContext':
                 self.visitStaff_block(child_node, sbl)  # Expand staff_block production
             elif node_type == 'Repeat_blockContext':

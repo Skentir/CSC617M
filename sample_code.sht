@@ -74,10 +74,12 @@ melody chorus{
     
     staff (4,4) {
         measure {
+            repstart
             quarter(C, 3)
             quarter(C, 3)
             sample_note
             sample_note
+            repend(3)
         }
         measure {
             quarter(A, 3)

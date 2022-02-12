@@ -133,7 +133,11 @@ declare_note: IDENTIFIER EQUAL_OPER expr_note;
 declare_chord: IDENTIFIER EQUAL_OPER expr_chord;
 declare_melody: MELODY IDENTIFIER OPEN_BRACKET (declare_staff)+ CLOSE_BRACKET;
 declare_continuous: CONTINUOUS OPEN_BRACKET (expr)+ CLOSE_BRACKET;
-declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
+// declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
+
+declare_measures: MEASURE OPEN_BRACKET (repeat_measure_block | measure_block) CLOSE_BRACKET;
+repeat_measure_block: declare_repeat measure_block declare_repeat_end;
+measure_block: (expr | declare_continuous)+;
 
 //Expresions
 expr: expr_note                             # NoteExpression
@@ -156,8 +160,11 @@ expr_acc: ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
 expr_add_acc: ACCIDENTAL PITCH | ACCIDENTAL PITCH COMMA_SEP expr_add_acc | PITCH | PITCH COMMA_SEP expr_add_acc;
 
 // Iteratives
-declare_repeat: REPSTART OPEN_PAR INTEGER? CLOSE_PAR;
-declare_repeat_end: REPEND;
+// declare_repeat: REPSTART OPEN_PAR INTEGER? CLOSE_PAR;
+// declare_repeat_end: REPEND;
+// Iteratives
+declare_repeat: REPSTART;
+declare_repeat_end: REPEND OPEN_PAR INTEGER? CLOSE_PAR;
 
 // Functions
 declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (staff_block)+ CLOSE_BRACKET;
@@ -167,5 +174,7 @@ declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (
 // staff_block: expr_acc staff_block | staff_block expr_acc | REPSTART staff_block declare_repeat_end | staff_block repeat_end_expr | declare_measures staff_block | staff_block declare_measures | declare_measures;
 // staff_block: REPSTART? staff_block repeat_end_expr (staff_block repeat_end_expr)*;
 // staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | REPSTART staff_block REPEND;
-staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | declare_repeat repeat_block declare_repeat_end staff_block | staff_block declare_repeat repeat_block declare_repeat_end | declare_repeat repeat_block declare_repeat_end;
-repeat_block: expr_acc repeat_block | repeat_block expr_acc | declare_measures repeat_block | repeat_block declare_measures | declare_measures;
+// staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | declare_repeat repeat_block declare_repeat_end staff_block | staff_block declare_repeat repeat_block declare_repeat_end | declare_repeat repeat_block declare_repeat_end;
+// repeat_block: expr_acc repeat_block | repeat_block expr_acc | declare_measures repeat_block | repeat_block declare_measures | declare_measures;
+
+staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures;
