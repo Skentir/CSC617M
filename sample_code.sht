@@ -2,6 +2,7 @@ bpM(150)
 instrument(Piano)
 
 staff (4,4) {
+    accidental( _A, #B, C)
     measure {
         quarter(C, 3)
         quarter(C, 3)

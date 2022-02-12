@@ -4,6 +4,7 @@ from MyGrammerParser import MyGrammerParser
 from MyGrammerVisitor import MyGrammerVisitor
 from MusicNodes import *
 from music21 import *
+import string
 
 
 def printExprNote(note: ExprNoteNode):
@@ -105,6 +106,19 @@ def processExprChord(chord_notes, type):
                     raise Exception("Mismatch in note values, all notes within a chord must have the same note value", line, col)
 
     return expected_note_val, is_dotted
+
+def applyAccidental(notes, accidentals):
+    #check notes and accidental
+    i = 0
+    for x in notes:
+        if accidentals[i] == "natural":
+            x.accidental = pitch.Accidental("natural")
+        elif accidentals[i] == "flat":
+            x.accidental = pitch.Accidental("flat")
+        elif accidentals[i] == "sharp":
+            x.accidental = pitch.Accidental("sharp")
+        i = i+1
+
   
 class Staff():
     def __init__(self, beats_per_measure, note_value, melodyVariable):
@@ -118,7 +132,7 @@ class MusicEvaluator(MyGrammerVisitor):
     instrument = None
     variables = {}
     staffs = []
-    music_stream = stream.Stream()
+    music_stream = stream.Score()
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
         note_value = ctx.note_value.getText()
@@ -172,7 +186,7 @@ class MusicEvaluator(MyGrammerVisitor):
                 top = staff.beats_per_measure
                 bottom = staff.note_value
                 newStaff = Staff(top, bottom, None)
-                staff1 = layout.Staff()
+                staff1 = stream.Part()
                 for expr in staff.expressions:
                     self.evaluateStaffBlock(expr, top, bottom, newStaff)
                     # for x in expr:
@@ -241,6 +255,12 @@ class MusicEvaluator(MyGrammerVisitor):
         pass
 
     def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value, staff): # List of Expressions of a staff block
+        # Accidental States for the Staff
+        accidental_states = {}
+        # Initialize states to empty string
+        for pitch in string.ascii_uppercase[:7]:
+            accidental_states[pitch] = ""
+
         for x in ctx:
             if isinstance(x, DeclareMeasuresNode):
                 measure = stream.Measure()
@@ -254,7 +274,10 @@ class MusicEvaluator(MyGrammerVisitor):
                             col = m_expr.note_value.getSymbol().column
                             raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                         else:
-                            measure.append(createNote(str(m_expr.num), str(m_expr.pitch), str(m_expr.note_value)))
+                            # Apply string concatenation of accidental state and pitch --> returns a string 'C#' or 'C'
+                            pitch = m_expr.pitch.getText()
+                            applied_pitch = pitch + accidental_states[pitch]
+                            measure.append(createNote(str(m_expr.num), applied_pitch, str(m_expr.note_value)))
                             printExprNote(m_expr)
 
                     elif isinstance(m_expr, ExprChordNode):
@@ -268,13 +291,19 @@ class MusicEvaluator(MyGrammerVisitor):
                         else:
                             new_notes = []
                             for n in m_expr.notes:
-                                new_notes.append((str(n.num), str(n.pitch)))
+                                pitch = n.pitch.getText()
+                                applied_pitch = pitch + accidental_states[pitch]
+                                new_notes.append((str(n.num), applied_pitch))
+                                
                             measure.append(createChord(new_notes, expected_note_val))
                             printExprChord(m_expr)
 
                     elif isinstance(m_expr, AccidentalExpressionNode):
                         print("accidental")
                         print(m_expr)
+                        # Update Accidental States
+                        value = "" if m_expr.accidental is None else m_expr.accidental.getText()
+                        accidental_states[acc_expr.pitch.getText()] = value
 
                     elif isinstance(m_expr, DeclareContinousNode):
                         for continuous_expr in m_expr.expressions:
@@ -286,7 +315,9 @@ class MusicEvaluator(MyGrammerVisitor):
 
                                     raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                                 else:
-                                    measure.append(createNote(str(continuous_expr.num), str(continuous_expr.pitch), str(continuous_expr.note_value)))
+                                    pitch = continuous_expr.pitch.getText()
+                                    applied_pitch = pitch + accidental_states[pitch]
+                                    measure.append(createNote(str(continuous_expr.num), applied_pitch, str(continuous_expr.note_value)))
                                     printExprNote(continuous_expr)
 
                             elif isinstance(continuous_expr, ExprChordNode):
@@ -306,6 +337,8 @@ class MusicEvaluator(MyGrammerVisitor):
 
                             elif isinstance(continuous_expr, AccidentalExpressionNode):
                                 print("Continuous Accidental")
+                                value = "" if acc_expr.accidental is None else acc_expr.accidental.getText()
+                                accidental_states[acc_expr.pitch.getText()] = value
 
                             else:
                                 if (not self.checkInListNode(continuous_expr)): # Error checking identifier and if melody
@@ -372,11 +405,16 @@ class MusicEvaluator(MyGrammerVisitor):
                                     measure.append(createChord(new_notes, expected_note_val))
 
                         print(m_expr)
+
+                
                 staff.expressions.append(measure)
             elif isinstance(x, AccidentalExpressionNode):
                 print("accidental")
                 for acc_expr in x.accidentals:
                     print(acc_expr.accidental, acc_expr.pitch)
+                    # Update Accidental States here
+                    value = "" if acc_expr.accidental is None else acc_expr.accidental.getText()
+                    accidental_states[acc_expr.pitch.getText()] = value
 
             elif isinstance(x, DeclareRepeatStartNode):
                 if x.times is not None and int(x.times.getText()) > 100:
@@ -444,8 +482,11 @@ class MusicEvaluator(MyGrammerVisitor):
 
         
         for i in self.staffs:
-            for j in i:
-                self.music_stream.append(j)
+            # # for j in i:
+            self.music_stream.append(i)
+            # print(i)
+ 
+
         #add to stream
         # for x in notes:
         #     self.music_stream.append(x)
