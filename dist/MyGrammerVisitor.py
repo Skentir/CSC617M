@@ -59,6 +59,16 @@ class MyGrammerVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MyGrammerParser#repeat_measure_block.
+    def visitRepeat_measure_block(self, ctx:MyGrammerParser.Repeat_measure_blockContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MyGrammerParser#measure_block.
+    def visitMeasure_block(self, ctx:MyGrammerParser.Measure_blockContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MyGrammerParser#NoteExpression.
     def visitNoteExpression(self, ctx:MyGrammerParser.NoteExpressionContext):
         return self.visitChildren(ctx)
@@ -126,11 +136,6 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#staff_block.
     def visitStaff_block(self, ctx:MyGrammerParser.Staff_blockContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MyGrammerParser#repeat_block.
-    def visitRepeat_block(self, ctx:MyGrammerParser.Repeat_blockContext):
         return self.visitChildren(ctx)
 
 

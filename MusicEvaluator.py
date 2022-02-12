@@ -203,6 +203,7 @@ class MusicEvaluator(MyGrammerVisitor):
                 for measure in newStaff.expressions:
                     staff1.append(measure)
                 self.staffs.append(staff1)
+                
             else: # Variable Expression checking
                 melodyVariable = MyGrammerVisitor().visitExpr_var(i)
                 if (not self.checkInListContext(i)):

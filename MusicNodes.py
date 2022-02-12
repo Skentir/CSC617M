@@ -56,8 +56,9 @@ class DeclareStaffNode():
 
 
 class DeclareMeasuresNode():
-    def __init__(self, expressions):
+    def __init__(self, expressions, repeatTimes):
         self.expressions = expressions
+        self.repeatTimes = repeatTimes
 
 
 class AccidentalExpressionNode():

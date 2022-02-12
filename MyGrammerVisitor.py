@@ -122,8 +122,35 @@ class MyGrammerVisitor(ParseTreeVisitor):
         return node
 
     # Visit a parse tree produced by MyGrammerParser#declare_measures.
-    def visitDeclare_measures(self,
-                              ctx: MyGrammerParser.Declare_measuresContext):
+    def visitDeclare_measures(self,ctx: MyGrammerParser.Declare_measuresContext):
+        expr_list, repeat = None, None
+        for child_node in ctx.getChildren():
+            node_type = child_node.__class__.__name__
+            if node_type == 'Measure_blockContext':
+                expr_list, repeat = self.visitMeasure_block(child_node)
+            elif node_type == 'Repeat_measure_blockContext':
+                expr_list, repeat = self.visitRepeat_measure_block(child_node)
+            else:
+                pass
+        node = DeclareMeasuresNode(expr_list, repeat)
+        return node
+
+
+    # Visit a parse tree produced by MyGrammerParser#repeat_measure_block.
+    def visitRepeat_measure_block(self, ctx:MyGrammerParser.Repeat_measure_blockContext):
+        for child_node in ctx.getChildren():
+            node_type = child_node.__class__.__name__
+            print(node_type, "rep mesur")
+        measure_block = ctx.measure_block()                          
+        expr_list = self.visitMeasure_block(measure_block)[0]       # Tuple (list, int)
+        repeat_times = ctx.declare_repeat_end().INTEGER()           
+        print(repeat_times.getText(), type(repeat_times))
+  
+        return expr_list, repeat_times
+
+
+    # Visit a parse tree produced by MyGrammerParser#measure_block.
+    def visitMeasure_block(self, ctx:MyGrammerParser.Measure_blockContext):
         expr_list = []
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
@@ -139,16 +166,18 @@ class MyGrammerVisitor(ParseTreeVisitor):
                 expr_list.append(chord)
             elif node_type == "VariableExpressionContext":
                 expr = child_node.expr_var()
-                var = self.visitExpr_var(expr)  # IDENTFIER, TerminalNodeImpl
+                var = self.visitExpr_var(expr)  # IDENTIFIER, TerminalNodeImpl
                 expr_list.append(var)
             elif node_type == "Declare_continuousContext":
                 cont = self.visitDeclare_continuous(child_node)
                 expr_list.append(cont)
             else:
+                print("Unknown", node_type)
                 pass
 
-        node = DeclareMeasuresNode(expr_list)
-        return node
+        # node = DeclareMeasuresNode(expr_list, 0)
+        return expr_list, 0
+    
 
     # Visit a parse tree produced by MyGrammerParser#NoteExpression.
     def visitNoteExpression(self, ctx: MyGrammerParser.NoteExpressionContext):
@@ -222,27 +251,6 @@ class MyGrammerVisitor(ParseTreeVisitor):
     def visitExpr_var(self, ctx: MyGrammerParser.Expr_varContext):
         return ctx.IDENTIFIER()
 
-    # Visit a parse tree produced by MyGrammerParser#expr_acc.
-    # def visitExpr_staff_acc(self, ctx: MyGrammerParser.Expr_staff_accContext):
-    #     # List of accidentals
-    #     acc_list = []
-    #     # for child in ctx.getChildren(): # Expr_add_accContext
-    #     #     print(child, type(child))
-    #     add_acc = self.visitExpr_add_acc(ctx.expr_add_acc(), acc_list)
-    #     node = AccidentalExpressionNode(add_acc)
-    #     return node
-    #     # return self.visitChildren(ctx)
-
-    # # Visit a parse tree produced by MyGrammerParser#expr_acc.
-    # def visitExpr__measure_acc(self, ctx: MyGrammerParser.Expr__measure_accContext):
-    #     # List of accidentals
-    #     acc_list = []
-    #     # for child in ctx.getChildren(): # Expr_add_accContext
-    #     #     print(child, type(child))
-    #     add_acc = self.visitExpr_add_acc(ctx.expr_add_acc(), acc_list)
-    #     node = AccidentalExpressionNode(add_acc)
-    #     return node
-    #     # return self.visitChildren(ctx)
 
     
     # Visit a parse tree produced by MyGrammerParser#expr_acc.
@@ -324,52 +332,17 @@ class MyGrammerVisitor(ParseTreeVisitor):
                     child_node)  # DeclareMeasureNode()
                 sbl.append(measures)
                 # print("sub measure", measures)
-            # elif node_type == 'Declare_repeatContext':
-            #     repstart = self.visitDeclare_repeat(child_node)
-            #     sbl.append(repstart)
-            # elif node_type == 'Declare_repeat_endContext':
-            #     repend = self.visitDeclare_repeat_end(child_node)
-            #     sbl.append(repend)
             elif node_type == 'Staff_blockContext':
                 self.visitStaff_block(child_node, sbl)  # Expand staff_block production
-            elif node_type == 'Repeat_blockContext':
-                repeat_block_list = []
-                self.visitRepeat_block(child_node, repeat_block_list)  # Expand staff_block production
-                for expr in repeat_block_list:
-                    sbl.append(expr)
-
+            else:
+                print("Unknown",node_type)
+                pass
         # print("SBL: ")
         # print(sbl)
         # print("StaffBL: ")
         # print(staff_block_list)
         return staff_block_list
 
-    # Visit a parse tree produced by MyGrammerParser#repeat_block.
-    def visitRepeat_block(self, ctx: MyGrammerParser.Repeat_blockContext, repeat_block_list):
-        rbl = []
-
-        rbl = repeat_block_list
-        # print("Visitor repeat block")
-
-        for child_node in ctx.getChildren():
-            # gets ALL children; grandchildren and descendants
-            node_type = child_node.__class__.__name__
-            # print("child : ", child_node, type(child_node))
-
-            if node_type == 'Expr_accContext':
-                accidentals = self.visitExpr_acc(child_node)  # AccidentalNode()
-                rbl.append(accidentals)
-            elif node_type == 'Declare_measuresContext':
-                measures = self.visitDeclare_measures(child_node)  # DeclareMeasureNode()
-                rbl.append(measures)
-            elif node_type == 'Repeat_blockContext':
-                self.visitRepeat_block(child_node, rbl)  # Expand staff_block production
-
-        # print("RBL: ")
-        # print(rbl)
-        # print("RepeatBL: ")
-        # print(repeat_block_list)
-        return repeat_block_list
-
+  
 
 del MyGrammerParser

@@ -107,6 +107,26 @@ public interface MyGrammerListener extends ParseTreeListener {
 	 */
 	void exitDeclare_measures(MyGrammerParser.Declare_measuresContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyGrammerParser#repeat_measure_block}.
+	 * @param ctx the parse tree
+	 */
+	void enterRepeat_measure_block(MyGrammerParser.Repeat_measure_blockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammerParser#repeat_measure_block}.
+	 * @param ctx the parse tree
+	 */
+	void exitRepeat_measure_block(MyGrammerParser.Repeat_measure_blockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammerParser#measure_block}.
+	 * @param ctx the parse tree
+	 */
+	void enterMeasure_block(MyGrammerParser.Measure_blockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammerParser#measure_block}.
+	 * @param ctx the parse tree
+	 */
+	void exitMeasure_block(MyGrammerParser.Measure_blockContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code NoteExpression}
 	 * labeled alternative in {@link MyGrammerParser#expr}.
 	 * @param ctx the parse tree
@@ -254,14 +274,4 @@ public interface MyGrammerListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStaff_block(MyGrammerParser.Staff_blockContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MyGrammerParser#repeat_block}.
-	 * @param ctx the parse tree
-	 */
-	void enterRepeat_block(MyGrammerParser.Repeat_blockContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MyGrammerParser#repeat_block}.
-	 * @param ctx the parse tree
-	 */
-	void exitRepeat_block(MyGrammerParser.Repeat_blockContext ctx);
 }

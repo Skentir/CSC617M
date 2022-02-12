@@ -145,7 +145,7 @@ expr: expr_note                             # NoteExpression
     | expr_var                              # VariableExpression
     | expr_acc                     # AccidentalExpression;
 
-expr_note: note_value OPEN_PAR PITCH COMMA_SEP INTEGER CLOSE_PAR | note_value OPEN_PAR PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED;
+expr_note: note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR | note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED;
 
 //expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR;
 expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR;
@@ -155,26 +155,14 @@ expr_add_note: COMMA_SEP expr_note | COMMA_SEP expr_note expr_add_note;
 expr_var: IDENTIFIER;
 
 expr_acc: ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
-// expr_staff_acc: STAFF_ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
-// expr__measure_acc: MEASURE_ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
+
 expr_add_acc: ACCIDENTAL PITCH | ACCIDENTAL PITCH COMMA_SEP expr_add_acc | PITCH | PITCH COMMA_SEP expr_add_acc;
 
 // Iteratives
-// declare_repeat: REPSTART OPEN_PAR INTEGER? CLOSE_PAR;
-// declare_repeat_end: REPEND;
-// Iteratives
+
 declare_repeat: REPSTART;
 declare_repeat_end: REPEND OPEN_PAR INTEGER? CLOSE_PAR;
 
 // Functions
 declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (staff_block)+ CLOSE_BRACKET;
-
-// staff_block: expr_acc staff_block | staff_block expr_acc | declare_repeat | declare_measures staff_block | staff_block declare_measures | declare_measures;
-
-// staff_block: expr_acc staff_block | staff_block expr_acc | REPSTART staff_block declare_repeat_end | staff_block repeat_end_expr | declare_measures staff_block | staff_block declare_measures | declare_measures;
-// staff_block: REPSTART? staff_block repeat_end_expr (staff_block repeat_end_expr)*;
-// staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | REPSTART staff_block REPEND;
-// staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | declare_repeat repeat_block declare_repeat_end staff_block | staff_block declare_repeat repeat_block declare_repeat_end | declare_repeat repeat_block declare_repeat_end;
-// repeat_block: expr_acc repeat_block | repeat_block expr_acc | declare_measures repeat_block | repeat_block declare_measures | declare_measures;
-
 staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures;
