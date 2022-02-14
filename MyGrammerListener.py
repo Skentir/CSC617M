@@ -98,15 +98,6 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MyGrammerParser#repeat_measure_block.
-    def enterRepeat_measure_block(self, ctx:MyGrammerParser.Repeat_measure_blockContext):
-        pass
-
-    # Exit a parse tree produced by MyGrammerParser#repeat_measure_block.
-    def exitRepeat_measure_block(self, ctx:MyGrammerParser.Repeat_measure_blockContext):
-        pass
-
-
     # Enter a parse tree produced by MyGrammerParser#measure_block.
     def enterMeasure_block(self, ctx:MyGrammerParser.Measure_blockContext):
         pass

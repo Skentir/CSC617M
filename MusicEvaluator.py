@@ -268,6 +268,20 @@ class MusicEvaluator(MyGrammerVisitor):
             if isinstance(x, DeclareMeasuresNode):
                 measure = stream.Measure()
                 measure.insert(0, meter.TimeSignature(beats_per_measure + "/" + note_value))
+                if x.repeat_start is not None:
+                    measure.leftBarline = bar.Repeat(direction = 'start')
+                if x.repeat_end is not None:
+                    repeat_times = None
+                    if x.repeat_end.INTEGER() is None:
+                        repeat_times = 1
+                    else:
+                        repeat_times = int(x.repeat_end.INTEGER().getText())
+                    if repeat_times < 0 or repeat_times > 10: # TODO: should we even count for this i think ok lang na wala restriction
+                        line = x.repeat_end.INTEGER().getSymbol().line
+                        col = x.repeat_end.INTEGER().getSymbol().column
+                        raise Exception("Number of repeats must be less than or equal to 10", line, col)
+                    else:
+                        measure.rightBarline = bar.Repeat(direction = 'end', times = repeat_times + 1)
                 cur_beats = 0
                 for m_expr in x.expressions:
                     if isinstance(m_expr, ExprNoteNode):

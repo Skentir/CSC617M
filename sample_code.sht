@@ -78,11 +78,60 @@ melody chorus{
 
 staff (4,4) {
     measure {
+        quarter(C, 3)
+        quarter(C, 3)
+        sample_note
+        sample_note
+    }
+    measure {
+        quarter(A, 3)
+        quarter(A, 3)
+        half(G, 3)
+    }
+    measure {
+        quarter(F, 3)
+        quarter(F, 3)
+        quarter(E, 3)
+        quarter(E, 3)
+    }
+    measure {
+        quarter(D, 3)
+        quarter(D, 3)
+        half(C, 3)
+    }
+    measure {
         repstart
+        quarter(G, 3)
+        quarter(G, 3)
+        quarter(F, 3)
+        quarter(F, 3)
+    }
+    measure {
+        quarter(E, 3)
+        quarter(E, 3)
+        half(D, 3)
+        repend
+    }
+    measure {
         quarter(C, 3)
         quarter(C, 3)
         sample_note
         sample_note
-        repend(3)
+    }
+    measure {
+        quarter(A, 3)
+        quarter(A, 3)
+        half(G, 3)
+    }
+    measure {
+        quarter(F, 3)
+        quarter(F, 3)
+        quarter(E, 3)
+        quarter(E, 3)
+    }
+    measure {
+        quarter(D, 3)
+        quarter(D, 3)
+        half(C, 3)
     }
 }

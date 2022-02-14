@@ -135,9 +135,9 @@ declare_melody: MELODY IDENTIFIER OPEN_BRACKET (declare_staff)+ CLOSE_BRACKET;
 declare_continuous: CONTINUOUS OPEN_BRACKET (expr)+ CLOSE_BRACKET;
 // declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
 
-declare_measures: MEASURE OPEN_BRACKET (repeat_measure_block | measure_block) CLOSE_BRACKET;
-repeat_measure_block: declare_repeat measure_block declare_repeat_end;
-measure_block: (expr | declare_continuous)+;
+declare_measures: MEASURE OPEN_BRACKET measure_block CLOSE_BRACKET;
+// repeat_measure_block: declare_repeat measure_block declare_repeat_end;
+measure_block: declare_repeat? (expr | declare_continuous)+ declare_repeat_end?;
 
 //Expresions
 expr: expr_note                             # NoteExpression
@@ -161,7 +161,7 @@ expr_add_acc: ACCIDENTAL PITCH | ACCIDENTAL PITCH COMMA_SEP expr_add_acc | PITCH
 // Iteratives
 
 declare_repeat: REPSTART;
-declare_repeat_end: REPEND OPEN_PAR INTEGER? CLOSE_PAR;
+declare_repeat_end: REPEND | REPEND OPEN_PAR INTEGER? CLOSE_PAR;
 
 // Functions
 declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (staff_block)+ CLOSE_BRACKET;

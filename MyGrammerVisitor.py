@@ -123,35 +123,26 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#declare_measures.
     def visitDeclare_measures(self,ctx: MyGrammerParser.Declare_measuresContext):
-        expr_list, repeat = None, None
+        expr_list, repeat_start, repeat_end = None, None, None
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
             if node_type == 'Measure_blockContext':
-                expr_list, repeat = self.visitMeasure_block(child_node)
-            elif node_type == 'Repeat_measure_blockContext':
-                expr_list, repeat = self.visitRepeat_measure_block(child_node)
+                expr_list, repeat_start, repeat_end = self.visitMeasure_block(child_node)
             else:
+                print("Unknown", node_type)
                 pass
-        node = DeclareMeasuresNode(expr_list, repeat)
+        node = DeclareMeasuresNode(expr_list, repeat_start, repeat_end)
         return node
-
-
-    # Visit a parse tree produced by MyGrammerParser#repeat_measure_block.
-    def visitRepeat_measure_block(self, ctx:MyGrammerParser.Repeat_measure_blockContext):
-        for child_node in ctx.getChildren():
-            node_type = child_node.__class__.__name__
-            print(node_type, "rep mesur")
-        measure_block = ctx.measure_block()                          
-        expr_list = self.visitMeasure_block(measure_block)[0]       # Tuple (list, int)
-        repeat_times = ctx.declare_repeat_end().INTEGER()           
-        print(repeat_times.getText(), type(repeat_times))
-  
-        return expr_list, repeat_times
-
 
     # Visit a parse tree produced by MyGrammerParser#measure_block.
     def visitMeasure_block(self, ctx:MyGrammerParser.Measure_blockContext):
         expr_list = []
+        repstart, repend = None, None
+        if ctx.declare_repeat() is not None:
+            repstart = ctx.declare_repeat()
+        if ctx.declare_repeat_end() is not None:
+            repend = ctx.declare_repeat_end()
+
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
 
@@ -176,7 +167,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
                 pass
 
         # node = DeclareMeasuresNode(expr_list, 0)
-        return expr_list, 0
+        return expr_list, repstart, repend
     
 
     # Visit a parse tree produced by MyGrammerParser#NoteExpression.
@@ -278,17 +269,6 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
         #return the list of notes
         return accList
-
-    # Visit a parse tree produced by MyGrammerParser#declare_repeat.
-    def visitDeclare_repeat(self, ctx: MyGrammerParser.Declare_repeatContext):
-        node = DeclareRepeatStartNode(ctx.INTEGER())
-        return node
-
-    # Visit a parse tree produced by MyGrammerParser#declare_repeat_end.
-    def visitDeclare_repeat_end(
-            self, ctx: MyGrammerParser.Declare_repeat_endContext):
-        node = DeclareRepeatEndNode()
-        return node
 
     # Visit a parse tree produced by MyGrammerParser#declare_staff.
     def visitDeclare_staff(self, ctx: MyGrammerParser.Declare_staffContext):
