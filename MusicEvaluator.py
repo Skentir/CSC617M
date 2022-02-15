@@ -252,10 +252,18 @@ class MusicEvaluator(MyGrammerVisitor):
             if melody.identifier.getText() not in self.variables: # If not then store the corresponding notes of a chord in a list each note is stored as tuple of values for each property of a note
                 for staff in staffs:
                     top = staff.beats_per_measure
+                    if int(top.getText()) <= 0:
+                        line = top.getSymbol().line
+                        col = top.getSymbol().column
+                        raise Exception("Number of beats in staff must be greater than 0", line, col)
                     bottom = staff.note_value
-                    newStaff = Staff(top, bottom, None)
+                    if int(bottom.getText()) <= 0:
+                        line = bottom.getSymbol().line
+                        col = bottom.getSymbol().column
+                        raise Exception("Note value of whole beats in staff must be greater than 0", line, col)
+                    newStaff = Staff(top.getText(), bottom.getText(), None)
                     for expr in staff.expressions:
-                        self.evaluateStaffBlock(expr, top, bottom, newStaff)
+                        self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), newStaff)
                         # for x in expr:
                         #     newStaff.expressions.append(x)
                     melodyStaffs.append(newStaff)
