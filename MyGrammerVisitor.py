@@ -273,8 +273,8 @@ class MyGrammerVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by MyGrammerParser#declare_staff.
     def visitDeclare_staff(self, ctx: MyGrammerParser.Declare_staffContext):
 
-        beats_per_measure = ctx.INTEGER(0).getText()
-        note_value = ctx.INTEGER(1).getText()
+        beats_per_measure = ctx.INTEGER(0)
+        note_value = ctx.INTEGER(1)
         expressions = []
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
