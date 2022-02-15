@@ -84,9 +84,9 @@ staff (4,4) {
         sample_note
     }
     measure {
-        quarter(A, 3)
-        quarter(A, 3)
-        half(G, 3)
+        quarter(A, 3)*
+        eighth(A, 3)
+        half(rest)
     }
     measure {
         quarter(F, 3)

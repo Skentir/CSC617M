@@ -143,6 +143,15 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MyGrammerParser#RestExpression.
+    def enterRestExpression(self, ctx:MyGrammerParser.RestExpressionContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#RestExpression.
+    def exitRestExpression(self, ctx:MyGrammerParser.RestExpressionContext):
+        pass
+
+
     # Enter a parse tree produced by MyGrammerParser#expr_note.
     def enterExpr_note(self, ctx:MyGrammerParser.Expr_noteContext):
         pass
@@ -194,6 +203,15 @@ class MyGrammerListener(ParseTreeListener):
 
     # Exit a parse tree produced by MyGrammerParser#expr_add_acc.
     def exitExpr_add_acc(self, ctx:MyGrammerParser.Expr_add_accContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#expr_rest.
+    def enterExpr_rest(self, ctx:MyGrammerParser.Expr_restContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#expr_rest.
+    def exitExpr_rest(self, ctx:MyGrammerParser.Expr_restContext):
         pass
 
 

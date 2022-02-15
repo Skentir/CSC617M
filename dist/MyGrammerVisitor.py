@@ -84,6 +84,11 @@ class MyGrammerVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MyGrammerParser#RestExpression.
+    def visitRestExpression(self, ctx:MyGrammerParser.RestExpressionContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MyGrammerParser#expr_note.
     def visitExpr_note(self, ctx:MyGrammerParser.Expr_noteContext):
         return self.visitChildren(ctx)
@@ -111,6 +116,11 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#expr_add_acc.
     def visitExpr_add_acc(self, ctx:MyGrammerParser.Expr_add_accContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MyGrammerParser#expr_rest.
+    def visitExpr_rest(self, ctx:MyGrammerParser.Expr_restContext):
         return self.visitChildren(ctx)
 
 
