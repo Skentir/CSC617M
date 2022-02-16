@@ -1,21 +1,14 @@
 bpM(300)
-instrument(Electric Guitar)
-sample_note = QuArTeR(A, 2)
-sample_kirs = quarter(A, 2)
-sampleChord2 = chord(quarter(A, 2), quarter(B, 4), quarter(C,5))
+instrument(piano)
 
-melody chorus {
-    staff (4,4) {
-        measure {
-            quarter(A, 2)
-            sample_kirs
-            continuous {
-                quarter(A, 2)
-                sampleChord2
-                sampleChord2
-            }
-        }
+staff (4,4) {
+    measureUp {
+        quarter(A, 2)
+        quarter(A, 2)
+    }
+
+    measureDown {
+        quarter(A, 2)
+        quarter(A, 2)
     }
 }
-
-chorus

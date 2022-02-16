@@ -134,6 +134,34 @@ class MyGrammerVisitor(ParseTreeVisitor):
         node = DeclareMeasuresNode(expr_list, repeat_start, repeat_end)
         return node
 
+    # Visit a parse tree produced by MyGrammerParser#declare_measures_grand.
+    def visitDeclare_measures_up(self, ctx:MyGrammerParser.Declare_measures_upContext):
+        expr_list, repeat_start, repeat_end = None, None, None
+        for child_node in ctx.getChildren():
+            node_type = child_node.__class__.__name__
+            if node_type == 'Measure_blockContext':
+                expr_list, repeat_start, repeat_end = self.visitMeasure_block(child_node)
+            elif node_type == 'Declare_measures_downContext':
+                nodeDown = self.visitDeclare_measures_down(child_node)
+            else:
+                print("Unknown", node_type)
+                pass
+        node = DeclareMeasuresGrandNode(expr_list, repeat_start, repeat_end, "UP")
+        return node, nodeDown
+
+    # Visit a parse tree produced by MyGrammerParser#declare_measures_grand.
+    def visitDeclare_measures_down(self, ctx:MyGrammerParser.Declare_measures_downContext):
+        expr_list, repeat_start, repeat_end = None, None, None
+        for child_node in ctx.getChildren():
+            node_type = child_node.__class__.__name__
+            if node_type == 'Measure_blockContext':
+                expr_list, repeat_start, repeat_end = self.visitMeasure_block(child_node)
+            else:
+                print("Unknown", node_type)
+                pass
+        node = DeclareMeasuresGrandNode(expr_list, repeat_start, repeat_end, "DOWN")
+        return node
+
     # Visit a parse tree produced by MyGrammerParser#measure_block.
     def visitMeasure_block(self, ctx:MyGrammerParser.Measure_blockContext):
         expr_list = []
@@ -311,6 +339,12 @@ class MyGrammerVisitor(ParseTreeVisitor):
                 measures = self.visitDeclare_measures(
                     child_node)  # DeclareMeasureNode()
                 sbl.append(measures)
+                # print("sub measure", measures)
+            elif node_type == 'Declare_measures_upContext':
+                measures, measuresDown = self.visitDeclare_measures_up(
+                    child_node)  # DeclareMeasureNode()
+                sbl.append(measures)
+                sbl.append(measuresDown)
                 # print("sub measure", measures)
             elif node_type == 'Staff_blockContext':
                 self.visitStaff_block(child_node, sbl)  # Expand staff_block production

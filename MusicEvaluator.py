@@ -281,7 +281,7 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value, staff): # List of Expressions of a staff block
         for x in ctx:
-            if isinstance(x, DeclareMeasuresNode):
+            if isinstance(x, DeclareMeasuresNode) or isinstance(x, DeclareMeasuresGrandNode):
                 measure = stream.Measure()
                 measure.insert(0, meter.TimeSignature(beats_per_measure + "/" + note_value))
                 if x.repeat_start is not None:
@@ -298,6 +298,14 @@ class MusicEvaluator(MyGrammerVisitor):
                         raise Exception("Number of repeats must be less than or equal to 10", line, col)
                     else:
                         measure.rightBarline = bar.Repeat(direction = 'end', times = repeat_times + 1)
+
+                checkInst = self.instrument.getText().lower()
+                grandInst = ["organ", "piano"]
+                if isinstance(x, DeclareMeasuresGrandNode) and checkInst not in grandInst:
+                    line = x.expressions[0].note_value.getSymbol().line - 1
+                    col = x.expressions[0].note_value.getSymbol().column
+                    raise Exception("Grand staff directions are only allowed for keyboard instruments", line, col)
+
                 cur_beats = 0
                 for m_expr in x.expressions:
                     if isinstance(m_expr, ExprNoteNode):
@@ -425,7 +433,9 @@ class MusicEvaluator(MyGrammerVisitor):
                                     measure.append(createChord(new_notes, expected_note_val))
 
                         print(m_expr)
+                        
                 staff.expressions.append(measure)
+
             elif isinstance(x, AccidentalExpressionNode):
                 print("accidental")
                 for acc_expr in x.accidentals:
