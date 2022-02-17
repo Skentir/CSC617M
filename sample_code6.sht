@@ -2,6 +2,11 @@ bpM(300)
 instrument(piano)
 
 staff (4,4) {
+    measure {
+        quarter(A, 2)
+        quarter(A, 2)
+    }
+    
     measureUp {
         quarter(A, 2)
         quarter(A, 2)

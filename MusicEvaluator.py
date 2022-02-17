@@ -305,6 +305,10 @@ class MusicEvaluator(MyGrammerVisitor):
                     line = x.expressions[0].note_value.getSymbol().line - 1
                     col = x.expressions[0].note_value.getSymbol().column
                     raise Exception("Grand staff directions are only allowed for keyboard instruments", line, col)
+                elif isinstance(x, DeclareMeasuresNode) and checkInst in grandInst:
+                    line = x.expressions[0].note_value.getSymbol().line - 1
+                    col = x.expressions[0].note_value.getSymbol().column
+                    raise Exception("Grand staff directions are required for keyboard instruments", line, col)
 
                 cur_beats = 0
                 for m_expr in x.expressions:
