@@ -203,8 +203,9 @@ class MyGrammerVisitor(ParseTreeVisitor):
         note_value = self.visitNote_value(ctx.note_value())
         pitch = ctx.PITCH()
         num = ctx.INTEGER()
+        accidental = ctx.ACCIDENTAL() if ctx.ACCIDENTAL() else None
         dotted = ctx.DOTTED() if ctx.DOTTED() else None
-        node = ExprNoteNode(note_value, pitch, num, dotted)
+        node = ExprNoteNode(note_value, accidental, pitch, num, dotted)
         return node
 
     # Visit a parse tree produced by MyGrammerParser#expr_chord.

@@ -32,8 +32,13 @@ def createNote(num, pitch, val):
 def printExprNote(note: ExprNoteNode):
     print(note.note_value, note.pitch, note.num, note.dotted)
 
-def createNote(num, pitch, val):
-    m_note = note.Note(pitch + num)
+def createNote(num, accidental, pitch, val):
+    if accidental == "_":
+        accidental = "-"
+    elif accidental == "None":
+        accidental = ""
+    print("create note",type(accidental))
+    m_note = note.Note(pitch + accidental +num)
         #update note duration
     if val == "eighth":
         d = duration.Duration(type="eighth")
@@ -145,11 +150,14 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
         note_value = ctx.note_value.getText()
+        accidental = None
+        if ctx.accidental is not None:
+            accidental = ctx.accidental.getText()
         pitch = ctx.pitch.getText()
         num = ctx.num.getText()
         dotted = ctx.dotted
 
-        return note_value, pitch, num, dotted
+        return note_value,accidental, pitch, num, dotted
 
     def evaluateDeclaredNotes(self, ctx: MyGrammerParser.Declare_noteContext):
         # DECLARED NOTES
@@ -158,10 +166,10 @@ class MusicEvaluator(MyGrammerVisitor):
             temp = MyGrammerVisitor().visitDeclare_note(note)
 
             if temp.identifier.getText() not in self.variables:
-                note_value, pitch, num, dotted = self.evaluateExprNoteNode(
+                note_value, accidental, pitch, num, dotted = self.evaluateExprNoteNode(
                     temp.note)
 
-                self.variables[temp.identifier.getText()] = ("NOTE", note_value, pitch,
+                self.variables[temp.identifier.getText()] = ("NOTE", note_value, accidental, pitch,
                                 num, dotted)
             else:
                 line = temp.identifier.getSymbol().line
@@ -277,7 +285,7 @@ class MusicEvaluator(MyGrammerVisitor):
                             col = m_expr.note_value.getSymbol().column
                             raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                         else:
-                            measure.append(createNote(str(m_expr.num), str(m_expr.pitch), str(m_expr.note_value)))
+                            measure.append(createNote(str(m_expr.num), str(m_expr.accidental),str(m_expr.pitch), str(m_expr.note_value)))
                             printExprNote(m_expr)
 
                     elif isinstance(m_expr, ExprChordNode):
@@ -345,7 +353,7 @@ class MusicEvaluator(MyGrammerVisitor):
 
                                             raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                                         else:
-                                            measure.append(createNote(str(self.variables[continuous_expr.getText()][3]), str(self.variables[continuous_expr.getText()][2]), str(self.variables[continuous_expr.getText()][1])))
+                                            measure.append(createNote(str(self.variables[continuous_expr.getText()][4]), str(self.variables[continuous_expr.getText()][2]),str(self.variables[continuous_expr.getText()][3]), str(self.variables[continuous_expr.getText()][1])))
 
                                     elif self.variables[continuous_expr.getText()][0] == "CHORD":
                                         expected_note_val, is_dotted = processExprChord(self.variables[continuous_expr.getText()][1], "VAR")
@@ -378,7 +386,8 @@ class MusicEvaluator(MyGrammerVisitor):
 
                                     raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                                 else:
-                                    measure.append(createNote(str(self.variables[m_expr.getText()][3]), str(self.variables[m_expr.getText()][2]), str(self.variables[m_expr.getText()][1])))
+                                    print(self.variables[m_expr.getText()], "here")
+                                    measure.append(createNote(str(self.variables[m_expr.getText()][4]),str(self.variables[m_expr.getText()][2]), str(self.variables[m_expr.getText()][3]), str(self.variables[m_expr.getText()][1])))
 
                             elif self.variables[m_expr.getText()][0] == "CHORD":
                                 expected_note_val, is_dotted = processExprChord(self.variables[m_expr.getText()][1], "VAR")
