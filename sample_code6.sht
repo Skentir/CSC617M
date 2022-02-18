@@ -7,7 +7,7 @@ melody chorus {
             quarter(C, 3)
             quarter(D, 3)
             quarter(C, 3)
-            quarter(D, 3)
+            quarter(C, 3)
         }
 
         measureDown {

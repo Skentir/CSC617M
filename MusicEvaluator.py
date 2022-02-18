@@ -318,6 +318,8 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value, staffUp, staffDown): # List of Expressions of a staff block
         for x in ctx:
+            cur_beats = 0
+
             if isinstance(x, DeclareMeasuresNode) or isinstance(x, DeclareMeasuresGrandNode):
                 measureUp = stream.Measure()
                 measureDown = stream.Measure()
@@ -350,8 +352,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     col = x.expressions[0].note_value.getSymbol().column
                     raise Exception("Grand staff directions are required for keyboard instruments", line, col)
 
-                cur_beats = 0
-                for m_expr in x.expressions:
+                for mIdx, m_expr in enumerate(x.expressions):
                     if isinstance(m_expr, ExprNoteNode):
                         cur_beats += valToBeat(str(m_expr.note_value), float(note_value), bool(m_expr.dotted))
                         if cur_beats > float(beats_per_measure):
@@ -504,6 +505,12 @@ class MusicEvaluator(MyGrammerVisitor):
                         
                 staffUp.expressions.append(measureUp)
                 staffDown.expressions.append(measureDown)
+
+                if mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):
+                    line = x.expressions[0].note_value.getSymbol().line - 1
+                    col = x.expressions[0].note_value.getSymbol().column
+
+                    raise Exception("Number of beats in measure did not meet amount allowed within staff", line, col)
 
             elif isinstance(x, AccidentalExpressionNode):
                 print("accidental")
