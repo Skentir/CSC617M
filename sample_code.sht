@@ -9,9 +9,9 @@ staff (4,4) {
         sample_note
     }
     measure {
-        quarter(A, 3)
-        quarter(A, 3)
-        half(G, 3)
+        quarter(A, 3)*
+        eighth(A, 3)
+        half(rest)
     }
     measure {
         quarter(F, 3)
@@ -35,7 +35,6 @@ staff (4,4) {
         quarter(E, 3)
         quarter(E, 3)
         half(D, 3)
-        repend
     }
     measure {
         quarter(C, 3)
@@ -47,15 +46,20 @@ staff (4,4) {
         quarter(A, 3)
         quarter(A, 3)
         half(G, 3)
+        repend
     }
     measure {
+        repstart
         quarter(F, 3)
         quarter(F, 3)
         quarter(E, 3)
         quarter(E, 3)
+        repend
     }
     measure {
         quarter(D, 3)
         quarter(D, 3)
+        half(C, 3)
+        repend
     }
 }

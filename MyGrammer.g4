@@ -65,6 +65,8 @@ INSTRUMENT: I N S T R U M E N T;
 
 DOTTED: '*';
 
+REST: R E S T;
+
 note_value: DOUBLE | FULL | HALF | QUARTER | EIGHTH | SIXTEENTH;
 // NOTE_VALUE: D O U B L E | F U L L | H A L F | Q U A R T E R | E I G H T H | S I X T E E N T H;
 
@@ -147,7 +149,8 @@ measure_block: declare_repeat? (expr | declare_continuous)+ declare_repeat_end?;
 expr: expr_note                             # NoteExpression
     | expr_chord                            # ChordExpression
     | expr_var                              # VariableExpression
-    | expr_acc                     # AccidentalExpression;
+    | expr_acc                              # AccidentalExpression
+    | expr_rest                             # RestExpression;
 
 expr_note: note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR | note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED;
 
@@ -161,6 +164,8 @@ expr_var: IDENTIFIER;
 expr_acc: ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
 
 expr_add_acc: ACCIDENTAL PITCH | ACCIDENTAL PITCH COMMA_SEP expr_add_acc | PITCH | PITCH COMMA_SEP expr_add_acc;
+
+expr_rest: note_value OPEN_PAR REST CLOSE_PAR DOTTED?;
 
 // Iteratives
 

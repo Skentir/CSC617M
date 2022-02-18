@@ -183,6 +183,10 @@ class MyGrammerVisitor(ParseTreeVisitor):
                 expr = child_node.expr_chord()
                 chord = self.visitExpr_chord(expr)  # ExprChordNode() object
                 expr_list.append(chord)
+            elif node_type == "RestExpressionContext":
+                expr = child_node.expr_rest()
+                rest = self.visitExpr_rest(expr)  # ExprRestNode() object
+                expr_list.append(rest)
             elif node_type == "VariableExpressionContext":
                 expr = child_node.expr_var()
                 var = self.visitExpr_var(expr)  # IDENTIFIER, TerminalNodeImpl
@@ -222,8 +226,9 @@ class MyGrammerVisitor(ParseTreeVisitor):
         note_value = self.visitNote_value(ctx.note_value())
         pitch = ctx.PITCH()
         num = ctx.INTEGER()
+        accidental = ctx.ACCIDENTAL() if ctx.ACCIDENTAL() else None
         dotted = ctx.DOTTED() if ctx.DOTTED() else None
-        node = ExprNoteNode(note_value, pitch, num, dotted)
+        node = ExprNoteNode(note_value, accidental, pitch, num, dotted)
         return node
 
     # Visit a parse tree produced by MyGrammerParser#expr_chord.
@@ -246,6 +251,13 @@ class MyGrammerVisitor(ParseTreeVisitor):
         #store in a node containing the notes for a chord expression
         node = ExprChordNode(notes)
         #return
+        return node
+
+    # Visit a parse tree produced by MyGrammerParser#expr_rest.
+    def visitExpr_rest(self, ctx: MyGrammerParser.Expr_restContext):
+        note_value = self.visitNote_value(ctx.note_value())
+        dotted = ctx.DOTTED() if ctx.DOTTED() else None
+        node = ExprRestNode(note_value, dotted)
         return node
 
     # Visit a parse tree produced by MyGrammerParser#expr_add_note.
