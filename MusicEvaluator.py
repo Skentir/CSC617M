@@ -163,6 +163,7 @@ class MusicEvaluator(MyGrammerVisitor):
     variables = {}
     staffs = []
     music_stream = stream.Stream()
+    repeat_ctr = []
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
         note_value = ctx.note_value.getText()
@@ -291,6 +292,7 @@ class MusicEvaluator(MyGrammerVisitor):
                 measure.insert(0, meter.TimeSignature(beats_per_measure + "/" + note_value))
                 if x.repeat_start is not None:
                     measure.leftBarline = bar.Repeat(direction = 'start')
+                    self.repeat_ctr.append(x.repeat_start)
                 if x.repeat_end is not None:
                     repeat_times = None
                     if x.repeat_end.INTEGER() is None:
@@ -303,6 +305,8 @@ class MusicEvaluator(MyGrammerVisitor):
                         raise Exception("Number of repeats must be less than or equal to 10", line, col)
                     else:
                         measure.rightBarline = bar.Repeat(direction = 'end', times = repeat_times + 1)
+                        if len(self.repeat_ctr) > 0:
+                            del self.repeat_ctr[-1]
                 cur_beats = 0
                 for m_expr in x.expressions:
                     if isinstance(m_expr, ExprNoteNode):
@@ -509,6 +513,12 @@ class MusicEvaluator(MyGrammerVisitor):
 
         self.evaluateDeclaredStaffs(node.staffs)
 
+        if len(self.repeat_ctr):
+            print(len(self.repeat_ctr))
+            rep = self.repeat_ctr[0]
+            line = rep.REPSTART().getSymbol().line
+            col = rep.REPSTART().getSymbol().column
+            raise Exception("Invalid repeat placement", line, col)
 
         
         for i in self.staffs:
@@ -527,4 +537,5 @@ class MusicEvaluator(MyGrammerVisitor):
         # for x in notes:
         #     self.music_stream.append(x)
         self.music_stream.write('midi', fp='test.midi')
+        
         # return "MIDI FILE"
