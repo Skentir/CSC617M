@@ -220,8 +220,8 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateDeclaredStaffs(self, ctx: list):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
-        right = stream.Score()
-        left = stream.Score()
+        right = stream.Part()
+        left = stream.Part()
         for idx, i in enumerate(ctx):
             # Gets a staff from music sheet
             first_staff = False
@@ -364,8 +364,8 @@ class MusicEvaluator(MyGrammerVisitor):
                     last_staff = False
                     last_measure = True
             if isinstance(x, DeclareMeasuresNode) or isinstance(x, DeclareMeasuresGrandNode):
-                measureUp = stream.Measure()
-                measureDown = stream.Measure()
+                # measureUp = stream.Measure()
+                # measureDown = stream.Measure()
                 measureUp.insert(0, meter.TimeSignature(beats_per_measure + "/" + note_value))
                 measureDown.insert(0, meter.TimeSignature(beats_per_measure + "/" + note_value))
 
