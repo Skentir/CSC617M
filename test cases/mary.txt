@@ -1,47 +1,48 @@
 title: (Mary had a little lamb)
 intrument(Piano)
 bpm(123)
-staff(4/4)
+staff(4/4){
 measure{
-	quarter(E)
-	quarter(D)
-	quarter(C)
-	quarter(D)
+	quarter(E, 4)
+	quarter(D, 4)
+	quarter(C, 4)
+	quarter(D, 4)
 	}
 measure{
-	quarter(E)
-	quarter(E)
-	half(E)
+	quarter(E, 4)
+	quarter(E, 4)
+	half(E, 4)
 	}
 measure{
-	quarter(E)
-	quarter(E)
-	half(E)
+	quarter(E, 4)
+	quarter(E,4)
+	half(E, 4)
 	}
 measure{
-	quarter(E)
-	quarter(G)
-	half(G)
+	quarter(E, 4)
+	quarter(G, 4)
+	half(G, 4)
 	}
 measure{
-	quarter(E)
-	quarter(D)
-	quarter(C)
-	quarter(D)
+	quarter(E, 4)
+	quarter(D, 4)
+	quarter(C, 4)
+	quarter(D, 4)
 	}
 measure{
-	quarter(E)
-	quarter(E)
-	quarter(E)
-	quarter(E)
+	quarter(E,4)
+	quarter(E, 4)
+	quarter(E,4)
+	quarter(E, 4)
 	}
 measure {
-	quarter(D)
-	quarter(D)
-	quarter(E)
-	quarter(D)
+	quarter(D, 4)
+	quarter(D, 4)
+	quarter(E, 4)
+	quarter(D, 4)
 	}
 measure{
-	half(C)
+	half(C, 4)
 	}
+}
 	

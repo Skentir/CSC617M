@@ -3,45 +3,40 @@ instrument(Piano)
 bpm(72)
 staff(4/4)
 G: measure{
-	eighth(chord(B,D_)) 
-	eighth(chord(B,D_)) 
-	eighth(chord(B,D_))
-	eighth(chord(B,D_))
+	chord(quarter(B_, 4),quarter(B_, 5))
+	chord(quarter(B_, 4),quarter(B_, 5))
+	chord(quarter(B_, 4),quarter(B_, 5))
+	chord(quarter(B_, 4),quarter(B_, 5))
 	}
    measure{
-	sixteenth(B, 1/4)
-	sixteenth(D, 1/4)
-	eighth(F, 1/2)
-	eighth(Fdot, 3/4)
-	sixteenth(E, 1/4) 
-	eighth(Fdot, 3/4) 
-	sixteenth(C, 1/4)
-	sixteenth(C, 1/4)
+	sixteenth(B, 4)
+	sixteenth(D, 4)
+	eighth(F, 4)
+	eighth(F, 4)*
+	sixteenth(E, 4) 
+	eighth(F, 4)* 
+	sixteenth(C, 4)
+	sixteenth(C, 4)
 	}
    measure{
-	sixteenth(C)
-	eighth(B)
-	sixteenth(B)
-	eighth(D)
-	sixteenth(F)
-	eighth(F)
-	eighth(Edot)
-	eighth(D)
-	sixteenth(E)
-	sixteenth(E)
+	sixteenth(C, 4)
+	eighth(B, 4)
+	sixteenth(B, 4)
+	eighth(D, 4)
+	sixteenth(F, 4)
+	eighth(F, 4)
+	eighth(E, 4)*
+	eighth(D, 4)
+	sixteenth(E, 4)
+	sixteenth(E, 4)
 	}
-
-F: measure{
-	half(rest, 2)
-	}
-
-G: measure{
-	eighth(D)
-	sixteenth(B)
-	eighth(F)
-	eighth(Fdot)
-	sixteenth(E)
-	eighth(Ddot)
-	sixteenth(C)
-	sixteenth(C)
+measure{
+	eighth(D, 4)
+	sixteenth(B, 4)
+	eighth(F, 4)
+	eighth(F, 4)*
+	sixteenth(E, 4)
+	eighth(D, 4)*
+	sixteenth(C, 4)
+	sixteenth(C, 4)
 	}
