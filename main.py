@@ -33,6 +33,7 @@ if __name__ == "__main__":
 
     parser = MyGrammerParser(stream)
     tree = parser.prog()
+    valid = True
     if parser._syntaxErrors == 0:
         # print(parser.getCurrentToken())
 
@@ -47,18 +48,20 @@ if __name__ == "__main__":
         except Exception as err:
             print("Caught Error: %s in line:%d col:%d" %
                   (err.args[0], err.args[1], err.args[2]))
+            valid = False
     else:
         print("Failed to parse")
-
-    fp = 'test.midi'
-    mf = midi.MidiFile()
-    mf.open(fp)
-    mf.read()
-    mf.close()
-    print(mf.tracks[0])
-    sp = converter.parse('test.midi')
-    sp = midi.realtime.StreamPlayer(sp)
-    sp.play()
+        valid = False
+    if valid:
+        fp = 'test.midi'
+        mf = midi.MidiFile()
+        mf.open(fp)
+        mf.read()
+        mf.close()
+        print(mf.tracks[0])
+        sp = converter.parse('test.midi')
+        sp = midi.realtime.StreamPlayer(sp)
+        sp.play()
 
     # try:
     #     ast = MyGrammerVisitor().visitProg(tree)

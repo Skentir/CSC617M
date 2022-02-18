@@ -70,12 +70,6 @@ public interface MyGrammerVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclare_measures(MyGrammerParser.Declare_measuresContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MyGrammerParser#repeat_measure_block}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRepeat_measure_block(MyGrammerParser.Repeat_measure_blockContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MyGrammerParser#measure_block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -109,6 +103,13 @@ public interface MyGrammerVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAccidentalExpression(MyGrammerParser.AccidentalExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RestExpression}
+	 * labeled alternative in {@link MyGrammerParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRestExpression(MyGrammerParser.RestExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyGrammerParser#expr_note}.
 	 * @param ctx the parse tree
@@ -145,6 +146,12 @@ public interface MyGrammerVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExpr_add_acc(MyGrammerParser.Expr_add_accContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyGrammerParser#expr_rest}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpr_rest(MyGrammerParser.Expr_restContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyGrammerParser#declare_repeat}.
 	 * @param ctx the parse tree

@@ -37,6 +37,11 @@ class ExprNoteNode():
         self.dotted = dotted
         self.accidental = accidental
 
+class ExprRestNode():
+    def __init__(self, note_value, dotted=False):
+        self.note_value = note_value
+        self.dotted = dotted
+
 
 class DeclareChordNode():
     def __init__(self, identifier, chord):
@@ -57,9 +62,10 @@ class DeclareStaffNode():
 
 
 class DeclareMeasuresNode():
-    def __init__(self, expressions, repeatTimes):
+    def __init__(self, expressions, repeat_start, repeat_end):
         self.expressions = expressions
-        self.repeatTimes = repeatTimes
+        self.repeat_start = repeat_start
+        self.repeat_end = repeat_end
 
 
 class AccidentalExpressionNode():

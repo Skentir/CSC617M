@@ -98,15 +98,6 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MyGrammerParser#repeat_measure_block.
-    def enterRepeat_measure_block(self, ctx:MyGrammerParser.Repeat_measure_blockContext):
-        pass
-
-    # Exit a parse tree produced by MyGrammerParser#repeat_measure_block.
-    def exitRepeat_measure_block(self, ctx:MyGrammerParser.Repeat_measure_blockContext):
-        pass
-
-
     # Enter a parse tree produced by MyGrammerParser#measure_block.
     def enterMeasure_block(self, ctx:MyGrammerParser.Measure_blockContext):
         pass
@@ -149,6 +140,15 @@ class MyGrammerListener(ParseTreeListener):
 
     # Exit a parse tree produced by MyGrammerParser#AccidentalExpression.
     def exitAccidentalExpression(self, ctx:MyGrammerParser.AccidentalExpressionContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#RestExpression.
+    def enterRestExpression(self, ctx:MyGrammerParser.RestExpressionContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#RestExpression.
+    def exitRestExpression(self, ctx:MyGrammerParser.RestExpressionContext):
         pass
 
 
@@ -203,6 +203,15 @@ class MyGrammerListener(ParseTreeListener):
 
     # Exit a parse tree produced by MyGrammerParser#expr_add_acc.
     def exitExpr_add_acc(self, ctx:MyGrammerParser.Expr_add_accContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#expr_rest.
+    def enterExpr_rest(self, ctx:MyGrammerParser.Expr_restContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#expr_rest.
+    def exitExpr_rest(self, ctx:MyGrammerParser.Expr_restContext):
         pass
 
 

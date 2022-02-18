@@ -24,21 +24,20 @@ def createChord(note_arr, val):
         d = duration.Duration(type="half")
         new_chord.quarterLength = d.quarterLength
     return new_chord
-def createNote(num, pitch, val):
-    m_note = note.Note(pitch + num)
-        #update note duration
-    return m_note
 
 def printExprNote(note: ExprNoteNode):
     print(note.note_value, note.pitch, note.num, note.dotted)
 
-def createNote(num, accidental, pitch, val):
+def printExprRest(note: ExprRestNode):
+    print(note.note_value, note.dotted)
+
+def createNote(num, accidental, pitch, val, dotted):
     if accidental == "_":
         accidental = "-"
     elif accidental == "None":
         accidental = ""
     print("create note",type(accidental))
-    m_note = note.Note(pitch + accidental +num)
+    m_note = note.Note(pitch + accidental + num)
         #update note duration
     if val == "eighth":
         d = duration.Duration(type="eighth")
@@ -53,7 +52,29 @@ def createNote(num, accidental, pitch, val):
     if val == "half":
         d = duration.Duration(type="half")
         m_note.quarterLength = d.quarterLength
+    if dotted:
+        m_note.quarterLength = m_note.quarterLength + (m_note.quarterLength / 2)
     return m_note
+
+def createRest(val, dotted):
+    m_rest = note.Rest()
+        #update rest duration
+    if val == "eighth":
+        d = duration.Duration(type="eighth")
+        m_rest.quarterLength = d.quarterLength
+    if val == "sixteenth":
+        m_rest.quarterLength = 0.25
+    if val == "full":
+        d = duration.Duration(type="whole")
+        m_rest.quarterLength = d.quarterLength
+    if val == "double":
+        m_rest.quarterLength = 2.0
+    if val == "half":
+        d = duration.Duration(type="half")
+        m_rest.quarterLength = d.quarterLength
+    if dotted:
+        m_rest.quarterLength = m_rest.quarterLength + (m_rest.quarterLength / 2)
+    return m_rest
 
 def createChord(note_arr, val):
     arr = []
@@ -147,6 +168,7 @@ class MusicEvaluator(MyGrammerVisitor):
     variables = {}
     staffs = []
     music_stream = stream.Stream()
+    repeat_ctr = []
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
         note_value = ctx.note_value.getText()
@@ -276,6 +298,23 @@ class MusicEvaluator(MyGrammerVisitor):
             if isinstance(x, DeclareMeasuresNode):
                 measure = stream.Measure()
                 measure.insert(0, meter.TimeSignature(beats_per_measure + "/" + note_value))
+                if x.repeat_start is not None:
+                    measure.leftBarline = bar.Repeat(direction = 'start')
+                    self.repeat_ctr.append(x.repeat_start)
+                if x.repeat_end is not None:
+                    repeat_times = None
+                    if x.repeat_end.INTEGER() is None:
+                        repeat_times = 1
+                    else:
+                        repeat_times = int(x.repeat_end.INTEGER().getText())
+                    if repeat_times < 0 or repeat_times > 10: # TODO: should we even count for this i think ok lang na wala restriction
+                        line = x.repeat_end.INTEGER().getSymbol().line
+                        col = x.repeat_end.INTEGER().getSymbol().column
+                        raise Exception("Number of repeats must be less than or equal to 10", line, col)
+                    else:
+                        measure.rightBarline = bar.Repeat(direction = 'end', times = repeat_times + 1)
+                        if len(self.repeat_ctr) > 0:
+                            del self.repeat_ctr[-1]
                 cur_beats = 0
                 for m_expr in x.expressions:
                     if isinstance(m_expr, ExprNoteNode):
@@ -285,7 +324,7 @@ class MusicEvaluator(MyGrammerVisitor):
                             col = m_expr.note_value.getSymbol().column
                             raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                         else:
-                            measure.append(createNote(str(m_expr.num), str(m_expr.accidental),str(m_expr.pitch), str(m_expr.note_value)))
+                            measure.append(createNote(str(m_expr.num), str(m_expr.accidental),str(m_expr.pitch), str(m_expr.note_value), bool(m_expr.dotted)))
                             printExprNote(m_expr)
 
                     elif isinstance(m_expr, ExprChordNode):
@@ -302,6 +341,16 @@ class MusicEvaluator(MyGrammerVisitor):
                                 new_notes.append((str(n.num), str(n.pitch)))
                             measure.append(createChord(new_notes, expected_note_val))
                             printExprChord(m_expr)
+                    
+                    elif isinstance(m_expr, ExprRestNode):
+                        cur_beats += valToBeat(str(m_expr.note_value), float(note_value), bool(m_expr.dotted))
+                        if cur_beats > float(beats_per_measure):
+                            line = m_expr.note_value.getSymbol().line
+                            col = m_expr.note_value.getSymbol().column
+                            raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                        else:
+                            measure.append(createRest(str(m_expr.note_value), bool(m_expr.dotted)))
+                            printExprRest(m_expr)
 
                     elif isinstance(m_expr, AccidentalExpressionNode):
                         print("accidental")
@@ -387,7 +436,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                                 else:
                                     print(self.variables[m_expr.getText()], "here")
-                                    measure.append(createNote(str(self.variables[m_expr.getText()][4]),str(self.variables[m_expr.getText()][2]), str(self.variables[m_expr.getText()][3]), str(self.variables[m_expr.getText()][1])))
+                                    measure.append(createNote(str(self.variables[m_expr.getText()][4]),str(self.variables[m_expr.getText()][2]), str(self.variables[m_expr.getText()][3]), str(self.variables[m_expr.getText()][1]), bool(self.variables[m_expr.getText()][5])))
 
                             elif self.variables[m_expr.getText()][0] == "CHORD":
                                 expected_note_val, is_dotted = processExprChord(self.variables[m_expr.getText()][1], "VAR")
@@ -473,6 +522,12 @@ class MusicEvaluator(MyGrammerVisitor):
 
         self.evaluateDeclaredStaffs(node.staffs)
 
+        if len(self.repeat_ctr):
+            print(len(self.repeat_ctr))
+            rep = self.repeat_ctr[0]
+            line = rep.REPSTART().getSymbol().line
+            col = rep.REPSTART().getSymbol().column
+            raise Exception("Invalid repeat placement", line, col)
 
         
         for i in self.staffs:
@@ -491,4 +546,5 @@ class MusicEvaluator(MyGrammerVisitor):
         # for x in notes:
         #     self.music_stream.append(x)
         self.music_stream.write('midi', fp='test.midi')
+        
         # return "MIDI FILE"

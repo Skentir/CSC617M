@@ -63,6 +63,8 @@ INSTRUMENT: I N S T R U M E N T;
 
 DOTTED: '*';
 
+REST: R E S T;
+
 note_value: DOUBLE | FULL | HALF | QUARTER | EIGHTH | SIXTEENTH;
 // NOTE_VALUE: D O U B L E | F U L L | H A L F | Q U A R T E R | E I G H T H | S I X T E E N T H;
 
@@ -135,15 +137,16 @@ declare_melody: MELODY IDENTIFIER OPEN_BRACKET (declare_staff)+ CLOSE_BRACKET;
 declare_continuous: CONTINUOUS OPEN_BRACKET (expr)+ CLOSE_BRACKET;
 // declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
 
-declare_measures: MEASURE OPEN_BRACKET (repeat_measure_block | measure_block) CLOSE_BRACKET;
-repeat_measure_block: declare_repeat measure_block declare_repeat_end;
-measure_block: (expr | declare_continuous)+;
+declare_measures: MEASURE OPEN_BRACKET measure_block CLOSE_BRACKET;
+// repeat_measure_block: declare_repeat measure_block declare_repeat_end;
+measure_block: declare_repeat? (expr | declare_continuous)+ declare_repeat_end?;
 
 //Expresions
 expr: expr_note                             # NoteExpression
     | expr_chord                            # ChordExpression
     | expr_var                              # VariableExpression
-    | expr_acc                     # AccidentalExpression;
+    | expr_acc                              # AccidentalExpression
+    | expr_rest                             # RestExpression;
 
 expr_note: note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR | note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED;
 
@@ -158,10 +161,12 @@ expr_acc: ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
 
 expr_add_acc: ACCIDENTAL PITCH | ACCIDENTAL PITCH COMMA_SEP expr_add_acc | PITCH | PITCH COMMA_SEP expr_add_acc;
 
+expr_rest: note_value OPEN_PAR REST CLOSE_PAR DOTTED?;
+
 // Iteratives
 
 declare_repeat: REPSTART;
-declare_repeat_end: REPEND OPEN_PAR INTEGER? CLOSE_PAR;
+declare_repeat_end: REPEND | REPEND OPEN_PAR INTEGER? CLOSE_PAR;
 
 // Functions
 declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (staff_block)+ CLOSE_BRACKET;
