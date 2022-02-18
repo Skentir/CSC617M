@@ -107,6 +107,26 @@ public interface MyGrammerListener extends ParseTreeListener {
 	 */
 	void exitDeclare_measures(MyGrammerParser.Declare_measuresContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyGrammerParser#declare_measures_up}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclare_measures_up(MyGrammerParser.Declare_measures_upContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammerParser#declare_measures_up}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclare_measures_up(MyGrammerParser.Declare_measures_upContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammerParser#declare_measures_down}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclare_measures_down(MyGrammerParser.Declare_measures_downContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammerParser#declare_measures_down}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclare_measures_down(MyGrammerParser.Declare_measures_downContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MyGrammerParser#measure_block}.
 	 * @param ctx the parse tree
 	 */

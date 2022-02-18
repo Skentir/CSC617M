@@ -135,6 +135,30 @@ public class MyGrammerBaseListener implements MyGrammerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDeclare_measures_up(MyGrammerParser.Declare_measures_upContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclare_measures_up(MyGrammerParser.Declare_measures_upContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclare_measures_down(MyGrammerParser.Declare_measures_downContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclare_measures_down(MyGrammerParser.Declare_measures_downContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMeasure_block(MyGrammerParser.Measure_blockContext ctx) { }
 	/**
 	 * {@inheritDoc}

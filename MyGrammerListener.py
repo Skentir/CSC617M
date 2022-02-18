@@ -98,6 +98,24 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MyGrammerParser#declare_measures_up.
+    def enterDeclare_measures_up(self, ctx:MyGrammerParser.Declare_measures_upContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#declare_measures_up.
+    def exitDeclare_measures_up(self, ctx:MyGrammerParser.Declare_measures_upContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#declare_measures_down.
+    def enterDeclare_measures_down(self, ctx:MyGrammerParser.Declare_measures_downContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#declare_measures_down.
+    def exitDeclare_measures_down(self, ctx:MyGrammerParser.Declare_measures_downContext):
+        pass
+
+
     # Enter a parse tree produced by MyGrammerParser#measure_block.
     def enterMeasure_block(self, ctx:MyGrammerParser.Measure_blockContext):
         pass

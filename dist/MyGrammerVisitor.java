@@ -70,6 +70,18 @@ public interface MyGrammerVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclare_measures(MyGrammerParser.Declare_measuresContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MyGrammerParser#declare_measures_up}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclare_measures_up(MyGrammerParser.Declare_measures_upContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyGrammerParser#declare_measures_down}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclare_measures_down(MyGrammerParser.Declare_measures_downContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MyGrammerParser#measure_block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
