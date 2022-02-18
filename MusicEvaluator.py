@@ -192,6 +192,12 @@ class MusicEvaluator(MyGrammerVisitor):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
         for idx, i in enumerate(ctx):
             # Gets a staff from music sheet
+            first_staff = False
+            last_staff = False
+            if idx == 0:
+                first_staff = True
+            if idx == len(ctx) - 1:
+                last_staff = True
             if i.__class__.__name__ == 'Declare_staffContext':
                 staff = MyGrammerVisitor().visitDeclare_staff(i)
                 top = staff.beats_per_measure
@@ -208,7 +214,7 @@ class MusicEvaluator(MyGrammerVisitor):
                 staffUp = Staff(top.getText(), bottom.getText(), None)
                 staffDown = Staff(top.getText(), bottom.getText(), None)
                 for expr in staff.expressions:
-                    self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), staffUp, staffDown)
+                    self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), staffUp, staffDown, first_staff, last_staff)
                     # for x in expr:
                     #     newStaff.expressions.append(x)
                 right = stream.Score()
@@ -292,7 +298,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     staffUp = Staff(top.getText(), bottom.getText(), None)
                     staffDown = Staff(top.getText(), bottom.getText(), None)
                     for expr in staff.expressions:
-                        self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), staffUp, staffDown)
+                        self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), staffUp, staffDown, False, False)
                         # for x in expr:
                         #     newStaff.expressions.append(x)
 
@@ -313,13 +319,19 @@ class MusicEvaluator(MyGrammerVisitor):
                     "Reassignment is not allowed. Use a different identifier",
                     line, col)
 
-    def evaluateMelodyVar(self, ctx: list):
-        pass
-
-    def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value, staffUp, staffDown): # List of Expressions of a staff block
-        for x in ctx:
+    def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value, staffUp, staffDown, first_staff, last_staff): # List of Expressions of a staff block
+        for idx, x in enumerate(ctx):
             cur_beats = 0
 
+            first_measure = False
+            last_measure = False
+            if first_staff:
+                first_staff = False
+                first_measure = True
+            if last_staff:
+                if idx == len(ctx) - 1 or all(isinstance(y, AccidentalExpressionNode) for y in ctx[idx + 1:]):
+                    last_staff = False
+                    last_measure = True
             if isinstance(x, DeclareMeasuresNode) or isinstance(x, DeclareMeasuresGrandNode):
                 measureUp = stream.Measure()
                 measureDown = stream.Measure()
@@ -506,30 +518,20 @@ class MusicEvaluator(MyGrammerVisitor):
                 staffUp.expressions.append(measureUp)
                 staffDown.expressions.append(measureDown)
 
-                if mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):
+                if not (first_measure or last_measure) and mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):
                     line = x.expressions[0].note_value.getSymbol().line - 1
                     col = x.expressions[0].note_value.getSymbol().column
 
                     raise Exception("Number of beats in measure did not meet amount allowed within staff", line, col)
+                if first_measure:
+                    first_measure = False
+                if last_measure:
+                    last_measure = False
 
             elif isinstance(x, AccidentalExpressionNode):
                 print("accidental")
                 for acc_expr in x.accidentals:
                     print(acc_expr.accidental, acc_expr.pitch)
-
-            elif isinstance(x, DeclareRepeatStartNode):
-                if x.times is not None and int(x.times.getText()) > 100:
-                    line = x.times.getSymbol().line
-                    col = x.times.getSymbol().column
-                    raise Exception("Number must be at most 100 only", line, col)
-                elif x.times is not None and int(x.times.getText()) <= 0:
-                    line = x.times.getSymbol().line
-                    col = x.times.getSymbol().column
-                    raise Exception("Number must be greater than 0", line, col)
-                print("declare repeat start")
-
-            elif isinstance(x, DeclareRepeatEndNode):
-                print("declare repeat end")
 
     def evaluate(self, node):
         # BPM Value
@@ -596,5 +598,5 @@ class MusicEvaluator(MyGrammerVisitor):
         # for x in notes:
         #     self.music_stream.append(x)
         self.music_stream.write('midi', fp='test.midi')
-        sp = midi.realtime.StreamPlayer(self.music_stream)
-        sp.play()
+        # sp = midi.realtime.StreamPlayer(self.music_stream)
+        # sp.play()
