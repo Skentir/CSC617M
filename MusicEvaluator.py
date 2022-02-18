@@ -220,6 +220,8 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateDeclaredStaffs(self, ctx: list):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
+        right = stream.Score()
+        left = stream.Score()
         for idx, i in enumerate(ctx):
             # Gets a staff from music sheet
             first_staff = False
@@ -247,16 +249,10 @@ class MusicEvaluator(MyGrammerVisitor):
                     self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), staffUp, staffDown, first_staff, last_staff)
                     # for x in expr:
                     #     newStaff.expressions.append(x)
-                right = stream.Score()
-                left = stream.Score()
                 for measure in staffUp.expressions:
                     right.append(measure)
                 for measure in staffDown.expressions:
                     left.append(measure)
-
-                self.music_stream.insert(idx, right)
-                if self.checkInst in self.grandInst:
-                    self.music_stream.insert(idx, left)
                 # self.staffs.append(staff1)
                 
             else: # Variable Expression checking
@@ -279,14 +275,17 @@ class MusicEvaluator(MyGrammerVisitor):
                         col = i.IDENTIFIER().getSymbol().column
                         raise Exception("Variable must be melody but a chord is called", line, col)
 
-                melodyStaffUp = self.variables[melodyVariable.getText()][0][0]
-                melodyStaffDown = self.variables[melodyVariable.getText()][0][1]
-
-                self.music_stream.insert(idx, melodyStaffUp)
-                if self.checkInst in self.grandInst:
-                    self.music_stream.insert(idx, melodyStaffDown)
+                for idx2, pair in enumerate(self.variables[melodyVariable.getText()]):
+                    # melodyStaffUp = self.variables[melodyVariable.getText()][0][0]
+                    # melodyStaffDown = self.variables[melodyVariable.getText()][0][1]
+                    right.append(pair[0])
+                    left.append(pair[1])
 
                 # self.staffs.append(Staff(None, None, melodyVariable.getText()))
+
+        self.music_stream.insert(0, right)
+        if self.checkInst in self.grandInst:
+            self.music_stream.insert(0, left)
                         
     def checkInListContext(self, ctx):
         line = ctx.IDENTIFIER().getSymbol().line
@@ -351,6 +350,8 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value, staffUp, staffDown, first_staff, last_staff): # List of Expressions of a staff block
         for idx, x in enumerate(ctx):
+            measureUp = stream.Measure()
+            measureDown = stream.Measure()
             cur_beats = 0
 
             first_measure = False
@@ -561,9 +562,6 @@ class MusicEvaluator(MyGrammerVisitor):
                                         measureUp.append(createChord(new_notes, expected_note_val))
 
                         print(m_expr)
-                        
-                staffUp.expressions.append(measureUp)
-                staffDown.expressions.append(measureDown)
 
                 if not (first_measure or last_measure) and mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):
                     line = x.expressions[0].note_value.getSymbol().line - 1
@@ -580,14 +578,13 @@ class MusicEvaluator(MyGrammerVisitor):
                 for acc_expr in x.accidentals:
                     print(acc_expr.accidental, acc_expr.pitch)
 
+            staffUp.expressions.append(measureUp)
+            staffDown.expressions.append(measureDown)
+
     def evaluate(self, node):
-        # BPM Value
-        notes = []
-        chords = []
         self.bpm = node.bpm
         self.instrument = node.instrument
         self.checkInst = self.instrument.getText().lower()
-        # print("bpm (" + str(node.bpm) + ")")
 
         if (int(self.bpm.getText()) > 300):
             line = self.bpm.getSymbol().line
