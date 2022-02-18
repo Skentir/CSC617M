@@ -139,9 +139,11 @@ class Staff():
 class MusicEvaluator(MyGrammerVisitor):
     bpm = None
     instrument = None
+    checkInst = None
+    grandInst = ["organ", "piano"]
     variables = {}
     staffs = []
-    music_stream = stream.Stream()
+    music_stream = stream.Score()
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
         note_value = ctx.note_value.getText()
@@ -188,7 +190,7 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateDeclaredStaffs(self, ctx: list):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
-        for i in ctx:
+        for idx, i in enumerate(ctx):
             # Gets a staff from music sheet
             if i.__class__.__name__ == 'Declare_staffContext':
                 staff = MyGrammerVisitor().visitDeclare_staff(i)
@@ -202,15 +204,24 @@ class MusicEvaluator(MyGrammerVisitor):
                     line = bottom.getSymbol().line
                     col = bottom.getSymbol().column
                     raise Exception("Note value of whole beats in staff must be greater than 0", line, col)
-                newStaff = Staff(top.getText(), bottom.getText(), None)
-                staff1 = layout.Staff()
+
+                staffUp = Staff(top.getText(), bottom.getText(), None)
+                staffDown = Staff(top.getText(), bottom.getText(), None)
                 for expr in staff.expressions:
-                    self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), newStaff)
+                    self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), staffUp, staffDown)
                     # for x in expr:
                     #     newStaff.expressions.append(x)
-                for measure in newStaff.expressions:
-                    staff1.append(measure)
-                self.staffs.append(staff1)
+                right = stream.Score()
+                left = stream.Score()
+                for measure in staffUp.expressions:
+                    right.append(measure)
+                for measure in staffDown.expressions:
+                    left.append(measure)
+
+                self.music_stream.insert(idx, right)
+                if self.checkInst in self.grandInst:
+                    self.music_stream.insert(idx, left)
+                # self.staffs.append(staff1)
                 
             else: # Variable Expression checking
                 melodyVariable = MyGrammerVisitor().visitExpr_var(i)
@@ -279,13 +290,17 @@ class MusicEvaluator(MyGrammerVisitor):
     def evaluateMelodyVar(self, ctx: list):
         pass
 
-    def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value, staff): # List of Expressions of a staff block
+    def evaluateStaffBlock(self,ctx: list, beats_per_measure, note_value, staffUp, staffDown): # List of Expressions of a staff block
         for x in ctx:
             if isinstance(x, DeclareMeasuresNode) or isinstance(x, DeclareMeasuresGrandNode):
-                measure = stream.Measure()
-                measure.insert(0, meter.TimeSignature(beats_per_measure + "/" + note_value))
+                measureUp = stream.Measure()
+                measureDown = stream.Measure()
+                measureUp.insert(0, meter.TimeSignature(beats_per_measure + "/" + note_value))
+                measureDown.insert(0, meter.TimeSignature(beats_per_measure + "/" + note_value))
+
                 if x.repeat_start is not None:
-                    measure.leftBarline = bar.Repeat(direction = 'start')
+                    measureUp.leftBarline = bar.Repeat(direction = 'start')
+                    measureDown.leftBarline = bar.Repeat(direction = 'start')
                 if x.repeat_end is not None:
                     repeat_times = None
                     if x.repeat_end.INTEGER() is None:
@@ -297,15 +312,14 @@ class MusicEvaluator(MyGrammerVisitor):
                         col = x.repeat_end.INTEGER().getSymbol().column
                         raise Exception("Number of repeats must be less than or equal to 10", line, col)
                     else:
-                        measure.rightBarline = bar.Repeat(direction = 'end', times = repeat_times + 1)
+                        measureUp.rightBarline = bar.Repeat(direction = 'end', times = repeat_times + 1)
+                        measureDown.rightBarline = bar.Repeat(direction = 'end', times = repeat_times + 1)
 
-                checkInst = self.instrument.getText().lower()
-                grandInst = ["organ", "piano"]
-                if isinstance(x, DeclareMeasuresGrandNode) and checkInst not in grandInst:
+                if isinstance(x, DeclareMeasuresGrandNode) and self.checkInst not in self.grandInst:
                     line = x.expressions[0].note_value.getSymbol().line - 1
                     col = x.expressions[0].note_value.getSymbol().column
                     raise Exception("Grand staff directions are only allowed for keyboard instruments", line, col)
-                elif isinstance(x, DeclareMeasuresNode) and checkInst in grandInst:
+                elif isinstance(x, DeclareMeasuresNode) and self.checkInst in self.grandInst:
                     line = x.expressions[0].note_value.getSymbol().line - 1
                     col = x.expressions[0].note_value.getSymbol().column
                     raise Exception("Grand staff directions are required for keyboard instruments", line, col)
@@ -319,7 +333,10 @@ class MusicEvaluator(MyGrammerVisitor):
                             col = m_expr.note_value.getSymbol().column
                             raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                         else:
-                            measure.append(createNote(str(m_expr.num), str(m_expr.pitch), str(m_expr.note_value)))
+                            if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                measureDown.append(createNote(str(m_expr.num), str(m_expr.pitch), str(m_expr.note_value)))
+                            else:
+                                measureUp.append(createNote(str(m_expr.num), str(m_expr.pitch), str(m_expr.note_value)))
                             printExprNote(m_expr)
 
                     elif isinstance(m_expr, ExprChordNode):
@@ -334,7 +351,10 @@ class MusicEvaluator(MyGrammerVisitor):
                             new_notes = []
                             for n in m_expr.notes:
                                 new_notes.append((str(n.num), str(n.pitch)))
-                            measure.append(createChord(new_notes, expected_note_val))
+                            if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                measureDown.append(createChord(new_notes, expected_note_val))
+                            else:
+                                measureUp.append(createChord(new_notes, expected_note_val))
                             printExprChord(m_expr)
 
                     elif isinstance(m_expr, AccidentalExpressionNode):
@@ -351,7 +371,10 @@ class MusicEvaluator(MyGrammerVisitor):
 
                                     raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                                 else:
-                                    measure.append(createNote(str(continuous_expr.num), str(continuous_expr.pitch), str(continuous_expr.note_value)))
+                                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                        measureDown.append(createNote(str(continuous_expr.num), str(continuous_expr.pitch), str(continuous_expr.note_value)))
+                                    else:
+                                        measureUp.append(createNote(str(continuous_expr.num), str(continuous_expr.pitch), str(continuous_expr.note_value)))
                                     printExprNote(continuous_expr)
 
                             elif isinstance(continuous_expr, ExprChordNode):
@@ -366,7 +389,10 @@ class MusicEvaluator(MyGrammerVisitor):
                                     new_notes = []
                                     for n in continuous_expr.notes:
                                         new_notes.append((str(n.num), str(n.pitch)))
-                                    measure.append(createChord(new_notes, expected_note_val))
+                                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                        measureDown.append(createChord(new_notes, expected_note_val))
+                                    else:
+                                        measureUp.append(createChord(new_notes, expected_note_val))
                                     printExprChord(continuous_expr)
 
                             elif isinstance(continuous_expr, AccidentalExpressionNode):
@@ -387,7 +413,10 @@ class MusicEvaluator(MyGrammerVisitor):
 
                                             raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                                         else:
-                                            measure.append(createNote(str(self.variables[continuous_expr.getText()][3]), str(self.variables[continuous_expr.getText()][2]), str(self.variables[continuous_expr.getText()][1])))
+                                            if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                                measureDown.append(createNote(str(self.variables[continuous_expr.getText()][3]), str(self.variables[continuous_expr.getText()][2]), str(self.variables[continuous_expr.getText()][1])))
+                                            else:
+                                                measureUp.append(createNote(str(self.variables[continuous_expr.getText()][3]), str(self.variables[continuous_expr.getText()][2]), str(self.variables[continuous_expr.getText()][1])))
 
                                     elif self.variables[continuous_expr.getText()][0] == "CHORD":
                                         expected_note_val, is_dotted = processExprChord(self.variables[continuous_expr.getText()][1], "VAR")
@@ -401,7 +430,10 @@ class MusicEvaluator(MyGrammerVisitor):
                                             new_notes = []
                                             for n in self.variables[continuous_expr.getText()][1]:
                                                 new_notes.append((str(n[2]), str(n[1])))
-                                            measure.append(createChord(new_notes, expected_note_val))
+                                            if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                                measureDown.append(createChord(new_notes, expected_note_val))
+                                            else:
+                                                measureUp.append(createChord(new_notes, expected_note_val))
 
                         print(m_expr.expressions)
                         print(m_expr)
@@ -420,7 +452,10 @@ class MusicEvaluator(MyGrammerVisitor):
 
                                     raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
                                 else:
-                                    measure.append(createNote(str(self.variables[m_expr.getText()][3]), str(self.variables[m_expr.getText()][2]), str(self.variables[m_expr.getText()][1])))
+                                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                        measureDown.append(createNote(str(self.variables[m_expr.getText()][3]), str(self.variables[m_expr.getText()][2]), str(self.variables[m_expr.getText()][1])))
+                                    else:
+                                        measureUp.append(createNote(str(self.variables[m_expr.getText()][3]), str(self.variables[m_expr.getText()][2]), str(self.variables[m_expr.getText()][1])))
 
                             elif self.variables[m_expr.getText()][0] == "CHORD":
                                 expected_note_val, is_dotted = processExprChord(self.variables[m_expr.getText()][1], "VAR")
@@ -434,11 +469,15 @@ class MusicEvaluator(MyGrammerVisitor):
                                     new_notes = []
                                     for n in self.variables[m_expr.getText()][1]:
                                         new_notes.append((str(n[2]), str(n[1])))
-                                    measure.append(createChord(new_notes, expected_note_val))
+                                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                        measureDown.append(createChord(new_notes, expected_note_val))
+                                    else:
+                                        measureUp.append(createChord(new_notes, expected_note_val))
 
                         print(m_expr)
                         
-                staff.expressions.append(measure)
+                staffUp.expressions.append(measureUp)
+                staffDown.expressions.append(measureDown)
 
             elif isinstance(x, AccidentalExpressionNode):
                 print("accidental")
@@ -465,6 +504,7 @@ class MusicEvaluator(MyGrammerVisitor):
         chords = []
         self.bpm = node.bpm
         self.instrument = node.instrument
+        self.checkInst = self.instrument.getText().lower()
         # print("bpm (" + str(node.bpm) + ")")
 
         if (int(self.bpm.getText()) > 300):
@@ -510,20 +550,22 @@ class MusicEvaluator(MyGrammerVisitor):
 
 
         
-        for i in self.staffs:
-            if isinstance(i, layout.Staff):
-                for j in i:
-                    self.music_stream.append(j)
-            else:
-                if isinstance(i, Staff):
-                    if i.melodyVariable is not None:
-                        for staff in self.variables[i.melodyVariable]:
-                            for j in staff.expressions:
-                                self.music_stream.append(j)
-                    else:
-                        pass
+        # for i in self.staffs:
+        #     if isinstance(i, layout.Staff):
+        #         for j in i:
+        #             self.music_stream.append(j)
+        #     else:
+        #         if isinstance(i, Staff):
+        #             if i.melodyVariable is not None:
+        #                 for staff in self.variables[i.melodyVariable]:
+        #                     for j in staff.expressions:
+        #                         self.music_stream.append(j)
+        #             else:
+        #                 pass
         #add to stream
         # for x in notes:
         #     self.music_stream.append(x)
         self.music_stream.write('midi', fp='test.midi')
         # return "MIDI FILE"
+        sp = midi.realtime.StreamPlayer(self.music_stream)
+        sp.play()
