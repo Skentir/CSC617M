@@ -67,6 +67,13 @@ class DeclareMeasuresNode():
         self.repeat_start = repeat_start
         self.repeat_end = repeat_end
 
+class DeclareMeasuresGrandNode():
+    def __init__(self, expressions, repeat_start, repeat_end, direction):
+        self.expressions = expressions
+        self.repeat_start = repeat_start
+        self.repeat_end = repeat_end
+        self.direction = direction
+
 
 class AccidentalExpressionNode():
     def __init__(self, accidentals):

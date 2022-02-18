@@ -32,6 +32,8 @@ BPM: B P M;
 STAFF: S T A F F;
 
 MEASURE: M E A S U R E;
+MEASUREUP: M E A S U R E U P;
+MEASUREDOWN: M E A S U R E D O W N;
 
 MELODY: M E L O D Y;
 
@@ -138,6 +140,8 @@ declare_continuous: CONTINUOUS OPEN_BRACKET (expr)+ CLOSE_BRACKET;
 // declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
 
 declare_measures: MEASURE OPEN_BRACKET measure_block CLOSE_BRACKET;
+declare_measures_up: MEASUREUP OPEN_BRACKET measure_block CLOSE_BRACKET declare_measures_down;
+declare_measures_down: MEASUREDOWN OPEN_BRACKET measure_block CLOSE_BRACKET;
 // repeat_measure_block: declare_repeat measure_block declare_repeat_end;
 measure_block: declare_repeat? (expr | declare_continuous)+ declare_repeat_end?;
 
@@ -170,4 +174,4 @@ declare_repeat_end: REPEND | REPEND OPEN_PAR INTEGER? CLOSE_PAR;
 
 // Functions
 declare_staff: STAFF OPEN_PAR INTEGER COMMA_SEP INTEGER CLOSE_PAR OPEN_BRACKET (staff_block)+ CLOSE_BRACKET;
-staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures;
+staff_block: expr_acc staff_block | staff_block expr_acc | declare_measures staff_block | staff_block declare_measures | declare_measures | declare_measures_up staff_block | staff_block declare_measures_up | declare_measures_up;
