@@ -1,32 +1,36 @@
 bpM(300)
 instrument(piano)
 
-staff (4,4) {    
-    measureUp {
-        quarter(C, 3)
-        quarter(D, 3)
-        quarter(C, 3)
-        quarter(D, 3)
-    }
+melody chorus {
+    staff (4,4) {    
+        measureUp {
+            quarter(C, 3)
+            quarter(D, 3)
+            quarter(C, 3)
+            quarter(D, 3)
+        }
 
-    measureDown {
-        quarter(A, 2)
-        quarter(A, 2)
-        quarter(E, 2)
-        quarter(E, 2)
-    }
+        measureDown {
+            quarter(A, 2)
+            quarter(A, 2)
+            quarter(E, 2)
+            quarter(E, 2)
+        }
 
-    measureUp {
-        quarter(A, 3)
-        quarter(B, 3)
-        quarter(A, 3)
-        quarter(B, 3)
-    }
+        measureUp {
+            quarter(A, 3)
+            quarter(B, 3)
+            quarter(A, 3)
+            quarter(B, 3)
+        }
 
-    measureDown {
-        quarter(G, 2)
-        quarter(C, 2)
-        quarter(G, 2)
-        quarter(C, 2)
+        measureDown {
+            quarter(G, 2)
+            quarter(C, 2)
+            quarter(G, 2)
+            quarter(C, 2)
+        }
     }
 }
+
+chorus

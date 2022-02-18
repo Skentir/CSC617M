@@ -226,15 +226,31 @@ class MusicEvaluator(MyGrammerVisitor):
             else: # Variable Expression checking
                 melodyVariable = MyGrammerVisitor().visitExpr_var(i)
                 if (not self.checkInListContext(i)):
-                    if isinstance(self.variables[melodyVariable.getText()], tuple): #note
+                    # if isinstance(self.variables[melodyVariable.getText()], tuple): #note
+                    #     line = i.IDENTIFIER().getSymbol().line
+                    #     col = i.IDENTIFIER().getSymbol().column
+                    #     raise Exception("Variable must be melody but a note is called", line, col)
+                    # elif isinstance(self.variables[melodyVariable.getText()][0], tuple): #chord:
+                    #     line = i.IDENTIFIER().getSymbol().line
+                    #     col = i.IDENTIFIER().getSymbol().column
+                    #     raise Exception("Variable must be melody but a chord is called", line, col)
+                    if self.variables[melodyVariable.getText()][0] == "NOTE": #note
                         line = i.IDENTIFIER().getSymbol().line
                         col = i.IDENTIFIER().getSymbol().column
                         raise Exception("Variable must be melody but a note is called", line, col)
-                    elif isinstance(self.variables[melodyVariable.getText()][0], tuple): #chord:
+                    elif self.variables[melodyVariable.getText()][0] == "CHORD": #chord:
                         line = i.IDENTIFIER().getSymbol().line
                         col = i.IDENTIFIER().getSymbol().column
                         raise Exception("Variable must be melody but a chord is called", line, col)
-                self.staffs.append(Staff(None, None, melodyVariable.getText()))
+
+                melodyStaffUp = self.variables[melodyVariable.getText()][0][0]
+                melodyStaffDown = self.variables[melodyVariable.getText()][0][1]
+
+                self.music_stream.insert(idx, melodyStaffUp)
+                if self.checkInst in self.grandInst:
+                    self.music_stream.insert(idx, melodyStaffDown)
+
+                # self.staffs.append(Staff(None, None, melodyVariable.getText()))
                         
     def checkInListContext(self, ctx):
         line = ctx.IDENTIFIER().getSymbol().line
@@ -272,12 +288,22 @@ class MusicEvaluator(MyGrammerVisitor):
                         line = bottom.getSymbol().line
                         col = bottom.getSymbol().column
                         raise Exception("Note value of whole beats in staff must be greater than 0", line, col)
-                    newStaff = Staff(top.getText(), bottom.getText(), None)
+
+                    staffUp = Staff(top.getText(), bottom.getText(), None)
+                    staffDown = Staff(top.getText(), bottom.getText(), None)
                     for expr in staff.expressions:
-                        self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), newStaff)
+                        self.evaluateStaffBlock(expr, top.getText(), bottom.getText(), staffUp, staffDown)
                         # for x in expr:
                         #     newStaff.expressions.append(x)
-                    melodyStaffs.append(newStaff)
+
+                    right = stream.Score()
+                    left = stream.Score()
+                    for measure in staffUp.expressions:
+                        right.append(measure)
+                    for measure in staffDown.expressions:
+                        left.append(measure)
+
+                    melodyStaffs.append((right, left))
 
                 self.variables[melody.identifier.getText()] = melodyStaffs
             else: # Else if reassignment of a chord variable is attempted raise an exception 
@@ -545,11 +571,8 @@ class MusicEvaluator(MyGrammerVisitor):
         #         self.variables[x] = createChord(cur_notes, val)
 
         self.evaluateDeclaredMelody(node.melodies)
-
         self.evaluateDeclaredStaffs(node.staffs)
 
-
-        
         # for i in self.staffs:
         #     if isinstance(i, layout.Staff):
         #         for j in i:
@@ -566,6 +589,5 @@ class MusicEvaluator(MyGrammerVisitor):
         # for x in notes:
         #     self.music_stream.append(x)
         self.music_stream.write('midi', fp='test.midi')
-        # return "MIDI FILE"
         sp = midi.realtime.StreamPlayer(self.music_stream)
         sp.play()
