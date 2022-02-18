@@ -135,6 +135,18 @@ public class MyGrammerBaseListener implements MyGrammerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMeasure_block(MyGrammerParser.Measure_blockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMeasure_block(MyGrammerParser.Measure_blockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNoteExpression(MyGrammerParser.NoteExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -178,6 +190,18 @@ public class MyGrammerBaseListener implements MyGrammerListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAccidentalExpression(MyGrammerParser.AccidentalExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRestExpression(MyGrammerParser.RestExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRestExpression(MyGrammerParser.RestExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -255,6 +279,18 @@ public class MyGrammerBaseListener implements MyGrammerListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterExpr_rest(MyGrammerParser.Expr_restContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpr_rest(MyGrammerParser.Expr_restContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDeclare_repeat(MyGrammerParser.Declare_repeatContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -298,18 +334,6 @@ public class MyGrammerBaseListener implements MyGrammerListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStaff_block(MyGrammerParser.Staff_blockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRepeat_block(MyGrammerParser.Repeat_blockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRepeat_block(MyGrammerParser.Repeat_blockContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

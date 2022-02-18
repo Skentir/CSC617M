@@ -98,6 +98,15 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MyGrammerParser#measure_block.
+    def enterMeasure_block(self, ctx:MyGrammerParser.Measure_blockContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#measure_block.
+    def exitMeasure_block(self, ctx:MyGrammerParser.Measure_blockContext):
+        pass
+
+
     # Enter a parse tree produced by MyGrammerParser#NoteExpression.
     def enterNoteExpression(self, ctx:MyGrammerParser.NoteExpressionContext):
         pass
@@ -131,6 +140,15 @@ class MyGrammerListener(ParseTreeListener):
 
     # Exit a parse tree produced by MyGrammerParser#AccidentalExpression.
     def exitAccidentalExpression(self, ctx:MyGrammerParser.AccidentalExpressionContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#RestExpression.
+    def enterRestExpression(self, ctx:MyGrammerParser.RestExpressionContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#RestExpression.
+    def exitRestExpression(self, ctx:MyGrammerParser.RestExpressionContext):
         pass
 
 
@@ -188,6 +206,15 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MyGrammerParser#expr_rest.
+    def enterExpr_rest(self, ctx:MyGrammerParser.Expr_restContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#expr_rest.
+    def exitExpr_rest(self, ctx:MyGrammerParser.Expr_restContext):
+        pass
+
+
     # Enter a parse tree produced by MyGrammerParser#declare_repeat.
     def enterDeclare_repeat(self, ctx:MyGrammerParser.Declare_repeatContext):
         pass
@@ -221,15 +248,6 @@ class MyGrammerListener(ParseTreeListener):
 
     # Exit a parse tree produced by MyGrammerParser#staff_block.
     def exitStaff_block(self, ctx:MyGrammerParser.Staff_blockContext):
-        pass
-
-
-    # Enter a parse tree produced by MyGrammerParser#repeat_block.
-    def enterRepeat_block(self, ctx:MyGrammerParser.Repeat_blockContext):
-        pass
-
-    # Exit a parse tree produced by MyGrammerParser#repeat_block.
-    def exitRepeat_block(self, ctx:MyGrammerParser.Repeat_blockContext):
         pass
 
 
