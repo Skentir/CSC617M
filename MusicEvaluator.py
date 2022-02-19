@@ -373,6 +373,13 @@ class MusicEvaluator(MyGrammerVisitor):
                     measureUp.leftBarline = bar.Repeat(direction = 'start')
                     measureDown.leftBarline = bar.Repeat(direction = 'start')
                     self.repeat_ctr.append(x.repeat_start)
+                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
+                        expDown = ctx[idx + 1]
+                        if expDown.repeat_start is None:
+                            line = expDown.expressions[0].note_value.getSymbol().line - 1
+                            col = expDown.expressions[0].note_value.getSymbol().column
+                            raise Exception("measureUp and measureDown pairs must both have repstart", line, col)
+
                 if x.repeat_end is not None:
                     repeat_times = None
                     if x.repeat_end.INTEGER() is None:
@@ -388,6 +395,12 @@ class MusicEvaluator(MyGrammerVisitor):
                         measureDown.rightBarline = bar.Repeat(direction = 'end', times = repeat_times + 1)
                         if len(self.repeat_ctr) > 0:
                             del self.repeat_ctr[-1]
+                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
+                        expDown = ctx[idx + 1]
+                        if expDown.repeat_end is None:
+                            line = expDown.expressions[0].note_value.getSymbol().line - 1
+                            col = expDown.expressions[0].note_value.getSymbol().column
+                            raise Exception("measureUp and measureDown pairs must both have repend", line, col)
 
                 if isinstance(x, DeclareMeasuresGrandNode) and self.checkInst not in self.grandInst:
                     line = x.expressions[0].note_value.getSymbol().line - 1
@@ -404,7 +417,7 @@ class MusicEvaluator(MyGrammerVisitor):
                         if cur_beats > float(beats_per_measure):
                             line = m_expr.note_value.getSymbol().line
                             col = m_expr.note_value.getSymbol().column
-                            raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                            raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
                         else:
                             if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                                 measureDown.append(createNote(str(m_expr.num), str(m_expr.accidental), str(m_expr.pitch), str(m_expr.note_value), bool(m_expr.dotted)))
@@ -419,7 +432,7 @@ class MusicEvaluator(MyGrammerVisitor):
                             line = m_expr.notes[0].note_value.getSymbol().line
                             col = m_expr.notes[0].note_value.getSymbol().column
 
-                            raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                            raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
                         else:
                             new_notes = []
                             for n in m_expr.notes:
@@ -435,7 +448,7 @@ class MusicEvaluator(MyGrammerVisitor):
                         if cur_beats > float(beats_per_measure):
                             line = m_expr.note_value.getSymbol().line
                             col = m_expr.note_value.getSymbol().column
-                            raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                            raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
                         else:
                             if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                                 measureDown.append(createRest(str(m_expr.note_value), bool(m_expr.dotted)))
@@ -455,7 +468,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     line = continuous_expr.note_value.getSymbol().line
                                     col = continuous_expr.note_value.getSymbol().column
 
-                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                                    raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
                                 else:
                                     if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                                         measureDown.append(createNote(str(continuous_expr.num), str(continuous_expr.accidental), str(continuous_expr.pitch), str(continuous_expr.note_value)))
@@ -470,7 +483,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     line = m_expr.notes[0].note_value.getSymbol().line
                                     col = m_expr.notes[0].note_value.getSymbol().column
 
-                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                                    raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
                                 else:
                                     new_notes = []
                                     for n in continuous_expr.notes:
@@ -497,7 +510,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                             line = continuous_expr.getSymbol().line
                                             col = continuous_expr.getSymbol().column
 
-                                            raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                                            raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
                                         else:
                                             if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                                                 measureDown.append(createNote(str(self.variables[continuous_expr.getText()][4]), str(self.variables[continuous_expr.getText()][2]),str(self.variables[continuous_expr.getText()][3]), str(self.variables[continuous_expr.getText()][1])))
@@ -511,7 +524,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                             line = continuous_expr.getSymbol().line
                                             col = continuous_expr.getSymbol().column
 
-                                            raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                                            raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
                                         else:
                                             new_notes = []
                                             for n in self.variables[continuous_expr.getText()][1]:
@@ -537,7 +550,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     line = m_expr.getSymbol().line
                                     col = m_expr.getSymbol().column
 
-                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                                    raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
                                 else:
                                     if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                                         measureDown.append(createNote(str(self.variables[m_expr.getText()][4]),str(self.variables[m_expr.getText()][2]), str(self.variables[m_expr.getText()][3]), str(self.variables[m_expr.getText()][1]), bool(self.variables[m_expr.getText()][5])))
@@ -551,7 +564,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     line = m_expr.getSymbol().line
                                     col = m_expr.getSymbol().column
 
-                                    raise Exception("Number of beats in measure has exceeded amount allowed within staff", line, col)
+                                    raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
                                 else:
                                     new_notes = []
                                     for n in self.variables[m_expr.getText()][1]:
@@ -563,11 +576,11 @@ class MusicEvaluator(MyGrammerVisitor):
 
                         print(m_expr)
 
-                if not (first_measure or last_measure) and mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):
+                if mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):
                     line = x.expressions[0].note_value.getSymbol().line - 1
                     col = x.expressions[0].note_value.getSymbol().column
 
-                    raise Exception("Number of beats in measure did not meet amount allowed within staff", line, col)
+                    raise Exception("Number of beats in measure did not meet amount required within staff", line, col)
                 if first_measure:
                     first_measure = False
                 if last_measure:
