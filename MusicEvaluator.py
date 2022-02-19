@@ -402,6 +402,20 @@ class MusicEvaluator(MyGrammerVisitor):
                             col = expDown.expressions[0].note_value.getSymbol().column
                             raise Exception("measureUp and measureDown pairs must both have repend", line, col)
 
+                if x.repeat_start is None and isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
+                    expDown = ctx[idx + 1]
+                    if expDown.repeat_start is not None:
+                        line = x.expressions[0].note_value.getSymbol().line - 1
+                        col = x.expressions[0].note_value.getSymbol().column
+                        raise Exception("measureUp and measureDown pairs must both have repend", line, col)
+
+                if x.repeat_end is None and isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
+                    expDown = ctx[idx + 1]
+                    if expDown.repeat_end is not None:
+                        line = x.expressions[0].note_value.getSymbol().line - 1
+                        col = x.expressions[0].note_value.getSymbol().column
+                        raise Exception("measureUp and measureDown pairs must both have repend", line, col)
+
                 if isinstance(x, DeclareMeasuresGrandNode) and self.checkInst not in self.grandInst:
                     line = x.expressions[0].note_value.getSymbol().line - 1
                     col = x.expressions[0].note_value.getSymbol().column
