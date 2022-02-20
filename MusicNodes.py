@@ -30,12 +30,13 @@ class DeclareMelodyNode():
 
 
 class ExprNoteNode():
-    def __init__(self,note_value, accidental, pitch, num, dotted=False):
+    def __init__(self, note_value, accidental, pitch, num, dotted=False):
         self.note_value = note_value
         self.pitch = pitch
         self.num = num
         self.dotted = dotted
         self.accidental = accidental
+
 
 class ExprRestNode():
     def __init__(self, note_value, dotted=False):
@@ -67,6 +68,7 @@ class DeclareMeasuresNode():
         self.repeat_start = repeat_start
         self.repeat_end = repeat_end
 
+
 class DeclareMeasuresGrandNode():
     def __init__(self, expressions, repeat_start, repeat_end, direction):
         self.expressions = expressions
@@ -81,18 +83,21 @@ class AccidentalExpressionNode():
 
 
 class AccidentalNode():
-    def __init__(self, pitch, accidental=None):
-        self.accidental = accidental
+    def __init__(self, pitch, accidental, octave):
         self.pitch = pitch
+        self.accidental = accidental
+        self.octave = octave
 
 
 class DeclareContinousNode():
     def __init__(self, expressions):
         self.expressions = expressions
 
+
 class DeclareRepeatStartNode():
     def __init__(self, times):
         self.times = times
+
 
 class DeclareRepeatEndNode():
     def __init__(self):

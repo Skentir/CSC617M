@@ -1,4 +1,4 @@
-// Generated from MyGrammer.g4 by ANTLR 4.9.3
+// Generated from MyGrammer.g4 by ANTLR 4.9.2
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -171,6 +171,13 @@ public class MyGrammerBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitExpr_acc(MyGrammerParser.Expr_accContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpr_base_acc(MyGrammerParser.Expr_base_accContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

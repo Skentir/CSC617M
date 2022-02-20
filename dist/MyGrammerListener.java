@@ -1,4 +1,4 @@
-// Generated from MyGrammer.g4 by ANTLR 4.9.3
+// Generated from MyGrammer.g4 by ANTLR 4.9.2
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -246,6 +246,16 @@ public interface MyGrammerListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpr_acc(MyGrammerParser.Expr_accContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammerParser#expr_base_acc}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpr_base_acc(MyGrammerParser.Expr_base_accContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammerParser#expr_base_acc}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpr_base_acc(MyGrammerParser.Expr_base_accContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyGrammerParser#expr_add_acc}.
 	 * @param ctx the parse tree

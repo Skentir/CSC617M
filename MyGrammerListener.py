@@ -1,4 +1,4 @@
-# Generated from MyGrammer.g4 by ANTLR 4.9.3
+# Generated from MyGrammer.g4 by ANTLR 4.9.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .MyGrammerParser import MyGrammerParser
@@ -212,6 +212,15 @@ class MyGrammerListener(ParseTreeListener):
 
     # Exit a parse tree produced by MyGrammerParser#expr_acc.
     def exitExpr_acc(self, ctx:MyGrammerParser.Expr_accContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#expr_base_acc.
+    def enterExpr_base_acc(self, ctx:MyGrammerParser.Expr_base_accContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#expr_base_acc.
+    def exitExpr_base_acc(self, ctx:MyGrammerParser.Expr_base_accContext):
         pass
 
 
