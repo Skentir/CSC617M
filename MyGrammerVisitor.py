@@ -233,25 +233,34 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#expr_chord.
     def visitExpr_chord(self, ctx: MyGrammerParser.Expr_chordContext):
-        # list for all notes in an expr chord
-        notes = []
-        # empty list to pass to function add_expr_note
-        add_notes = []
+        if ctx.FIXED_CHORD() is None:
+            # list for all notes in an expr chord
+            notes = []
+            # empty list to pass to function add_expr_note
+            add_notes = []
 
-        #get a MusicNodes.ExprNoteNode Context from the chord declaration
-        note = self.visitExpr_note(ctx.expr_note())
-        #append it to the list
-        notes.append(note)
+            #get a MusicNodes.ExprNoteNode Context from the chord declaration
+            note = self.visitExpr_note(ctx.expr_note())
+            #append it to the list
+            notes.append(note)
 
-        #get the additional note declarations
-        add_note = self.visitExpr_add_note(ctx.expr_add_note(), add_notes)
-        #combine the two lists
-        notes = notes + add_note
+            #get the additional note declarations
+            add_note = self.visitExpr_add_note(ctx.expr_add_note(), add_notes)
+            #combine the two lists
+            notes = notes + add_note
 
-        #store in a node containing the notes for a chord expression
-        node = ExprChordNode(notes)
-        #return
-        return node
+            #store in a node containing the notes for a chord expression
+            node = ExprChordNode(notes)
+            #return
+            return node
+        else:
+            note_value = self.visitNote_value(ctx.note_value())
+            fixed_chord = ctx.FIXED_CHORD()
+            num = ctx.INTEGER()
+            dotted = ctx.DOTTED() if ctx.DOTTED() else None
+            node = ExprFixedChordNode(note_value, fixed_chord, num, dotted)
+            return node
+            
 
     # Visit a parse tree produced by MyGrammerParser#expr_rest.
     def visitExpr_rest(self, ctx: MyGrammerParser.Expr_restContext):

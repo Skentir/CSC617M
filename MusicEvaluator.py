@@ -56,6 +56,28 @@ def createNote(num, accidental, pitch, val, dotted):
         m_note.quarterLength = m_note.quarterLength + (m_note.quarterLength / 2)
     return m_note
 
+def createFixedChord(note_value, num, fixed_chord, dotted):
+    chords = ExprFixedChordNode.chords[fixed_chord.lower()]
+    chords = [chord + num for chord in chords]
+
+    new_chord = chord.Chord(chords)
+    if note_value == "eighth":
+        d = duration.Duration(type="eighth")
+        new_chord.quarterLength = d.quarterLength
+    if note_value == "sixteenth":
+        new_chord.quarterLength = 0.25
+    if note_value == "full":
+        d = duration.Duration(type="whole")
+        new_chord.quarterLength = d.quarterLength
+    if note_value == "double":
+        new_chord.quarterLength = 2.0
+    if note_value == "half":
+        d = duration.Duration(type="half")
+        new_chord.quarterLength = d.quarterLength
+    if dotted:
+        new_chord.quarterLength = new_chord.quarterLength + (new_chord.quarterLength / 2)
+    return new_chord
+
 def createRest(val, dotted):
     m_rest = note.Rest()
         #update rest duration
@@ -210,9 +232,13 @@ class MusicEvaluator(MyGrammerVisitor):
             temp = MyGrammerVisitor().visitDeclare_chord(chord)
 
             if temp.identifier.getText() not in self.variables:
-                for x in temp.chord.notes:
-                    notes.append(self.evaluateExprNoteNode(x))
-                self.variables[temp.identifier.getText()] = ("CHORD", notes)
+                # TODO: CHECK IF ERROR WHEN DECLARING FIXED CHORD
+                if isinstance(temp.chord, ExprChordNode):
+                    for x in temp.chord.notes:
+                        notes.append(self.evaluateExprNoteNode(x))
+                    self.variables[temp.identifier.getText()] = ("CHORD", notes)
+                else: # FIXED CHORD
+                    self.variables[temp.identifier.getText()] = ("FIXED_CHORD", temp.chord)
             else:
                 line = temp.identifier.getSymbol().line
                 col = temp.identifier.getSymbol().column
@@ -271,6 +297,10 @@ class MusicEvaluator(MyGrammerVisitor):
                         col = i.IDENTIFIER().getSymbol().column
                         raise Exception("Variable must be melody but a note is called", line, col)
                     elif self.variables[melodyVariable.getText()][0] == "CHORD": #chord:
+                        line = i.IDENTIFIER().getSymbol().line
+                        col = i.IDENTIFIER().getSymbol().column
+                        raise Exception("Variable must be melody but a chord is called", line, col)
+                    elif self.variables[melodyVariable.getText()][0] == "FIXED_CHORD": #chord:
                         line = i.IDENTIFIER().getSymbol().line
                         col = i.IDENTIFIER().getSymbol().column
                         raise Exception("Variable must be melody but a chord is called", line, col)
@@ -456,7 +486,20 @@ class MusicEvaluator(MyGrammerVisitor):
                             else:
                                 measureUp.append(createChord(new_notes, expected_note_val))
                             printExprChord(m_expr)
-                    
+
+                    elif isinstance(m_expr, ExprFixedChordNode):
+                        cur_beats += valToBeat(str(m_expr.note_value), float(note_value), bool(m_expr.dotted))
+                        if cur_beats > float(beats_per_measure):
+                            line = m_expr.note_value.getSymbol().line
+                            col = m_expr.note_value.getSymbol().column
+                            raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
+                        else:
+                            if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                measureDown.append(createFixedChord(str(m_expr.note_value), str(m_expr.num), str(m_expr.fixed_chord), bool(m_expr.dotted)))
+                            else:
+                                measureUp.append(createFixedChord(str(m_expr.note_value), str(m_expr.num), str(m_expr.fixed_chord), bool(m_expr.dotted)))
+                            print(m_expr)
+
                     elif isinstance(m_expr, ExprRestNode):
                         cur_beats += valToBeat(str(m_expr.note_value), float(note_value), bool(m_expr.dotted))
                         if cur_beats > float(beats_per_measure):
@@ -587,7 +630,18 @@ class MusicEvaluator(MyGrammerVisitor):
                                         measureDown.append(createChord(new_notes, expected_note_val))
                                     else:
                                         measureUp.append(createChord(new_notes, expected_note_val))
-
+                            elif self.variables[m_expr.getText()][0] == "FIXED_CHORD":
+                                fixed = self.variables[m_expr.getText()][1]
+                                cur_beats += valToBeat(str(fixed.note_value), float(note_value), bool(fixed.dotted))
+                                if cur_beats > float(beats_per_measure):
+                                    line = fixed.note_value.getSymbol().line
+                                    col = fixed.note_value.getSymbol().column
+                                    raise Exception("Number of beats in measure has exceeded amount required within staff", line, col)
+                                else:
+                                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                        measureDown.append(createFixedChord(str(fixed.note_value), str(fixed.num), str(fixed.fixed_chord), bool(fixed.dotted)))
+                                    else:
+                                        measureUp.append(createFixedChord(str(fixed.note_value), str(fixed.num), str(fixed.fixed_chord), bool(fixed.dotted)))
                         print(m_expr)
 
                 if mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):

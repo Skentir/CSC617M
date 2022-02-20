@@ -70,6 +70,8 @@ REST: R E S T;
 note_value: DOUBLE | FULL | HALF | QUARTER | EIGHTH | SIXTEENTH;
 // NOTE_VALUE: D O U B L E | F U L L | H A L F | Q U A R T E R | E I G H T H | S I X T E E N T H;
 
+FIXED_CHORD: (C | C '#' | D | E '_' | E | F | F '#' | G | A '_' | A | B '_' | B) (M A J '7'? | M | M '7' | M '7_5' | 'dim' | 'dom7');
+
 CLARINET: C L A R I N E T;
 
 FLUTE: F L U T E;
@@ -152,10 +154,11 @@ expr: expr_note                             # NoteExpression
     | expr_acc                              # AccidentalExpression
     | expr_rest                             # RestExpression;
 
-expr_note: note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR | note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED;
+expr_note: note_value OPEN_PAR ACCIDENTAL? PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED?;
 
 //expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR;
-expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR;
+expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR
+    | CHORD OPEN_PAR note_value OPEN_PAR FIXED_CHORD CLOSE_PAR DOTTED? COMMA_SEP INTEGER CLOSE_PAR;
 
 expr_add_note: COMMA_SEP expr_note | COMMA_SEP expr_note expr_add_note;
 
