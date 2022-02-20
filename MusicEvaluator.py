@@ -9,9 +9,13 @@ import string
 
 def createChord(note_arr, val):
     arr = []
-    for num, pitch in note_arr:
-        # TO DO: ADD ACCIDENTAL HERE
-        arr.append(str(pitch) + str(num))
+    for num, pitch, accidental in note_arr:
+        if accidental == "_":
+            accidental = "-"
+        elif accidental == "None":
+            accidental = ""
+        arr.append(str(pitch) + str(accidental) + str(num))
+    print("chord arr", arr)
     new_chord = chord.Chord(arr)
     if val == "eighth":
         d = duration.Duration(type="eighth")
@@ -547,13 +551,20 @@ class MusicEvaluator(MyGrammerVisitor):
                         else:
                             new_notes = []
                             for n in m_expr.notes:
-                                print("chord m_expr", n.num, n.pitch, n.accidental)
-                                new_notes.append((str(n.num), str(n.pitch)))
+                                pitch  = n.pitch.getText()
+                                octave =  n.num.getText()
+
+                                if (pitch, octave) in measure_accidentals:
+                                    n.accidental = measure_accidentals[((pitch, octave))]
+                                elif (pitch,octave) in staff_accidentals:
+                                    n.accidental = staff_accidentals[((pitch, octave))]
+                    
+                                new_notes.append((str(n.num), str(n.pitch), str(n.accidental)))
                             if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                                 measureDown.append(createChord(new_notes, expected_note_val))
                             else:
                                 measureUp.append(createChord(new_notes, expected_note_val))
-                            printExprChord(m_expr)
+                            # printExprChord(m_expr)
 
                     elif isinstance(m_expr, ExprRestNode):
                         cur_beats += valToBeat(str(m_expr.note_value),
@@ -580,6 +591,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     elif isinstance(m_expr, AccidentalExpressionNode):
                         # print("accidental")
                         for i in m_expr.accidentals:  # List of AccidentalNodes
+                            print("measure accie")
                             measure_accidentals[(i.pitch.getText(),i.octave.getText())] = i.accidental.getText() if i.accidental is not None else ""
                             # print("axie",
                             #       staff_accidentals[(i.pitch, i.octave)],
