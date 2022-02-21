@@ -97,30 +97,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
             staffs = self.visitDeclare_staff(expr)
         node = DeclareMelodyNode(ctx.IDENTIFIER(), staffs)
         return node
-
-    # Visit a parse tree produced by MyGrammerParser#declare_continuous.
-    def visitDeclare_continuous(
-            self, ctx: MyGrammerParser.Declare_continuousContext):
-
-        expr_list = []
-        for child_node in ctx.expr():
-            node_type = child_node.__class__.__name__
-            if node_type == "NoteExpressionContext":
-                # Obtain the pitch and num values
-                expr = child_node.expr_note()
-                note = self.visitExpr_note(expr)  # ExprNoteNode() object
-                expr_list.append(note)
-            elif node_type == "ChordExpressionContext":
-                expr = child_node.expr_chord()
-                chord = self.visitExpr_chord(expr)  # ExprChordNode() object
-                expr_list.append(chord)
-            elif node_type == "VariableExpressionContext":
-                expr = child_node.expr_var()
-                var = self.visitExpr_var(expr)  # IDENTFIER, TerminalNodeImpl
-                expr_list.append(var)
-        node = DeclareContinousNode(expr_list)
-        return node
-
+   
     # Visit a parse tree produced by MyGrammerParser#declare_measures.
     def visitDeclare_measures(self,
                               ctx: MyGrammerParser.Declare_measuresContext):
@@ -148,7 +125,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
             elif node_type == 'Declare_measures_downContext':
                 nodeDown = self.visitDeclare_measures_down(child_node)
             else:
-                print("Unknown Measures_up", node_type)
+                # print("Unknown Measures_up", node_type)
                 pass
         node = DeclareMeasuresGrandNode(expr_list, repeat_start, repeat_end,
                                         "UP")
@@ -164,7 +141,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
                 expr_list, repeat_start, repeat_end = self.visitMeasure_block(
                     child_node)
             else:
-                print("Unknown Measures_down", node_type)
+                # print("Unknown Measures_down", node_type)
                 pass
         node = DeclareMeasuresGrandNode(expr_list, repeat_start, repeat_end,
                                         "DOWN")
@@ -199,9 +176,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
                 expr = child_node.expr_var()
                 var = self.visitExpr_var(expr)  # IDENTIFIER, TerminalNodeImpl
                 expr_list.append(var)
-            elif node_type == "Declare_continuousContext":
-                cont = self.visitDeclare_continuous(child_node)
-                expr_list.append(cont)
+         
             elif node_type == "AccidentalExpressionContext":
                 res = self.visitAccidentalExpression(child_node)
                 expr_list.append(res)
@@ -243,7 +218,15 @@ class MyGrammerVisitor(ParseTreeVisitor):
         num = ctx.INTEGER()
         accidental = ctx.ACCIDENTAL() if ctx.ACCIDENTAL() else None
         dotted = ctx.DOTTED() if ctx.DOTTED() else None
-        node = ExprNoteNode(note_value, accidental, pitch, num, dotted)
+        slur_start = False
+        slur_end = False
+        if ctx.declare_slur_start:
+            slur_start = True
+        elif ctx.declare_slur_end:
+            slur_end = True   
+    
+        node = ExprNoteNode(note_value, accidental, pitch, num, slur_start, slur_end, dotted)
+        # node = ExprNoteNode(note_value, accidental, pitch, num, dotted)
         return node
 
     # Visit a parse tree produced by MyGrammerParser#expr_chord.
@@ -272,7 +255,13 @@ class MyGrammerVisitor(ParseTreeVisitor):
     def visitExpr_rest(self, ctx: MyGrammerParser.Expr_restContext):
         note_value = self.visitNote_value(ctx.note_value())
         dotted = ctx.DOTTED() if ctx.DOTTED() else None
-        node = ExprRestNode(note_value, dotted)
+        slur_start = False
+        slur_end = False
+        if ctx.declare_slur_start:
+            slur_start = True
+        elif ctx.declare_slur_end:
+            slur_end = True  
+        node = ExprRestNode(note_value, slur_start, slur_end, dotted)
         return node
 
     # Visit a parse tree produced by MyGrammerParser#expr_add_note.
@@ -389,6 +378,15 @@ class MyGrammerVisitor(ParseTreeVisitor):
         # print("StaffBL: ")
         # print(staff_block_list)
         return staff_block_list
+
+    # Visit a parse tree produced by MyGrammerParser#declare_slur_start.
+    def visitDeclare_slur_start(self, ctx:MyGrammerParser.Declare_slur_startContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MyGrammerParser#declare_slur_end.
+    def visitDeclare_slur_end(self, ctx:MyGrammerParser.Declare_slur_endContext):
+        return self.visitChildren(ctx)
 
 
 del MyGrammerParser

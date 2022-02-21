@@ -1,4 +1,4 @@
-# Generated from MyGrammer.g4 by ANTLR 4.9.2
+# Generated from MyGrammer.g4 by ANTLR 4.9.3
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .MyGrammerParser import MyGrammerParser
@@ -80,12 +80,21 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MyGrammerParser#declare_continuous.
-    def enterDeclare_continuous(self, ctx:MyGrammerParser.Declare_continuousContext):
+    # Enter a parse tree produced by MyGrammerParser#declare_slur_start.
+    def enterDeclare_slur_start(self, ctx:MyGrammerParser.Declare_slur_startContext):
         pass
 
-    # Exit a parse tree produced by MyGrammerParser#declare_continuous.
-    def exitDeclare_continuous(self, ctx:MyGrammerParser.Declare_continuousContext):
+    # Exit a parse tree produced by MyGrammerParser#declare_slur_start.
+    def exitDeclare_slur_start(self, ctx:MyGrammerParser.Declare_slur_startContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#declare_slur_end.
+    def enterDeclare_slur_end(self, ctx:MyGrammerParser.Declare_slur_endContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#declare_slur_end.
+    def exitDeclare_slur_end(self, ctx:MyGrammerParser.Declare_slur_endContext):
         pass
 
 

@@ -1,40 +1,22 @@
 bpM(150)
-instrument(Guitar)
+instrument(Piano)
 sample_note = quarter(G, 3)
 
 staff (4,4) {
-    measure {
+    measureUp {
+        slurstart
         quarter(C, 3)
+        slurstart
         quarter(C, 3)
         sample_note
+        sample_note
     }
-    measure {
+    measureDown {
         quarter(A, 3)*
+        slurend
         eighth(A, 3)
         half(rest)
+        slurend
     }
-    measure {
-        quarter(F, 3)
-        quarter(F, 3)
-        quarter(E, 3)
-        quarter(E, 3)
-    }
-    measure {
-        quarter(D, 3)
-        quarter(D, 3)
-        half(C, 3)
-    }
-    measure {
-        repstart
-        quarter(G, 3)
-        quarter(G, 3)
-        quarter(F, 3)
-        quarter(F, 3)
-    }
-    measure {
-        quarter(E, 3)
-        quarter(E, 3)
-        half(D, 3)
-        repend
-    }
+   
 }

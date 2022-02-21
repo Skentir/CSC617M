@@ -6,7 +6,6 @@ from MusicNodes import *
 from music21 import *
 import string
 
-
 def createChord(note_arr, val):
     arr = []
     for num, pitch, accidental in note_arr:
@@ -176,6 +175,14 @@ class MusicEvaluator(MyGrammerVisitor):
     staffs = []
     music_stream = stream.Score()
     repeat_ctr = []
+    spanner_down_items = []
+    spanner_down_item_ctr = 0
+    spanner_up_items = []
+    spanner_up_item_ctr = 0
+    spanner_down_queue = []
+    spanner_up_queue = []
+    spanner_up_cntr = 0
+    spanner_down_cntr = 0
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
         note_value = ctx.note_value.getText()
@@ -504,6 +511,7 @@ class MusicEvaluator(MyGrammerVisitor):
                             if isinstance(x, DeclareMeasuresGrandNode
                                           ) and x.direction == "DOWN":
                                 print("down")
+                                
                                 pitch  = m_expr.pitch.getText()
                                 octave =  m_expr.num.getText()
                                 
@@ -513,14 +521,47 @@ class MusicEvaluator(MyGrammerVisitor):
                                     updated_acc = staff_accidentals[((pitch, octave))]
                                 else:
                                     updated_acc = m_expr.accidental
-                                
-                                measureDown.append(
+
+                                if m_expr.slur_start or m_expr.slur_end:
+                                   
+                                    #create a note
+                            
+                                    self.spanner_down_items.append(createNote(str(m_expr.num),
+                                                str(m_expr.accidental),
+                                                str(m_expr.pitch),
+                                                str(m_expr.note_value),
+                                                bool(m_expr.dotted)))
+                                    self.spanner_down_item_ctr += 1
+                                    
+                                    measureDown.append(self.spanner_down_items[self.spanner_down_item_ctr-1])
+                                    #check if there is slur start
+                                    if m_expr.slur_start == True:
+                                        #instantiate a slur object with binded note
+                                        s = spanner.Slur([self.spanner_down_items[self.spanner_down_item_ctr-1]])
+                                        #add spanner object to data struct
+                                        self.spanner_down_queue.append(s)
+                                        measureDown.append(s)
+                                    
+                                    #add note to slur object in data struct (first entry slur object)
+                                    #add to queue 
+                                    #check if there is slur end
+                                    if m_expr.slur_end == True:
+                                        #remove oldest slur object in data struct
+                                        head = self.spanner_down_queue[self.spanner_down_cntr-1] # TO DO: add TRY catch
+                                    
+                                        #add note to slur object
+                                        head.addSpannedElements(self.spanner_down_queue[self.spanner_down_item_ctr-1])
+                                   
+                                else:
+                                    measureDown.append(
                                     createNote(str(m_expr.num),
                                                str(m_expr.accidental),
                                                str(m_expr.pitch),
                                                str(m_expr.note_value),
                                                bool(m_expr.dotted)))
+                                               
                             else:
+                             
                                 pitch  = m_expr.pitch.getText()
                                 octave =  m_expr.num.getText()
                                 if (pitch, octave) in measure_accidentals:
@@ -529,9 +570,40 @@ class MusicEvaluator(MyGrammerVisitor):
                                     updated_acc = staff_accidentals[((pitch, octave))]
                                 else:
                                     updated_acc = m_expr.accidental
-                                measureUp.append(
+                                if m_expr.slur_start or m_expr.slur_end:
+                                   
+                                    #create a note
+                            
+                                    self.spanner_up_items.append(createNote(str(m_expr.num),
+                                                str(m_expr.accidental),
+                                                str(m_expr.pitch),
+                                                str(m_expr.note_value),
+                                                bool(m_expr.dotted)))
+                                    self.spanner_up_item_ctr += 1
+                                    
+                                    measureDown.append(self.spanner_up_items[self.spanner_up_item_ctr-1])
+                                    #check if there is slur start
+                                    if m_expr.slur_start == True:
+                                        #instantiate a slur object with binded note
+                                        s = spanner.Slur([self.spanner_up_items[self.spanner_up_item_ctr-1]])
+                                        #add spanner object to data struct
+                                        self.spanner_up_queue.append(s)
+                                        measureUp.append(s)
+                                    
+                                    #add note to slur object in data struct (first entry slur object)
+                                    #add to queue 
+                                    #check if there is slur end
+                                    if m_expr.slur_end == True:
+                                        #remove oldest slur object in data struct
+                                        head = self.spanner_up_queue[self.spanner_up_cntr-1] # TO DO: add TRY catch
+                                    
+                                        #add note to slur object
+                                        head.addSpannedElements(self.spanner_up_queue[self.spanner_up_item_ctr-1])
+                                   
+                                else:
+                                    measureUp.append(
                                     createNote(str(m_expr.num),
-                                               str(updated_acc),
+                                               str(m_expr.accidental),
                                                str(m_expr.pitch),
                                                str(m_expr.note_value),
                                                bool(m_expr.dotted)))
@@ -577,15 +649,68 @@ class MusicEvaluator(MyGrammerVisitor):
                                 "Number of beats in measure has exceeded amount required within staff",
                                 line, col)
                         else:
-                            if isinstance(x, DeclareMeasuresGrandNode
-                                          ) and x.direction == "DOWN":
-                                measureDown.append(
-                                    createRest(str(m_expr.note_value),
+                            if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                if m_expr.slur_start or m_expr.slur_end:
+                                    #create a note
+                                    self.spanner_down_items.append(createRest(str(m_expr.note_value),
                                                bool(m_expr.dotted)))
+                                    self.spanner_down_item_ctr += 1
+                                    
+                                    measureDown.append(self.spanner_down_items[self.spanner_down_item_ctr-1])
+                                    #check if there is slur start
+                                    if m_expr.slur_start == True:
+                                        #instantiate a slur object with binded note
+                                        s = spanner.Slur([self.spanner_down_items[self.spanner_down_item_ctr-1]])
+                                        #add spanner object to data struct
+                                        self.spanner_down_queue.append(s)
+                                        measureDown.append(s)
+                                    
+                                    #add note to slur object in data struct (first entry slur object)
+                                    #add to queue 
+                                    #check if there is slur end
+                                    if m_expr.slur_end == True:
+                                        #remove oldest slur object in data struct
+                                        head = self.spanner_down_queue[self.spanner_down_cntr-1] # TO DO: add TRY catch
+                                    
+                                        #add note to slur object
+                                        head.addSpannedElements(self.spanner_down_queue[self.spanner_down_item_ctr-1])
+                                   
+                                else:
+                                    measureDown.append(createRest(str(m_expr.note_value),bool(m_expr.dotted)))
+                            
+                                # measureDown.append(
+                                #     createRest(str(m_expr.note_value),
+                                #                bool(m_expr.dotted)))
                             else:
-                                measureUp.append(
-                                    createRest(str(m_expr.note_value),
-                                               bool(m_expr.dotted)))
+                                if m_expr.slur_start or m_expr.slur_end:
+                                    #create a note
+                                    self.spanner_up_items.append(createRest(str(m_expr.note_value),
+                                                bool(m_expr.dotted)))
+                                    self.spanner_up_item_ctr += 1
+                                    
+                                    measureUp.append(self.spanner_up_items[self.spanner_up_item_ctr-1])
+                                    #check if there is slur start
+                                    if m_expr.slur_start == True:
+                                        #instantiate a slur object with binded note
+                                        s = spanner.Slur([self.spanner_up_items[self.spanner_up_item_ctr-1]])
+                                        #add spanner object to data struct
+                                        self.spanner_up_queue.append(s)
+                                        measureUp.append(s)
+                                 
+                                    #check if there is slur end
+                                    if m_expr.slur_end == True:
+                                        #remove oldest slur object in data struct
+                                        head = self.spanner_up_queue[self.spanner_up_cntr-1] # TO DO: add TRY catch
+                                    
+                                        #add note to slur object
+                                        head.addSpannedElements(self.spanner_up_queue[self.spanner_up_item_ctr-1])
+                                    
+                                else:
+                                    measureUp.append(createRest(str(m_expr.note_value), bool(m_expr.dotted)))
+                                
+                                # measureUp.append(
+                                #     createRest(str(m_expr.note_value),
+                                #                bool(m_expr.dotted)))
                             printExprRest(m_expr)
 
                     elif isinstance(m_expr, AccidentalExpressionNode):
@@ -596,177 +721,6 @@ class MusicEvaluator(MyGrammerVisitor):
                             # print("axie",
                             #       staff_accidentals[(i.pitch, i.octave)],
                             #       i.pitch, i.octave)
-
-                    elif isinstance(m_expr, DeclareContinousNode):
-                        for continuous_expr in m_expr.expressions:
-                            if isinstance(continuous_expr, ExprNoteNode):
-                                cur_beats += valToBeat(
-                                    str(continuous_expr.note_value),
-                                    float(note_value),
-                                    bool(continuous_expr.dotted))
-                                if cur_beats > float(beats_per_measure):
-                                    line = continuous_expr.note_value.getSymbol(
-                                    ).line
-                                    col = continuous_expr.note_value.getSymbol(
-                                    ).column
-
-                                    raise Exception(
-                                        "Number of beats in measure has exceeded amount required within staff",
-                                        line, col)
-                                else:
-                                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
-                                        measureDown.append(
-                                            createNote(
-                                                str(continuous_expr.num),
-                                                str(continuous_expr.accidental
-                                                    ),
-                                                str(continuous_expr.pitch),
-                                                str(continuous_expr.note_value)
-                                            ))
-                                    else:
-                                        measureUp.append(
-                                            createNote(
-                                                str(continuous_expr.num),
-                                                str(continuous_expr.accidental
-                                                    ),
-                                                str(continuous_expr.pitch),
-                                                str(continuous_expr.note_value)
-                                            ))
-                                    # printExprNote(continuous_expr)
-
-                            elif isinstance(continuous_expr, ExprChordNode):
-                                expected_note_val, is_dotted = processExprChord(
-                                    continuous_expr.notes, "EXPR")
-                                cur_beats += valToBeat(expected_note_val,
-                                                       float(note_value),
-                                                       is_dotted)
-                                if cur_beats > float(beats_per_measure):
-                                    line = m_expr.notes[0].note_value.getSymbol().line
-                                    col = m_expr.notes[0].note_value.getSymbol().column
-
-                                    raise Exception(
-                                        "Number of beats in measure has exceeded amount required within staff",
-                                        line, col)
-                                else:
-                                    new_notes = []
-                                    for n in continuous_expr.notes:
-                                        new_notes.append(
-                                            (str(n.num), str(n.pitch)))
-                                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
-                                        measureDown.append(
-                                            createChord(
-                                                new_notes, expected_note_val))
-                                    else:
-                                        measureUp.append(
-                                            createChord(
-                                                new_notes, expected_note_val))
-                                    printExprChord(continuous_expr)
-
-                            elif isinstance(continuous_expr, AccidentalExpressionNode):
-                                print("Continuous Accidental")
-
-                            else:
-                                if (not self.checkInListNode(continuous_expr)):  # Error checking identifier and if melody
-                                    if isinstance(
-                                            self.variables[
-                                                continuous_expr.getText()][0],
-                                            Staff):
-                                        line = continuous_expr.getSymbol().line
-                                        col = continuous_expr.getSymbol(
-                                        ).column
-                                        raise Exception(
-                                            "Variable must be note or chord but a melody is called",
-                                            line, col)
-
-                                    elif self.variables[
-                                            continuous_expr.getText(
-                                            )][0] == "NOTE":
-                                        cur_beats += valToBeat(
-                                            str(self.variables[
-                                                continuous_expr.getText()][1]),
-                                            float(note_value),
-                                            bool(self.variables[
-                                                continuous_expr.getText()][4]))
-                                        if cur_beats > float(beats_per_measure):
-                                            line = continuous_expr.getSymbol().line
-                                            col = continuous_expr.getSymbol().column
-
-                                            raise Exception(
-                                                "Number of beats in measure has exceeded amount required within staff",
-                                                line, col)
-                                        else:
-                                            if isinstance(
-                                                    x, DeclareMeasuresGrandNode
-                                            ) and x.direction == "DOWN":
-                                                measureDown.append(
-                                                    createNote(
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][4]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][2]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][3]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][1])))
-                                            else:
-                                                measureUp.append(
-                                                    createNote(
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][4]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][2]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][3]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][1])))
-
-                                    elif self.variables[
-                                            continuous_expr.getText(
-                                            )][0] == "CHORD":
-                                        expected_note_val, is_dotted = processExprChord(
-                                            self.variables[
-                                                continuous_expr.getText()][1],
-                                            "VAR")
-                                        cur_beats += valToBeat(
-                                            expected_note_val,
-                                            float(note_value), is_dotted)
-                                        if cur_beats > float(
-                                                beats_per_measure):
-                                            line = continuous_expr.getSymbol(
-                                            ).line
-                                            col = continuous_expr.getSymbol(
-                                            ).column
-
-                                            raise Exception(
-                                                "Number of beats in measure has exceeded amount required within staff",
-                                                line, col)
-                                        else:
-                                            new_notes = []
-                                            for n in self.variables[
-                                                    continuous_expr.getText(
-                                                    )][1]:
-                                                new_notes.append(
-                                                    (str(n[2]), str(n[1])))
-                                            if isinstance(
-                                                    x, DeclareMeasuresGrandNode
-                                            ) and x.direction == "DOWN":
-                                                measureDown.append(
-                                                    createChord(
-                                                        new_notes,
-                                                        expected_note_val))
-                                            else:
-                                                measureUp.append(
-                                                    createChord(
-                                                        new_notes,
-                                                        expected_note_val))
 
                         # print(m_expr.expressions)
                         # print(m_expr)

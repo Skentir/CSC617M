@@ -45,9 +45,12 @@ REPSTART: R E P S T A R T;
 
 REPEND: R E P E N D;
 
+SLURSTART: S L U R S T A R T;
+
+SLUREND: S L U R E N D;
+
 CHORD: C H O R D;
 
-CONTINUOUS: C O N T I N U O U S;
 
 DOUBLE: D O U B L E;
 
@@ -139,23 +142,21 @@ bpm: BPM OPEN_PAR INTEGER CLOSE_PAR;
 
 instrument: INSTRUMENT OPEN_PAR instruments CLOSE_PAR;
 
-// prog: bpm (declare_note | declare_chord | declare_melody)* (declare_staff | expr_var)+;
 prog:
 	bpm instrument (
 		declare_note
 		| declare_chord
 		| declare_melody
 	)* (declare_staff | expr_var)+ EOF;
-// prog: bpm (declare_note | declare_chord)*;
 
 //Declaration
 declare_note: IDENTIFIER EQUAL_OPER expr_note;
 declare_chord: IDENTIFIER EQUAL_OPER expr_chord;
 declare_melody:
 	MELODY IDENTIFIER OPEN_BRACKET (declare_staff)+ CLOSE_BRACKET;
-declare_continuous:
-	CONTINUOUS OPEN_BRACKET (expr)+ CLOSE_BRACKET;
-// declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
+
+declare_slur_start: SLURSTART;
+declare_slur_end: SLUREND;
 
 declare_measures:
 	MEASURE OPEN_BRACKET measure_block CLOSE_BRACKET;
@@ -163,9 +164,8 @@ declare_measures_up:
 	MEASUREUP OPEN_BRACKET measure_block CLOSE_BRACKET declare_measures_down;
 declare_measures_down:
 	MEASUREDOWN OPEN_BRACKET measure_block CLOSE_BRACKET;
-// repeat_measure_block: declare_repeat measure_block declare_repeat_end;
-measure_block:
-	declare_repeat? (expr | declare_continuous)+ declare_repeat_end?;
+
+measure_block: declare_repeat?  (expr)+  declare_repeat_end?; 
 
 //Expresions
 expr:
@@ -176,11 +176,11 @@ expr:
 	| expr_rest		# RestExpression;
 
 expr_note:
-	note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR
-	| note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED;
+	declare_slur_start? note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR declare_slur_end?
+	| declare_slur_start? note_value OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED declare_slur_end?;
 
 //expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR;
-expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR;
+expr_chord: declare_slur_start?  CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR declare_slur_end?;
 
 expr_add_note:
 	COMMA_SEP expr_note
@@ -197,8 +197,7 @@ expr_add_acc:
 	expr_base_acc
 	| expr_base_acc COMMA_SEP expr_add_acc;
 
-// | PITCH | PITCH COMMA_SEP expr_add_acc;
-expr_rest: note_value OPEN_PAR REST CLOSE_PAR DOTTED?;
+expr_rest: declare_slur_start? note_value OPEN_PAR REST CLOSE_PAR DOTTED? declare_slur_end?;
 
 // Iteratives
 

@@ -30,18 +30,22 @@ class DeclareMelodyNode():
 
 
 class ExprNoteNode():
-    def __init__(self, note_value, accidental, pitch, num, dotted=False):
+    def __init__(self, note_value, accidental, pitch, num, slur_start, slur_end,dotted=False):
         self.note_value = note_value
         self.pitch = pitch
         self.num = num
         self.dotted = dotted
         self.accidental = accidental
+        self.slur_start = slur_start
+        self.slur_end = slur_end
 
 
 class ExprRestNode():
-    def __init__(self, note_value, dotted=False):
+    def __init__(self, note_value, slur_start, slur_end, dotted=False):
         self.note_value = note_value
         self.dotted = dotted
+        self.slur_start = slur_start
+        self.slur_end = slur_end
 
 
 class DeclareChordNode():
