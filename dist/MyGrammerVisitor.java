@@ -1,4 +1,4 @@
-// Generated from MyGrammer.g4 by ANTLR 4.9.3
+// Generated from MyGrammer.g4 by ANTLR 4.9.2
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -152,6 +152,12 @@ public interface MyGrammerVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExpr_acc(MyGrammerParser.Expr_accContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MyGrammerParser#expr_base_acc}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpr_base_acc(MyGrammerParser.Expr_base_accContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MyGrammerParser#expr_add_acc}.
 	 * @param ctx the parse tree

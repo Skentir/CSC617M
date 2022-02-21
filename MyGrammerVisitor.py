@@ -122,48 +122,56 @@ class MyGrammerVisitor(ParseTreeVisitor):
         return node
 
     # Visit a parse tree produced by MyGrammerParser#declare_measures.
-    def visitDeclare_measures(self,ctx: MyGrammerParser.Declare_measuresContext):
+    def visitDeclare_measures(self,
+                              ctx: MyGrammerParser.Declare_measuresContext):
         expr_list, repeat_start, repeat_end = None, None, None
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
             if node_type == 'Measure_blockContext':
-                expr_list, repeat_start, repeat_end = self.visitMeasure_block(child_node)
+                expr_list, repeat_start, repeat_end = self.visitMeasure_block(
+                    child_node)
             else:
-                print("Unknown", node_type)
+                # print("Unknown Declare_measure", node_type)
                 pass
         node = DeclareMeasuresNode(expr_list, repeat_start, repeat_end)
         return node
 
     # Visit a parse tree produced by MyGrammerParser#declare_measures_grand.
-    def visitDeclare_measures_up(self, ctx:MyGrammerParser.Declare_measures_upContext):
+    def visitDeclare_measures_up(
+            self, ctx: MyGrammerParser.Declare_measures_upContext):
         expr_list, repeat_start, repeat_end = None, None, None
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
             if node_type == 'Measure_blockContext':
-                expr_list, repeat_start, repeat_end = self.visitMeasure_block(child_node)
+                expr_list, repeat_start, repeat_end = self.visitMeasure_block(
+                    child_node)
             elif node_type == 'Declare_measures_downContext':
                 nodeDown = self.visitDeclare_measures_down(child_node)
             else:
-                print("Unknown", node_type)
+                print("Unknown Measures_up", node_type)
                 pass
-        node = DeclareMeasuresGrandNode(expr_list, repeat_start, repeat_end, "UP")
+        node = DeclareMeasuresGrandNode(expr_list, repeat_start, repeat_end,
+                                        "UP")
         return node, nodeDown
 
     # Visit a parse tree produced by MyGrammerParser#declare_measures_grand.
-    def visitDeclare_measures_down(self, ctx:MyGrammerParser.Declare_measures_downContext):
+    def visitDeclare_measures_down(
+            self, ctx: MyGrammerParser.Declare_measures_downContext):
         expr_list, repeat_start, repeat_end = None, None, None
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
             if node_type == 'Measure_blockContext':
-                expr_list, repeat_start, repeat_end = self.visitMeasure_block(child_node)
+                expr_list, repeat_start, repeat_end = self.visitMeasure_block(
+                    child_node)
             else:
-                print("Unknown", node_type)
+                print("Unknown Measures_down", node_type)
                 pass
-        node = DeclareMeasuresGrandNode(expr_list, repeat_start, repeat_end, "DOWN")
+        node = DeclareMeasuresGrandNode(expr_list, repeat_start, repeat_end,
+                                        "DOWN")
         return node
 
     # Visit a parse tree produced by MyGrammerParser#measure_block.
-    def visitMeasure_block(self, ctx:MyGrammerParser.Measure_blockContext):
+    def visitMeasure_block(self, ctx: MyGrammerParser.Measure_blockContext):
         expr_list = []
         repstart, repend = None, None
         if ctx.declare_repeat() is not None:
@@ -194,13 +202,15 @@ class MyGrammerVisitor(ParseTreeVisitor):
             elif node_type == "Declare_continuousContext":
                 cont = self.visitDeclare_continuous(child_node)
                 expr_list.append(cont)
+            elif node_type == "AccidentalExpressionContext":
+                res = self.visitAccidentalExpression(child_node)
+                expr_list.append(res)
             else:
-                print("Unknown", node_type)
+                # print("Unknown Measure_block", node_type)
                 pass
 
         # node = DeclareMeasuresNode(expr_list, 0)
         return expr_list, repstart, repend
-    
 
     # Visit a parse tree produced by MyGrammerParser#NoteExpression.
     def visitNoteExpression(self, ctx: MyGrammerParser.NoteExpressionContext):
@@ -219,7 +229,12 @@ class MyGrammerVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by MyGrammerParser#AccidentalExpression.
     def visitAccidentalExpression(
             self, ctx: MyGrammerParser.AccidentalExpressionContext):
-        return self.visitChildren(ctx)
+
+        for child_node in ctx.getChildren():
+            node_type = child_node.__class__.__name__
+            if node_type == "Expr_accContext":
+                return self.visitExpr_acc(child_node)
+        # return self.visitChildren(ctx)
 
     # Visit a parse tree produced by MyGrammerParser#expr_note.
     def visitExpr_note(self, ctx: MyGrammerParser.Expr_noteContext):
@@ -291,8 +306,6 @@ class MyGrammerVisitor(ParseTreeVisitor):
     def visitExpr_var(self, ctx: MyGrammerParser.Expr_varContext):
         return ctx.IDENTIFIER()
 
-
-    
     # Visit a parse tree produced by MyGrammerParser#expr_acc.
     def visitExpr_acc(self, ctx: MyGrammerParser.Expr_accContext):
         # List of accidentals
@@ -303,14 +316,23 @@ class MyGrammerVisitor(ParseTreeVisitor):
         node = AccidentalExpressionNode(add_acc)
         return node
 
+    # Visit a parse tree produced by MyGrammerParser#expr_base_acc.
+    def visitExpr_base_acc(self, ctx: MyGrammerParser.Expr_base_accContext):
+        accidental = ctx.ACCIDENTAL() if ctx.ACCIDENTAL() else None
+        pitch = ctx.PITCH()
+        octave = ctx.INTEGER()
+        node = AccidentalNode(pitch, accidental, octave)
+        return node
+        # return self.visitChildren(ctx)  return p a o
+
     # Visit a parse tree produced by MyGrammerParser#expr_add_acc.
     def visitExpr_add_acc(self, ctx: MyGrammerParser.Expr_add_accContext,
                           accs):
-
         #copy the list of accidental nodes
         accList = accs
-        node = AccidentalNode(ctx.PITCH(), ctx.ACCIDENTAL())
 
+        base = ctx.expr_base_acc()
+        node = self.visitExpr_base_acc(base)
         accList.append(node)
 
         if ctx.expr_add_acc() is not None:
@@ -331,10 +353,8 @@ class MyGrammerVisitor(ParseTreeVisitor):
                 staff_block_list = []
                 expressions.append(
                     self.visitStaff_block(child_node, staff_block_list))
-        # TO DO:MOVE THIS TO EVALUATOR
-        # if not (note_value != 0 and (note_value & (note_value - 1)) == 0):
-        #    raise Exception("Error: Note argument is not a power of 2",
-        #           note_value_line, note_value_column)
+            # else:
+            # print("Unknown Declare_staff", child_node.getText())
 
         node = DeclareStaffNode(beats_per_measure, expressions, note_value)
         return node
@@ -368,9 +388,10 @@ class MyGrammerVisitor(ParseTreeVisitor):
                 sbl.append(measuresDown)
                 # print("sub measure", measures)
             elif node_type == 'Staff_blockContext':
-                self.visitStaff_block(child_node, sbl)  # Expand staff_block production
+                self.visitStaff_block(child_node,
+                                      sbl)  # Expand staff_block production
             else:
-                print("Unknown",node_type)
+                # print("Unknown Staff_block", node_type)
                 pass
         # print("SBL: ")
         # print(sbl)
@@ -378,6 +399,5 @@ class MyGrammerVisitor(ParseTreeVisitor):
         # print(staff_block_list)
         return staff_block_list
 
-  
 
 del MyGrammerParser

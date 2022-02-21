@@ -1,0 +1,27 @@
+bpM(150)
+instrument(Guitar)
+sample_note = quarter(C, 2)
+
+staff (2,4) {
+
+    measure {
+        sample_note
+        sample_note
+    }
+    measure {
+        accidental((_C, 2))
+        sample_note
+        sample_note
+    }
+    measure {
+        accidental((#C, 2))
+        sample_note
+        sample_note
+    }
+     measure {
+        accidental((_C, 2))
+        sample_note
+        sample_note
+    }
+    
+}
