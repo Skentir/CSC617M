@@ -456,6 +456,43 @@ repend
 
 [END OF BRIDGE]
 
+repstart
 measure {
     chord(half(E, 3), half(G, 3), half(B, 3))
+    chord(half(E, 3), half(G, 3), half(C, 4))
 }
+
+measure {
+    chord(half(E, 3), half(G, 3), half(D, 4))
+    chord(half(E, 3), half(G, 3), half(E, 4))
+}
+
+measure {
+    chord(half(D, 3), half(F, 3), half(B, 3))
+    chord(quarter(D, 3), quarter(F, 3), quarter(C, 4))
+    eighth(D, 4)
+    eighth(B, 2)
+}
+repend
+
+measure {
+    chord(quarter(G, 3), quarter(D, 4))
+    chord(quarter(F, 3), quarter(C, 4))
+    chord(quarter(E, 3), quarter(B, 3))
+    chord(quarter(D, 3), quarter(A, 3))
+}
+
+measure {
+    chord(whole(B, 2), whole(E, 3), whole(G, 3))
+}
+
+repstart
+measure {
+    chord(half(C, 3), half(E, 3), half(G, 3))
+    chord(half(C, 3), half(F, 3), half(A, 3))
+}
+
+measure {
+    chord(whole(B, 2), whole(F, 3S))
+}
+repend
