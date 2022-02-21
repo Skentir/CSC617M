@@ -6,493 +6,494 @@ gm = chord(eighth(B, 2), eighth(D, 3), eighth(G, 3), eighth (B, 3))
 eflat = chord(eighth(B, 2), eighth(E, 3), eighth(G, 3), eighth(B, 3))
 
 left
-staff(4/4)
-accidentals (_B, _E)
-measure {
-    whole (rest)
+staff(4/4) {
+    accidentals (_B, _E)
+    measure {
+        whole (rest)
+    }
+
+    measure {
+        bflat
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        gm
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        eflat
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    repstart
+    measure {
+        bflat
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    repend
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        gm
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        eflat
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        chord(eighth(G, 4), eighth(B, 4), eighth(D, 5), eighth(G, 5))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    [CHORUS]
+
+    repstart
+    measure {
+        chord(eighth(E, 3), eighth(B, 3))
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(G, 3)
+        eighth(B, 3)
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(G, 3)
+    }
+
+    measure {
+        chord(eighth(E, 3), eighth(B, 3))
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(C, 4)
+        eighth(G, 3) 
+        eighth(D, 4)
+        eighth(G, 3) 
+        eighth(E, 4)
+        eighth(G, 3)
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        eighth(F, 3)
+        eighth(D, 4)
+        eighth(F, 3)
+        eighth(B, 3)
+        eighth(F, 3)
+        eighth(D, 4)
+        eighth(F, 3)
+    }
+    repend
+
+    measure {
+        chord(eighth(G, 3), eighth(D, 4))
+        eighth(F, 3)
+        chord(eighth(D, 3), eighth(C, 4))
+        eighth(F, 3)
+        chord(eighth(D, 3), eighth(D, 4))
+        eighth(F, 3)
+        chord(eighth(D, 3), eighth(B, 3))
+        eighth(F, 3)
+    }
+
+    measure {
+        chord(eighth(G, 3), eighth(B, 3))
+        eighth(E, 3)
+        chord(eighth(G, 3), eighth(B, 3))
+        eighth(E, 3)
+        chord(eighth(G, 3), eighth(B, 3))
+        eighth(E, 3)
+        chord(eighth(G, 3), eighth(B, 3))
+        eighth(E, 3)
+    }
+
+    measure {
+        chord(half(C, 3), half(E, 3), half(G, 3))
+        chord (half(A, 2), half(C, 3), half(F, 3))
+    }
+
+    measure {
+        chord (whole(B, 2), whole(F, 3))
+    }
+
+    [END OF CHORUS]
+
+    measure {
+        bflat
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        gm
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        eflat
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+
+
+    [CHORUS]
+
+    repstart
+    measure {
+        chord(eighth(E, 3), eighth(B, 3))
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(G, 3)
+        eighth(B, 3)
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(G, 3)
+    }
+
+    measure {
+        chord(eighth(E, 3), eighth(B, 3))
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(C, 4)
+        eighth(G, 3) 
+        eighth(D, 4)
+        eighth(G, 3) 
+        eighth(E, 4)
+        eighth(G, 3)
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        eighth(F, 3)
+        eighth(D, 4)
+        eighth(F, 3)
+        eighth(B, 3)
+        eighth(F, 3)
+        eighth(D, 4)
+        eighth(F, 3)
+    }
+    repend
+
+    measure {
+        chord(eighth(G, 3), eighth(D, 4))
+        eighth(F, 3)
+        chord(eighth(D, 3), eighth(C, 4))
+        eighth(F, 3)
+        chord(eighth(D, 3), eighth(D, 4))
+        eighth(F, 3)
+        chord(eighth(D, 3), eighth(B, 3))
+        eighth(F, 3)
+    }
+
+    measure {
+        chord(eighth(G, 3), eighth(B, 3))
+        eighth(E, 3)
+        chord(eighth(G, 3), eighth(B, 3))
+        eighth(E, 3)
+        chord(eighth(G, 3), eighth(B, 3))
+        eighth(E, 3)
+        chord(eighth(G, 3), eighth(B, 3))
+        eighth(E, 3)
+    }
+
+    measure {
+        chord(half(C, 3), half(E, 3), half(G, 3))
+        chord (half(A, 2), half(C, 3), half(F, 3))
+    }
+
+    measure {
+        chord (whole(B, 2), whole(F, 3))
+    }
+
+    [END OF CHORUS]
+
+    [BRIDGE]
+    repstart 
+
+    meaure {
+        chord(eighth(G, 3), eighth(B, 3), eighth(D, 4))
+        chord(eighth(B, 3), eighth(D, 4))
+        eighth(G, 3)
+        chord(quarter(G, 3), quarter(B, 3), quarter(D, 4))
+        chord(eighth(B, 3), eighth(D, 4))
+        eighth(G, 3)
+    }
+
+    measure {
+        chord(quarter(E, 3), quarter(G, 3), quarter(B, 3))
+        chord(quarter(G, 3), quarter(B, 3))
+        eighth(E, 4)
+        chord(quarter(E, 3), quarter(G, 3), quarter(B, 3))
+        chord(quarter(G, 3), quarter(B, 3))
+        eighth(E, 4)
+    }
+
+    measure {
+        chord(quarter(B, 2), quarter(D, 3), quarter(F, 3))
+        chord(eighth(D, 3), eighth(F, 3))
+        eighth(B, 2)
+        chord(quarter(B, 2), quarter(D, 3), quarter(F, 3))
+        chord(eighth(D, 3), eighth(F, 3))
+        eighth(B, 2)
+    }
+
+    measure {
+        chord(quarter(D, 3), quarter(A, 3), quarter(C, 4))
+        chord(eighth(A, 3), eighth(C, 4))
+        eighth(D, 3)
+        chord(quarter(D, 3), quarter(A, 3), quarter(C, 4))
+        chord(eighth(A, 3), eighth(C, 4))
+        eighth(D, 3)
+    }
+
+    meaure {
+        chord(eighth(G, 3), eighth(B, 3), eighth(D, 4))
+        chord(eighth(B, 3), eighth(D, 4))
+        eighth(G, 3)
+        chord(quarter(G, 3), quarter(B, 3), quarter(D, 4))
+        chord(eighth(B, 3), eighth(D, 4))
+        eighth(G, 3)
+    }
+
+    measure {
+        chord(quarter(E, 3), quarter(G, 3), quarter(B, 3))
+        chord(quarter(G, 3), quarter(B, 3))
+        eighth(E, 4)
+        chord(quarter(E, 3), quarter(G, 3), quarter(B, 3))
+        chord(quarter(G, 3), quarter(B, 3))
+        eighth(E, 4)
+    }
+
+    measure {
+        chord(quarter(B, 2), quarter(D, 3), quarter(F, 3))
+        chord(eighth(D, 3), eighth(F, 3))
+        eighth(B, 2)
+        chord(quarter(B, 2), quarter(D, 3), quarter(F, 3))
+        chord(eighth(D, 3), eighth(F, 3))
+        eighth(B, 2)
+    }
+
+    measure {
+        chord(quarter(D, 3), quarter(A, 3), quarter(C, 4))
+        chord(eighth(A, 3), eighth(C, 4))
+        eighth(D, 3)
+        chord(quarter(D, 3), quarter(A, 3), quarter(C, 4))
+        chord(eighth(A, 3), eighth(C, 4))
+        eighth(D, 3)
+    }
+    repend
+
+    [END OF BRIDGE]
+
+    repstart
+    measure {
+        chord(half(E, 3), half(G, 3), half(B, 3))
+        chord(half(E, 3), half(G, 3), half(C, 4))
+    }
+
+    measure {
+        chord(half(E, 3), half(G, 3), half(D, 4))
+        chord(half(E, 3), half(G, 3), half(E, 4))
+    }
+
+    measure {
+        chord(half(D, 3), half(F, 3), half(B, 3))
+        chord(quarter(D, 3), quarter(F, 3), quarter(C, 4))
+        eighth(D, 4)
+        eighth(B, 2)
+    }
+    repend
+
+    measure {
+        chord(quarter(G, 3), quarter(D, 4))
+        chord(quarter(F, 3), quarter(C, 4))
+        chord(quarter(E, 3), quarter(B, 3))
+        chord(quarter(D, 3), quarter(A, 3))
+    }
+
+    measure {
+        chord(whole(B, 2), whole(E, 3), whole(G, 3))
+    }
+
+    repstart
+    measure {
+        chord(half(C, 3), half(E, 3), half(G, 3))
+        chord(half(C, 3), half(F, 3), half(A, 3))
+    }
+
+    measure {
+        chord(whole(B, 2), whole(F, 3S))
+    }
+    repend
 }
-
-measure {
-    bflat
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    gm
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    eflat
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-repstart
-measure {
-    bflat
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-repend
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    gm
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    eflat
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    chord(eighth(G, 4), eighth(B, 4), eighth(D, 5), eighth(G, 5))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-[CHORUS]
-
-repstart
-measure {
-    chord(eighth(E, 3), eighth(B, 3))
-    eighth(G, 3)
-    eighth(D, 4) 
-    eighth(G, 3)
-    eighth(B, 3)
-    eighth(G, 3)
-    eighth(D, 4) 
-    eighth(G, 3)
-}
-
-measure {
-    chord(eighth(E, 3), eighth(B, 3))
-    eighth(G, 3)
-    eighth(D, 4) 
-    eighth(C, 4)
-    eighth(G, 3) 
-    eighth(D, 4)
-    eighth(G, 3) 
-    eighth(E, 4)
-    eighth(G, 3)
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    eighth(F, 3)
-    eighth(D, 4)
-    eighth(F, 3)
-    eighth(B, 3)
-    eighth(F, 3)
-    eighth(D, 4)
-    eighth(F, 3)
-}
-repend
-
-measure {
-    chord(eighth(G, 3), eighth(D, 4))
-    eighth(F, 3)
-    chord(eighth(D, 3), eighth(C, 4))
-    eighth(F, 3)
-    chord(eighth(D, 3), eighth(D, 4))
-    eighth(F, 3)
-    chord(eighth(D, 3), eighth(B, 3))
-    eighth(F, 3)
-}
-
-measure {
-    chord(eighth(G, 3), eighth(B, 3))
-    eighth(E, 3)
-    chord(eighth(G, 3), eighth(B, 3))
-    eighth(E, 3)
-    chord(eighth(G, 3), eighth(B, 3))
-    eighth(E, 3)
-    chord(eighth(G, 3), eighth(B, 3))
-    eighth(E, 3)
-}
-
-measure {
-    chord(half(C, 3), half(E, 3), half(G, 3))
-    chord (half(A, 2), half(C, 3), half(F, 3))
-}
-
-measure {
-    chord (whole(B, 2), whole(F, 3))
-}
-
-[END OF CHORUS]
-
-measure {
-    bflat
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    gm
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    eflat
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-    chord(eighth(B, 2), eighth(B, 3))
-}
-
-
-[CHORUS]
-
-repstart
-measure {
-    chord(eighth(E, 3), eighth(B, 3))
-    eighth(G, 3)
-    eighth(D, 4) 
-    eighth(G, 3)
-    eighth(B, 3)
-    eighth(G, 3)
-    eighth(D, 4) 
-    eighth(G, 3)
-}
-
-measure {
-    chord(eighth(E, 3), eighth(B, 3))
-    eighth(G, 3)
-    eighth(D, 4) 
-    eighth(C, 4)
-    eighth(G, 3) 
-    eighth(D, 4)
-    eighth(G, 3) 
-    eighth(E, 4)
-    eighth(G, 3)
-}
-
-measure {
-    chord(eighth(B, 2), eighth(B, 3))
-    eighth(F, 3)
-    eighth(D, 4)
-    eighth(F, 3)
-    eighth(B, 3)
-    eighth(F, 3)
-    eighth(D, 4)
-    eighth(F, 3)
-}
-repend
-
-measure {
-    chord(eighth(G, 3), eighth(D, 4))
-    eighth(F, 3)
-    chord(eighth(D, 3), eighth(C, 4))
-    eighth(F, 3)
-    chord(eighth(D, 3), eighth(D, 4))
-    eighth(F, 3)
-    chord(eighth(D, 3), eighth(B, 3))
-    eighth(F, 3)
-}
-
-measure {
-    chord(eighth(G, 3), eighth(B, 3))
-    eighth(E, 3)
-    chord(eighth(G, 3), eighth(B, 3))
-    eighth(E, 3)
-    chord(eighth(G, 3), eighth(B, 3))
-    eighth(E, 3)
-    chord(eighth(G, 3), eighth(B, 3))
-    eighth(E, 3)
-}
-
-measure {
-    chord(half(C, 3), half(E, 3), half(G, 3))
-    chord (half(A, 2), half(C, 3), half(F, 3))
-}
-
-measure {
-    chord (whole(B, 2), whole(F, 3))
-}
-
-[END OF CHORUS]
-
-[BRIDGE]
-repstart 
-
-meaure {
-    chord(eighth(G, 3), eighth(B, 3), eighth(D, 4))
-    chord(eighth(B, 3), eighth(D, 4))
-    eighth(G, 3)
-    chord(quarter(G, 3), quarter(B, 3), quarter(D, 4))
-    chord(eighth(B, 3), eighth(D, 4))
-    eighth(G, 3)
-}
-
-measure {
-    chord(quarter(E, 3), quarter(G, 3), quarter(B, 3))
-    chord(quarter(G, 3), quarter(B, 3))
-    eighth(E, 4)
-    chord(quarter(E, 3), quarter(G, 3), quarter(B, 3))
-    chord(quarter(G, 3), quarter(B, 3))
-    eighth(E, 4)
-}
-
-measure {
-    chord(quarter(B, 2), quarter(D, 3), quarter(F, 3))
-    chord(eighth(D, 3), eighth(F, 3))
-    eighth(B, 2)
-    chord(quarter(B, 2), quarter(D, 3), quarter(F, 3))
-    chord(eighth(D, 3), eighth(F, 3))
-    eighth(B, 2)
-}
-
-measure {
-    chord(quarter(D, 3), quarter(A, 3), quarter(C, 4))
-    chord(eighth(A, 3), eighth(C, 4))
-    eighth(D, 3)
-    chord(quarter(D, 3), quarter(A, 3), quarter(C, 4))
-    chord(eighth(A, 3), eighth(C, 4))
-    eighth(D, 3)
-}
-
-meaure {
-    chord(eighth(G, 3), eighth(B, 3), eighth(D, 4))
-    chord(eighth(B, 3), eighth(D, 4))
-    eighth(G, 3)
-    chord(quarter(G, 3), quarter(B, 3), quarter(D, 4))
-    chord(eighth(B, 3), eighth(D, 4))
-    eighth(G, 3)
-}
-
-measure {
-    chord(quarter(E, 3), quarter(G, 3), quarter(B, 3))
-    chord(quarter(G, 3), quarter(B, 3))
-    eighth(E, 4)
-    chord(quarter(E, 3), quarter(G, 3), quarter(B, 3))
-    chord(quarter(G, 3), quarter(B, 3))
-    eighth(E, 4)
-}
-
-measure {
-    chord(quarter(B, 2), quarter(D, 3), quarter(F, 3))
-    chord(eighth(D, 3), eighth(F, 3))
-    eighth(B, 2)
-    chord(quarter(B, 2), quarter(D, 3), quarter(F, 3))
-    chord(eighth(D, 3), eighth(F, 3))
-    eighth(B, 2)
-}
-
-measure {
-    chord(quarter(D, 3), quarter(A, 3), quarter(C, 4))
-    chord(eighth(A, 3), eighth(C, 4))
-    eighth(D, 3)
-    chord(quarter(D, 3), quarter(A, 3), quarter(C, 4))
-    chord(eighth(A, 3), eighth(C, 4))
-    eighth(D, 3)
-}
-repend
-
-[END OF BRIDGE]
-
-repstart
-measure {
-    chord(half(E, 3), half(G, 3), half(B, 3))
-    chord(half(E, 3), half(G, 3), half(C, 4))
-}
-
-measure {
-    chord(half(E, 3), half(G, 3), half(D, 4))
-    chord(half(E, 3), half(G, 3), half(E, 4))
-}
-
-measure {
-    chord(half(D, 3), half(F, 3), half(B, 3))
-    chord(quarter(D, 3), quarter(F, 3), quarter(C, 4))
-    eighth(D, 4)
-    eighth(B, 2)
-}
-repend
-
-measure {
-    chord(quarter(G, 3), quarter(D, 4))
-    chord(quarter(F, 3), quarter(C, 4))
-    chord(quarter(E, 3), quarter(B, 3))
-    chord(quarter(D, 3), quarter(A, 3))
-}
-
-measure {
-    chord(whole(B, 2), whole(E, 3), whole(G, 3))
-}
-
-repstart
-measure {
-    chord(half(C, 3), half(E, 3), half(G, 3))
-    chord(half(C, 3), half(F, 3), half(A, 3))
-}
-
-measure {
-    chord(whole(B, 2), whole(F, 3S))
-}
-repend
