@@ -1,0 +1,639 @@
+title:Driver's license
+instrument(Piano)
+bpm(72)
+right 
+staff(4/4)
+accidental (_B, _E)
+measure{
+	chord(quarter(B, 3),quarter(B, 4))
+	chord(quarter(B, 3),quarter(B, 4))
+	chord(quarter(B, 3),quarter(B, 4))
+	chord(quarter(B, 3),quarter(B, 4))
+}
+measure{
+	eighth(rest)
+	sixteenth(B, 3)
+	sixteenth(D, 4)
+	eighth(F, 4)
+	eighth(F, 4)*
+	sixteenth(E, 4) 
+	eighth(F, 4)* 
+	sixteenth(C, 4)
+	sixteenth(C, 4)
+}
+measure{
+	sixteenth(C, 4)
+	eighth(B, 3)
+	sixteenth(B, 3)
+	eighth(D, 4)
+	sixteenth(F, 4)
+	eighth(F, 4)
+	eighth(E, 4)*
+	eighth(D, 4)
+	sixteenth(E, 4)
+	sixteenth(E, 4)
+}
+measure{
+	eighth(rest)
+	eighth(D, 4)
+	sixteenth(B, 3)
+	eighth(F, 4)
+	eighth(F, 4)*
+	sixteenth(E, 4)
+	eighth(D, 4)*
+	sixteenth(C, 4)
+	sixteenth(C, 4)
+}
+measure{
+	sixteenth(C, 4)
+	eight(B, 3)
+	sixteenth(B, 3)
+	sixteenth(D, 4)
+	eighth(F, 4) 
+	eighth(F, 4)
+	eighth(E, 4)
+	eighth(D, 4)
+	eighth(E, 4)
+	sixteenth(D, 4)
+}
+measure {
+    eighth(D, 4)
+    sixteenth(B, 3)
+    sixteenth(B, 3)
+    sixteenth(B, 3)
+    sixteenth(G, 3) (?)
+    eighth(B, 3)
+    sixteenth(G, 3)
+    sixteenth(B, 3)
+    sixteenth(G, 3)*
+}
+
+measure {
+    eighth(rest)
+    eighth(D, 4)
+    eighth(C, 4)*
+    sixteenth(B, 3)
+    eighth(D, 4)
+    quarter(C, 4)
+    sixteenth(B, 3)
+    sixteenth(B, 3)    
+}
+measure {
+    quarter(B, 3)
+    quarter(rest)
+    half(rest)
+}
+measure {
+    eighth (rest)
+    sixteenth(B, 3)
+    sixteenth(B, 3)
+    sixteenth(D, 4)
+    eighth (F, 4)
+    eighth (F, 4)
+    eighth (E, 4)
+    eighth (D, 4)*
+    eighth (C, 4)
+}
+measure {
+    eighth (rest)
+    sixteenth(B, 3)
+    sixteenth (D, 4)
+    eighth (F, 4)
+    eighth (F, 4)
+    eighth (G, 4)
+    eighth (D, 4)
+    eighth (rest)
+}
+measure {
+    eighth (rest)
+    sixteenth(B, 3)
+    eighth (F, 4)
+    eighth (F, 4)*
+    sixteenth (E, 4)
+    sixteenth(D, 4)
+    eighth (D, 4)*
+    sixteenth(B, 3)
+}
+measure {
+    sixteenth(B, 3)
+    sixteenth(F, 4)
+    sixteenth(F, 4)
+    eighth(F, 4)
+    eighth(F, 4)
+    eighth(F, 4)
+    eighth(F, 4)
+    sixteenth(F, 4)
+    eighth(E, 4)
+    sixteenth(B, 3)
+    sixteenth(G, 3)
+}
+	
+measure {
+    sixteenth(_B, 3)
+    sixteenth(G, 3)
+    eighth(_B, 3)
+    eighth(_B, 3)
+    eighth(G, 3)
+    sixteenth(_B, 3)
+    eighth(G, 3)
+    sixteenth(rest)
+    eighth(rest)
+}
+measure {
+    sixteenth(rest)
+    sixteenth(G, 3)
+    eighth(D, 4)
+    sixteenth(C, 4)
+    eighth(_B, 3)
+    eighth(D, 4)
+    sixteenth(C, 4)
+    eighth(D, 4)
+    eighth(C, 4)
+    eighth(_B, 3)
+}
+
+measure {
+    eighth(B, 3)
+    eighth(B, 3)
+    half(rest)
+    eighth(rest)
+    sixteenth(F, 4)   
+}
+
+[CHORUS]
+measure {
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+}
+
+measure{
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    quarter(D, 5)
+    sixteenth(C, 5)
+    sixteenth(B, 4)
+}
+measure {
+    quarter(B, 4)
+    sixteenth(G, 4)
+    sixteenth(rest)
+    eighth(D, 5)
+    eighth(C, 5)
+    sixteenth(B, 4)
+    sixteenth(F, 4)
+}
+
+measure {
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+}
+
+measure {
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(D, 5)
+    quarter(D, 5)*
+    sixteenth(C, 5)
+    sixteenth(B, 4)
+}
+
+measure {
+    quarter(D, 5)
+    quarter(D, 5)
+    quarter(rest)
+    eigthth(rest)
+    sixteenth(F, 4)
+}
+ measure {
+    eighth (D, 5)
+    eighth (C, 5)
+    eighth (B, 4)
+    eighth (D, 5)
+    eighth (C, 5)
+    eighth (B, 4)
+    eighth (D, 5)
+    eighth (C, 5)
+    eighth (B, 4)
+    eighth (D, 5)
+    eighth (C, 5)
+    eighth (B, 4)
+ }
+
+ measure {
+    eighth (B, 4)
+    eighth (B, 4)
+    eighth (G, 4)
+    quarter (rest)
+    eighth (rest)
+    sixteenth (F, 4)
+ }
+
+measure {
+    eighth (F, 4)
+    eighth (F, 4)
+    eighth (F, 4)
+    eighth (F, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)*
+    sixteenth (B, 3)
+}
+
+measure {
+    quarter(B, 3)
+    quarter (rest)
+    half (rest)
+}
+
+[END OF CHORUS]
+
+measure { 
+    eighth (rest)
+    sixteenth (B, 3)
+    sixteenth (D, 4)
+    eighth (F, 4)
+    eighth (F, 4)*
+    sixteenth (D, 4)
+    eighth (D, 4)*
+    eighth (B, 3)
+}
+
+measure {
+    sixteenth (rest)
+    sixteenth (B, 3)
+    sixteenth (F, 4)
+    sixteenth (D, 4)
+    sixteenth (F, 4)
+    eighth (D, 4)
+    eighth (F, 4)
+    eighth (G, 4)*
+    eighth (D, 4)
+    eighth (C, 4)
+}
+
+measure {
+    eighth (rest)
+    sixteenth (B, 3)
+    sixteenth (D, 4)
+    sixteenth (F, 4)
+    eighth (F, 4)
+    eighth (F, 4)
+    sixteenth (D, 4)
+    sixteenth (D, 4)
+    eighth (B, 3)
+    sixteenth (rest)
+    sixteenth (B, 3)
+}
+
+measure {
+    eighth (F, 4)
+    eighth (D, 4)
+    eighth (F, 4)
+    eighth (F, 4)
+    eighth (D, 4)
+    eighth (F, 4)
+    eighth (F, 4)
+    eighth (D, 4)
+    eighth (G, 4)
+    eighth (F, 4)
+    eighth (D, 4)
+    eighth (B, 3)
+}
+
+measure {
+    sixteenth (B, 3)
+    sixteenth (G, 3)
+    eighth (B, 3)
+    eighth (B, 3)
+    eighth (G, 3)
+    sixteenth (B, 3)
+    eighth (D, 4)
+}
+
+measure {
+    eighth (D, 4)
+    sixteenth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (E, 4)*
+    eighth (D, 4)
+    quarter (C, 4)
+}
+
+measure {
+    eighth (C, 4)
+    sixteenth (B, 3)
+    quarter (B, 3)
+    sixteenth (rest)
+    half (rest)
+}
+
+[CHORUS]
+measure {
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+}
+
+measure{
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    quarter(D, 5)
+    sixteenth(C, 5)
+    sixteenth(B, 4)
+}
+measure {
+    quarter(B, 4)
+    sixteenth(G, 4)
+    sixteenth(rest)
+    eighth(D, 5)
+    eighth(C, 5)
+    sixteenth(B, 4)
+    sixteenth(F, 4)
+}
+
+measure {
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+    eighth(A, 4)
+}
+
+measure {
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(D, 5)
+    quarter(D, 5)*
+    sixteenth(C, 5)
+    sixteenth(B, 4)
+}
+
+measure {
+    quarter(D, 5)
+    quarter(D, 5)
+    quarter(rest)
+    eigthth(rest)
+    sixteenth(F, 4)
+}
+ measure {
+    eighth (D, 5)
+    eighth (C, 5)
+    eighth (B, 4)
+    eighth (D, 5)
+    eighth (C, 5)
+    eighth (B, 4)
+    eighth (D, 5)
+    eighth (C, 5)
+    eighth (B, 4)
+    eighth (D, 5)
+    eighth (C, 5)
+    eighth (B, 4)
+ }
+
+ measure {
+    eighth (B, 4)
+    eighth (B, 4)
+    eighth (G, 4)
+    quarter (rest)
+    eighth (rest)
+    sixteenth (F, 4)
+ }
+
+measure {
+    eighth (F, 4)
+    eighth (F, 4)
+    eighth (F, 4)
+    eighth (F, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)
+    eighth (D, 4)*
+    sixteenth (B, 3)
+}
+
+measure {
+    quarter(B, 3)
+    quarter (rest)
+    half (rest)
+}
+
+[END OF CHORUS]
+
+
+[BRIDGE 1]
+repstart
+measure {
+    quarter (D, 5)
+    eighth (B, 4)
+    eighth (rest)
+    quarter (D, 5)
+    eighth (B, 4)
+    eighth (rest)
+}
+
+measure {
+    eighth (D, 5)
+    eighth (D, 5)
+    eighth (B, 4)
+    eighth (E, 5)
+    quarter (D, 5)
+    eighth (B, 4)
+    eighth (C, 5)
+}
+
+measure {
+    quarter (D, 5)
+    eighth (B, 4)
+    eighth (B, 4)
+    quarter (D, 5)
+    eighth (B, 4)
+    eighth (rest)
+}
+
+measure {
+    eighth (D, 5)
+    eighth (D, 5)
+    eighth (B, 4)
+    eighth (E, 5)
+    quarter (D, 5)
+    eighth (B, 4)
+    eighth (C, 5)
+}
+
+measure {
+    quarter (D, 5)
+    eighth (G, 4)
+    eighth (rest)
+    eighth (D, 5)
+    eighth (D, 5)
+    eighth (G, 4)
+    sixteenth (rest)
+    sixteenth (G, 4)
+}
+
+measure {
+    eighth (D, 5)
+    eighth (D, 5)
+    eighth (B, 4)
+    eighth (G, 4)
+    quarter (D, 5)
+    eighth (G, 4)
+    eighth (G, 4)
+}
+
+measure {
+    quarter (F, 4)
+    half (D, 5)
+    sixteenth (C, 5)
+    sixteenth (D, 5)
+    sixteenth (C, 5)
+    sixteenth (D, 5)
+}
+
+measure {
+    quarter(C, 5)
+    quarter(A, 4)
+    quarter(C, 5)
+    quarter(A, 4)
+}
+repend
+[END OF BRIDGE]
+
+measure {
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(A, 4)
+    quarter(A, 4)
+    sixteenth(A, 4)
+    sixteenth(A, 4)
+} 
+
+measure {
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    quarter(D, 5)*
+    sixteenth(C, 5)
+    sixteenth(B, 4)
+}
+
+measure {
+    quarter(B, 4)
+    sixteenth(G, 4)
+    quarter(F, 4)
+    quarter(rest)
+    sixteenth(F, 4)
+}
+
+measure {
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(G, 4)
+    eighth(A, 4)
+    quarter(A, 4)
+    sixteenth(A, 4)
+    sixteenth(A, 4)
+}
+
+measure {
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(D, 4)
+    quarter(D, 5)*
+    sixteenth(D, 5)
+    sixteenth(C, 5)
+}
+
+measure {
+    quarter(F, 5)
+    quarter(D, 5)
+    quarter(rest)
+    eighth(rest)
+    sixteenth(F, 4)
+}
+
+measure{
+    eighth(D, 5)
+    eighth(C, 5)
+    eighth(B, 4)
+    eighth(D, 5)
+    eighth(C, 5)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+    eighth(B, 4)
+}
+measure {
+    eighth(B, 4)
+    eighth(C, 5)
+    quarter(C, 5)
+    quarter(rest)
+    eighth(rest)
+    sixteenth(F, 4)
+}
+
+repstart 
+measure {
+    eighth(F, 4)
+    eighth(F, 4)
+    eighth(F, 4)
+    eighth(F, 4)
+    eighth(D, 4)
+    eighth(D, 4)
+    eighth(D, 4)
+    eighth(D, 4)
+    eighth(D, 4)
+    eighth(D, 4)*
+    sixteenth(B, 3)
+}
+
+measure {
+    quarter(B, 3)
+    quarter(rest)
+    half(rest)
+}
+repend
