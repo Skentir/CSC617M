@@ -155,15 +155,19 @@ class DeclareStaffNode():
 
 
 class DeclareMeasuresNode():
-    def __init__(self, expressions, repeat_start, repeat_end):
+    def __init__(self, expressions, ending_start, ending_end, repeat_start, repeat_end):
         self.expressions = expressions
+        self.ending_start = ending_start
+        self.ending_end = ending_end
         self.repeat_start = repeat_start
         self.repeat_end = repeat_end
 
 
 class DeclareMeasuresGrandNode():
-    def __init__(self, expressions, repeat_start, repeat_end, direction):
+    def __init__(self, expressions, ending_start, ending_end, repeat_start, repeat_end, direction):
         self.expressions = expressions
+        self.ending_start = ending_start
+        self.ending_end = ending_end
         self.repeat_start = repeat_start
         self.repeat_end = repeat_end
         self.direction = direction
@@ -180,17 +184,6 @@ class AccidentalNode():
         self.accidental = accidental
         self.octave = octave
 
-
 class DeclareContinousNode():
     def __init__(self, expressions):
         self.expressions = expressions
-
-
-class DeclareRepeatStartNode():
-    def __init__(self, times):
-        self.times = times
-
-
-class DeclareRepeatEndNode():
-    def __init__(self):
-        pass

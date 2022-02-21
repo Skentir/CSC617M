@@ -139,41 +139,46 @@ class MyGrammerVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by MyGrammerParser#declare_measures_grand.
     def visitDeclare_measures_up(
             self, ctx: MyGrammerParser.Declare_measures_upContext):
-        expr_list, repeat_start, repeat_end = None, None, None
+        expr_list, ending_start, ending_end, repeat_start, repeat_end = None, None, None, None, None
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
             if node_type == 'Measure_blockContext':
-                expr_list, repeat_start, repeat_end = self.visitMeasure_block(
+                expr_list, ending_start, ending_end, repeat_start, repeat_end = self.visitMeasure_block(
                     child_node)
             elif node_type == 'Declare_measures_downContext':
                 nodeDown = self.visitDeclare_measures_down(child_node)
             else:
                 print("Unknown Measures_up", node_type)
                 pass
-        node = DeclareMeasuresGrandNode(expr_list, repeat_start, repeat_end,
+        node = DeclareMeasuresGrandNode(expr_list, ending_start, ending_end, repeat_start, repeat_end,
                                         "UP")
         return node, nodeDown
 
     # Visit a parse tree produced by MyGrammerParser#declare_measures_grand.
     def visitDeclare_measures_down(
             self, ctx: MyGrammerParser.Declare_measures_downContext):
-        expr_list, repeat_start, repeat_end = None, None, None
+        expr_list, ending_start, ending_end, repeat_start, repeat_end = None, None, None, None, None
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
             if node_type == 'Measure_blockContext':
-                expr_list, repeat_start, repeat_end = self.visitMeasure_block(
+                expr_list, ending_start, ending_end, repeat_start, repeat_end = self.visitMeasure_block(
                     child_node)
             else:
                 print("Unknown Measures_down", node_type)
                 pass
-        node = DeclareMeasuresGrandNode(expr_list, repeat_start, repeat_end,
+        node = DeclareMeasuresGrandNode(expr_list, ending_start, ending_end, repeat_start, repeat_end,
                                         "DOWN")
         return node
 
     # Visit a parse tree produced by MyGrammerParser#measure_block.
     def visitMeasure_block(self, ctx: MyGrammerParser.Measure_blockContext):
         expr_list = []
+        endingstart, endingend = None, None
         repstart, repend = None, None
+        if ctx.declare_ending() is not None:
+            endingstart = ctx.declare_ending()
+        if ctx.declare_ending_end() is not None:
+            endingend = ctx.declare_ending_end()
         if ctx.declare_repeat() is not None:
             repstart = ctx.declare_repeat()
         if ctx.declare_repeat_end() is not None:
@@ -210,7 +215,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
                 pass
 
         # node = DeclareMeasuresNode(expr_list, 0)
-        return expr_list, repstart, repend
+        return expr_list, endingstart, endingend, repstart, repend
 
     # Visit a parse tree produced by MyGrammerParser#NoteExpression.
     def visitNoteExpression(self, ctx: MyGrammerParser.NoteExpressionContext):

@@ -45,6 +45,10 @@ REPSTART: R E P S T A R T;
 
 REPEND: R E P E N D;
 
+ENDSTART: E N D I N G S T A R T;
+
+ENDEND: E N D I N G E N D;
+
 CHORD: C H O R D;
 
 CONTINUOUS: C O N T I N U O U S;
@@ -61,13 +65,15 @@ EIGHTH: E I G H T H;
 
 SIXTEENTH: S I X T E E N T H;
 
+THIRTYSECOND: T H I R T Y S E C O N D;
+
 INSTRUMENT: I N S T R U M E N T;
 
 DOTTED: '*';
 
 REST: R E S T;
 
-note_value: DOUBLE | FULL | HALF | QUARTER | EIGHTH | SIXTEENTH;
+note_value: DOUBLE | FULL | HALF | QUARTER | EIGHTH | SIXTEENTH | THIRTYSECOND;
 // NOTE_VALUE: D O U B L E | F U L L | H A L F | Q U A R T E R | E I G H T H | S I X T E E N T H;
 
 FIXED_CHORD: (C | C '#' | D | E '_' | E | F | F '#' | G | A '_' | A | B '_' | B) (M A J '7'? | M | M '7' | M '7_5' | 'dim' | 'dom7');
@@ -167,7 +173,7 @@ declare_measures_down:
 	MEASUREDOWN OPEN_BRACKET measure_block CLOSE_BRACKET;
 // repeat_measure_block: declare_repeat measure_block declare_repeat_end;
 measure_block:
-	declare_repeat? (expr | declare_continuous)+ declare_repeat_end?;
+	declare_ending? declare_repeat? (expr | declare_continuous)+ declare_repeat_end? declare_ending_end?;
 
 //Expresions
 expr:
@@ -205,6 +211,8 @@ expr_rest: note_value OPEN_PAR REST CLOSE_PAR DOTTED?;
 
 declare_repeat: REPSTART;
 declare_repeat_end: REPEND | REPEND OPEN_PAR INTEGER? CLOSE_PAR;
+declare_ending: ENDSTART OPEN_PAR INTEGER (COMMA_SEP INTEGER)* CLOSE_PAR;
+declare_ending_end: ENDEND;
 
 // Functions
 declare_staff:

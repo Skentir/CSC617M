@@ -215,6 +215,15 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MyGrammerParser#expr_base_acc.
+    def enterExpr_base_acc(self, ctx:MyGrammerParser.Expr_base_accContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#expr_base_acc.
+    def exitExpr_base_acc(self, ctx:MyGrammerParser.Expr_base_accContext):
+        pass
+
+
     # Enter a parse tree produced by MyGrammerParser#expr_add_acc.
     def enterExpr_add_acc(self, ctx:MyGrammerParser.Expr_add_accContext):
         pass
@@ -248,6 +257,24 @@ class MyGrammerListener(ParseTreeListener):
 
     # Exit a parse tree produced by MyGrammerParser#declare_repeat_end.
     def exitDeclare_repeat_end(self, ctx:MyGrammerParser.Declare_repeat_endContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#declare_ending.
+    def enterDeclare_ending(self, ctx:MyGrammerParser.Declare_endingContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#declare_ending.
+    def exitDeclare_ending(self, ctx:MyGrammerParser.Declare_endingContext):
+        pass
+
+
+    # Enter a parse tree produced by MyGrammerParser#declare_ending_end.
+    def enterDeclare_ending_end(self, ctx:MyGrammerParser.Declare_ending_endContext):
+        pass
+
+    # Exit a parse tree produced by MyGrammerParser#declare_ending_end.
+    def exitDeclare_ending_end(self, ctx:MyGrammerParser.Declare_ending_endContext):
         pass
 
 
