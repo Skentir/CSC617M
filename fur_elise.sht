@@ -128,35 +128,41 @@ staff (3,8) {
     }
 
     measureUp{
+        endingstart(1)
         quarter(A, 4)
-        eighth(rest)
         repend
+        endingend
     }
     
 
     measureDown{
+        endingstart(1)
         sixteenth(A, 2)
         sixteenth(E, 3)
         sixteenth(A, 3)
         sixteenth(rest)
-        eighth(rest)
         repend
+        endingend
     }
 
     measureUp{
+        endingstart(2)
         eighth(B, 4)
         sixteenth(rest)
         sixteenth(E, 4)
         sixteenth(C, 5)
         sixteenth(B, 4)
+        endingend
     }
 
     measureDown{
+        endingstart(2)
         sixteenth(E, 2)
         sixteenth(E, 3)
         sixteenth(#G, 3)
         sixteenth(rest)
         eighth(rest)
+        endingend
     }
 
     measureUp{

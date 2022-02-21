@@ -227,6 +227,7 @@ class MusicEvaluator(MyGrammerVisitor):
     music_stream = stream.Score()
     repeat_ctr = []
     ending_ctr = []
+    ending_values = []
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
         note_value = ctx.note_value.getText()
@@ -328,15 +329,20 @@ class MusicEvaluator(MyGrammerVisitor):
                 for measure in staffDown.expressions:
                     left.append(measure)
 
-                # for id in range(0, len(ending_id), 2):
-                #     repeat.insertRepeatEnding(right, right.index(ending_id[id]), right.index(ending_id[id]))
-                #     repeat.insertRepeatEnding(left, left.index(ending_id[id]), left.index(ending_id[id]))
-                #     print(right.index(ending_id[id]))
-                #     print(right.index(ending_id[id + 1]))
-                #     pass
+                up_idx = None
+                down_idx = None
+                for id in ending_id:
+                    if id[0] == "UP_START":
+                        up_idx = right.index(id[1])
+                    elif id[0] == "UP_END":
+                        repeat.insertRepeatEnding(right, up_idx, right.index(id[1]), endingNumber=id[2])
+                for id in ending_id:
+                    if id[0] == "DOWN_START":
+                        down_idx = left.index(id[1])
+                    elif id[0] == "DOWN_END":
+                        repeat.insertRepeatEnding(left, down_idx, left.index(id[1]), endingNumber=id[2])
 
                 print(ending_id)
-                # input()
 
                 # self.staffs.append(staff1)
 
@@ -440,10 +446,18 @@ class MusicEvaluator(MyGrammerVisitor):
                     for measure in staffDown.expressions:
                         left.append(measure)
 
-                    for id in range(0, len(ending_id), 2):
-                        print(right.index(ending_id[id]))
-                        print(right.index(ending_id[id + 1]))
-                        pass
+                    up_idx = None
+                    down_idx = None
+                    for id in ending_id:
+                        if id[0] == "UP_START":
+                            up_idx = right.index(id[1])
+                        elif id[0] == "UP_END":
+                            repeat.insertRepeatEnding(right, up_idx, right.index(id[1]), endingNumber=id[2])
+                    for id in ending_id:
+                        if id[0] == "DOWN_START":
+                            down_idx = left.index(id[1])
+                        elif id[0] == "DOWN_END":
+                            repeat.insertRepeatEnding(left, down_idx, left.index(id[1]), endingNumber=id[2])
 
                     melodyStaffs.append((right, left))
 
@@ -481,7 +495,7 @@ class MusicEvaluator(MyGrammerVisitor):
                 measureDown.insert(0, meter.TimeSignature(beats_per_measure + "/" + note_value))
                 
                 if x.ending_start is not None:
-                    if len(self.ending_ctr) > 0:
+                    if isinstance(x, DeclareMeasuresNode) and len(self.ending_ctr) > 0 or isinstance(x, DeclareMeasuresGrandNode) and len(self.ending_ctr) > 1:
                         line = x.ending_start.ENDSTART().getSymbol().line
                         col = x.ending_start.ENDSTART().getSymbol().column
                         raise(Exception("Endings should be ended first before declaring another", line, col))
@@ -490,9 +504,9 @@ class MusicEvaluator(MyGrammerVisitor):
                             x,
                             DeclareMeasuresGrandNode):
                             if x.direction == "UP":
-                                ending_id.append(("UP_START", measureUp))
+                                ending_id.append(("UP_START", measureUp, [int(ending.getText()) for ending in x.ending_start.INTEGER()]))
                             else:
-                                ending_id.append(("DOWN_START", measureDown))
+                                ending_id.append(("DOWN_START", measureDown, [int(ending.getText()) for ending in x.ending_start.INTEGER()]))
                             self.ending_ctr.append(x.ending_start)
                         else:
                             ending_id.append(measureUp)
@@ -512,15 +526,35 @@ class MusicEvaluator(MyGrammerVisitor):
                             raise Exception(
                                 "measureUp and measureDown pairs must both have endingstart",
                                 line, col)
+                        else:
+                            up_numbers = [int(ending.getText()) for ending in x.ending_start.INTEGER()]
+                            down_numbers = [int(ending.getText()) for ending in expDown.ending_start.INTEGER()]
+                            up_numbers.sort()
+                            down_numbers.sort()
+                            if up_numbers != down_numbers:
+                                line = expDown.expressions[0].note_value.getSymbol(
+                                ).line - 1
+                                col = expDown.expressions[0].note_value.getSymbol(
+                                ).column
+                                raise Exception(
+                                    "measureUp and measureDown pairs must both have the same ending numbers",
+                                    line, col)
+                            else:
+                                for i in up_numbers:
+                                    self.ending_values.append((i, x.ending_start.INTEGER()))
 
                 if x.ending_end is not None:
+                    if len(self.ending_ctr) == 0:
+                        line = x.ending_end.ENDEND().getSymbol().line
+                        col = x.ending_end.ENDEND().getSymbol().column
+                        raise Exception("Invalid ending placement", line, col)
                     if isinstance(
                         x,
                         DeclareMeasuresGrandNode):
                         if x.direction == "UP":
-                            ending_id.append(("UP_END", measureUp))
+                            ending_id.append(("UP_END", measureUp, [int(ending.getText()) for ending in x.ending_start.INTEGER()]))
                         else:
-                            ending_id.append(("DOWN_END", measureDown))
+                            ending_id.append(("DOWN_END", measureDown, [int(ending.getText()) for ending in x.ending_start.INTEGER()]))
                     else:
                         ending_id.append(measureUp)
 
@@ -536,6 +570,7 @@ class MusicEvaluator(MyGrammerVisitor):
                             raise Exception(
                                 "measureUp and measureDown pairs must both have endingend",
                                 line, col)
+                        
                     del self.ending_ctr[-1]
 
 
@@ -573,10 +608,10 @@ class MusicEvaluator(MyGrammerVisitor):
                     else:
                         if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
                             measureUp.rightBarline = bar.Repeat(
-                                direction='end', times=repeat_times + 1)
+                                direction='end', times = repeat_times + 1)
                         else:
                             measureDown.rightBarline = bar.Repeat(
-                                direction='end', times=repeat_times + 1)
+                                direction='end', times = repeat_times + 1)
                         if len(self.repeat_ctr) > 0:
                             del self.repeat_ctr[-1]
                     if isinstance(
@@ -590,6 +625,14 @@ class MusicEvaluator(MyGrammerVisitor):
                             ).column
                             raise Exception(
                                 "measureUp and measureDown pairs must both have repend",
+                                line, col)
+                        if repeat_times != int(expDown.repeat_end.INTEGER().getText()):
+                            line = expDown.repeat_end.INTEGER().getSymbol(
+                            ).line
+                            col = expDown.repeat_end.INTEGER().getSymbol(
+                            ).column
+                            raise Exception(
+                                "measureUp and measureDown pairs must both have the same number of repeats",
                                 line, col)
 
                 if x.repeat_start is None and isinstance(
@@ -1030,17 +1073,17 @@ class MusicEvaluator(MyGrammerVisitor):
                                         measureUp.append(createFixedChord(str(fixed.note_value), str(fixed.num), str(fixed.fixed_chord), bool(fixed.dotted)))
                         print(m_expr)
 
-                if (not first_measure and not last_measure) and mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):
-                    # If not a terminal node 
-                    if x.expressions[0].__class__.__name__ != "TerminalNodeImpl":
-                        line = x.expressions[0].note_value.getSymbol().line - 1
-                        col = x.expressions[0].note_value.getSymbol().column
-                    else:
-                        line = x.expressions[0].getSymbol().line - 1
-                        col = x.expressions[0].getSymbol().column
-                    raise Exception(
-                        "Number of beats in measure did not meet amount required within staff",
-                        line, col)
+                # if (not first_measure and not last_measure) and mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):
+                #     # If not a terminal node 
+                #     if x.expressions[0].__class__.__name__ != "TerminalNodeImpl":
+                #         line = x.expressions[0].note_value.getSymbol().line - 1
+                #         col = x.expressions[0].note_value.getSymbol().column
+                #     else:
+                #         line = x.expressions[0].getSymbol().line - 1
+                #         col = x.expressions[0].getSymbol().column
+                #     raise Exception(
+                #         "Number of beats in measure did not meet amount required within staff",
+                #         line, col)
                 if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
                     cur_beats_up = cur_beats
                 else:
@@ -1114,6 +1157,16 @@ class MusicEvaluator(MyGrammerVisitor):
             line = rep.REPSTART().getSymbol().line
             col = rep.REPSTART().getSymbol().column
             raise Exception("Invalid repeat placement", line, col)
+        if len(self.ending_ctr):
+            end = self.ending_ctr[0]
+            line = end.REPSTART().getSymbol().line
+            col = end.REPSTART().getSymbol().column
+            raise Exception("Invalid ending placement", line, col)
+        for idx, i in enumerate(self.ending_values):
+            if idx + 1 != i[0]:
+                line = i[1][0].getSymbol().line
+                col = i[1][0].getSymbol().column
+                raise Exception("Invalid ending number", line, col)
 
         self.music_stream.write('midi', fp='test.midi')
 
