@@ -643,26 +643,22 @@ class MusicEvaluator(MyGrammerVisitor):
                         first = 1
                         note_val = ""
                         for tuplet_expr in m_expr.expressions:
-                            if isinstance(tuplet_expr, ExprNoteNode):
-                                # initialize note_value 
-                                if first ==1:
-                                    note_val = str(tuplet_expr.note_value)
-                                    first = 0
-                                else:
-                                    #check if notevalue matches with initial (for homogeneity)
-                                    if str(tuplet_expr.note_value) != note_val:
-                                        line = tuplet_expr.note_value.getSymbol().line
-                                        col = tuplet_expr.note_value.getSymbol().column
-                               
-                                        raise Exception("Tuplet note does not match other notes", line, col)
+                            if first ==1:
+                                note_val = str(tuplet_expr.note_value)
+                                first = 0
+                            else:
+                                #check if notevalue matches with initial (for homogeneity)
+                                if str(tuplet_expr.note_value) != note_val:
+                                    line = tuplet_expr.note_value.getSymbol().line
+                                    col = tuplet_expr.note_value.getSymbol().column
+                            
+                                    raise Exception("Tuplet note does not match other notes", line, col)
                         
-                       
-                        else:
                             
                             # check noteval of those isnside tuple i.e. quarter => 1.0 quarter length
                             quarter_length = getNoteDuration(note_val)
                             # get total number of notes in tuplet
-                            multiplier = len(m_expr.expressions) -1 / len(m_expr.expressions)
+                            multiplier = (len(m_expr.expressions) - 1) / len(m_expr.expressions)
 
                             # divide quarterlength  by total number of notes in tuplet
                             new_duration = quarter_length * multiplier
@@ -876,5 +872,9 @@ class MusicEvaluator(MyGrammerVisitor):
             raise Exception("Invalid repeat placement", line, col)
 
         self.music_stream.write('midi', fp='test.midi')
+
+        self.music_stream.show('t')
+        sp = midi.realtime.StreamPlayer(self.music_stream)
+        sp.play()
 
         return "MIDI FILE"
