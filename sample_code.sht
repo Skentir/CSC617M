@@ -5,7 +5,7 @@ sample_note = quarter(G, 3)
 staff (4,4) {
     measureUp {
         slurstart
-        quarter(C, 3)
+        chord(quarter(C, 3), quarter(C, 5))
         slurstart
         quarter(C, 3)
         sample_note

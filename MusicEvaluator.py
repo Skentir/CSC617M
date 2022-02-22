@@ -183,6 +183,10 @@ class MusicEvaluator(MyGrammerVisitor):
     spanner_up_queue = []
     spanner_up_cntr = 0
     spanner_down_cntr = 0
+    total_slurstart_up = 0
+    total_slurstart_down = 0
+    total_slurend_up = 0
+    total_slurend_down = 0
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
         note_value = ctx.note_value.getText()
@@ -539,6 +543,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                         #instantiate a slur object with binded note
                                         s = spanner.Slur([self.spanner_down_items[self.spanner_down_item_ctr-1]])
                                         #add spanner object to data struct
+                                        self.total_slurstart_down +=1
                                         self.spanner_down_queue.append(s)
                                         measureDown.append(s)
                                     
@@ -548,6 +553,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     if m_expr.slur_end == True:
                                         #remove oldest slur object in data struct
                                         head = self.spanner_down_queue[self.spanner_down_cntr-1] # TO DO: add TRY catch
+                                        self.total_slurend_down +=1
                                     
                                         #add note to slur object
                                         head.addSpannedElements(self.spanner_down_queue[self.spanner_down_item_ctr-1])
@@ -581,12 +587,13 @@ class MusicEvaluator(MyGrammerVisitor):
                                                 bool(m_expr.dotted)))
                                     self.spanner_up_item_ctr += 1
                                     
-                                    measureDown.append(self.spanner_up_items[self.spanner_up_item_ctr-1])
+                                    measureUp.append(self.spanner_up_items[self.spanner_up_item_ctr-1])
                                     #check if there is slur start
                                     if m_expr.slur_start == True:
                                         #instantiate a slur object with binded note
                                         s = spanner.Slur([self.spanner_up_items[self.spanner_up_item_ctr-1]])
                                         #add spanner object to data struct
+                                        self.total_slurstart_up +=1
                                         self.spanner_up_queue.append(s)
                                         measureUp.append(s)
                                     
@@ -596,7 +603,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     if m_expr.slur_end == True:
                                         #remove oldest slur object in data struct
                                         head = self.spanner_up_queue[self.spanner_up_cntr-1] # TO DO: add TRY catch
-                                    
+                                        self.total_slurend_up +=1
                                         #add note to slur object
                                         head.addSpannedElements(self.spanner_up_queue[self.spanner_up_item_ctr-1])
                                    
@@ -633,9 +640,64 @@ class MusicEvaluator(MyGrammerVisitor):
                     
                                 new_notes.append((str(n.num), str(n.pitch), str(n.accidental)))
                             if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
-                                measureDown.append(createChord(new_notes, expected_note_val))
+                                if m_expr.slur_start or m_expr.slur_end:
+                                   
+                                    #create a note
+                            
+                                    self.spanner_down_items.append(createChord(new_notes, expected_note_val))
+                                    self.spanner_down_item_ctr += 1
+                                    
+                                    measureDown.append(self.spanner_down_items[self.spanner_down_item_ctr-1])
+                                    #check if there is slur start
+                                    if m_expr.slur_start == True:
+                                        #instantiate a slur object with binded note
+                                        s = spanner.Slur([self.spanner_down_items[self.spanner_down_item_ctr-1]])
+                                        #add spanner object to data struct
+                                        self.total_slurstart_down +=1
+                                        self.spanner_up_queue.append(s)
+                                        measureUp.append(s)
+                                    
+                                    #add note to slur object in data struct (first entry slur object)
+                                    #add to queue 
+                                    #check if there is slur end
+                                    if m_expr.slur_end == True:
+                                        #remove oldest slur object in data struct
+                                        head = self.spanner_down_queue[self.spanner_down_cntr-1] # TO DO: add TRY catch
+                                    
+                                        #add note to slur object
+                                        head.addSpannedElements(self.spanner_up_queue[self.spanner_up_item_ctr-1])
+                                        self.total_slurend_down+=1
+                                else:
+                                    measureDown.append(createChord(new_notes, expected_note_val))
                             else:
-                                measureUp.append(createChord(new_notes, expected_note_val))
+                                if m_expr.slur_start or m_expr.slur_end:
+                                   
+                                    #create a note
+                            
+                                    self.spanner_up_items.append(createChord(new_notes, expected_note_val))
+                                    self.spanner_up_item_ctr += 1
+                                    
+                                    measureUp.append(self.spanner_up_items[self.spanner_up_item_ctr-1])
+                                    #check if there is slur start
+                                    if m_expr.slur_start == True:
+                                        #instantiate a slur object with binded note
+                                        s = spanner.Slur([self.spanner_up_items[self.spanner_up_item_ctr-1]])
+                                        #add spanner object to data struct
+                                        self.spanner_up_queue.append(s)
+                                        self.total_slurstart_up+=1
+                                        measureUp.append(s)
+                                    
+                                    #add note to slur object in data struct (first entry slur object)
+                                    #add to queue 
+                                    #check if there is slur end
+                                    if m_expr.slur_end == True:
+                                        #remove oldest slur object in data struct
+                                        head = self.spanner_up_queue[self.spanner_up_cntr-1] # TO DO: add TRY catch
+                                        self.total_slurend_up+=1
+                                        #add note to slur object
+                                        head.addSpannedElements(self.spanner_up_queue[self.spanner_up_item_ctr-1])
+                                else:
+                                    measureUp.append(createChord(new_notes, expected_note_val))
                             # printExprChord(m_expr)
 
                     elif isinstance(m_expr, ExprRestNode):
@@ -662,6 +724,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                         #instantiate a slur object with binded note
                                         s = spanner.Slur([self.spanner_down_items[self.spanner_down_item_ctr-1]])
                                         #add spanner object to data struct
+                                        self.total_slurstart_down+=1
                                         self.spanner_down_queue.append(s)
                                         measureDown.append(s)
                                     
@@ -671,7 +734,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     if m_expr.slur_end == True:
                                         #remove oldest slur object in data struct
                                         head = self.spanner_down_queue[self.spanner_down_cntr-1] # TO DO: add TRY catch
-                                    
+                                        self.total_slurend_down+=1
                                         #add note to slur object
                                         head.addSpannedElements(self.spanner_down_queue[self.spanner_down_item_ctr-1])
                                    
@@ -693,6 +756,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     if m_expr.slur_start == True:
                                         #instantiate a slur object with binded note
                                         s = spanner.Slur([self.spanner_up_items[self.spanner_up_item_ctr-1]])
+                                        self.total_slurstart_up+=1
                                         #add spanner object to data struct
                                         self.spanner_up_queue.append(s)
                                         measureUp.append(s)
@@ -701,7 +765,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                     if m_expr.slur_end == True:
                                         #remove oldest slur object in data struct
                                         head = self.spanner_up_queue[self.spanner_up_cntr-1] # TO DO: add TRY catch
-                                    
+                                        self.total_slurend_up+=1
                                         #add note to slur object
                                         head.addSpannedElements(self.spanner_up_queue[self.spanner_up_item_ctr-1])
                                     
@@ -883,6 +947,8 @@ class MusicEvaluator(MyGrammerVisitor):
             node.chords)  # Returns ChordExpression Objects
         self.evaluateDeclaredMelody(node.melodies)
         self.evaluateDeclaredStaffs(node.staffs)
+        if self.total_slurstart_up != self.total_slurend_up or self.total_slurstart_down != self.total_slurend_down:
+            raise Exception("Not all slurs closed", 0,0)
 
         if len(self.repeat_ctr):
             rep = self.repeat_ctr[0]

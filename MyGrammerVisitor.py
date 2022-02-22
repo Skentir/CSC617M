@@ -247,7 +247,15 @@ class MyGrammerVisitor(ParseTreeVisitor):
         notes = notes + add_note
 
         #store in a node containing the notes for a chord expression
-        node = ExprChordNode(notes)
+
+        slur_start = False
+        slur_end = False
+        if ctx.declare_slur_start:
+            slur_start = True
+        elif ctx.declare_slur_end:
+            slur_end = True  
+
+        node = ExprChordNode(notes, slur_start, slur_end)
         #return
         return node
 

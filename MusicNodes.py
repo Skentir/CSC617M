@@ -55,8 +55,10 @@ class DeclareChordNode():
 
 
 class ExprChordNode():
-    def __init__(self, notes):
+    def __init__(self, notes, slur_start, slur_end):
         self.notes = notes
+        self.slur_start = slur_start
+        self.slur_end = slur_end
 
 
 class DeclareStaffNode():
