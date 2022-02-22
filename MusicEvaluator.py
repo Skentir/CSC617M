@@ -890,13 +890,13 @@ class MusicEvaluator(MyGrammerVisitor):
                                 
                                 d = duration.Duration(quarter_length * multiplier)
                                 n = None
-                                if updated_acc == "_":
+                                if str(updated_acc) == "_":
                                     accidental = "-"
-                                elif updated_acc == "None":
-                                    accidental = ""
-                                    n = note.Note(str(tuplet_expr.pitch) + str(accidental) + str(tuplet_expr.num))
+                                elif str(updated_acc) == "#":
+                                    accidental = "#"
                                 else:
-                                    n = note.Note(str(tuplet_expr.pitch) + str(tuplet_expr.num))
+                                    accidental = ""
+                                n = note.Note(str(tuplet_expr.pitch) + str(accidental) + str(tuplet_expr.num))
                                 n.duration = d
                                 if tuplet_expr.dotted:
                                     n.quarterLength = n.quarterLength + (n.quarterLength / 2)
@@ -918,13 +918,13 @@ class MusicEvaluator(MyGrammerVisitor):
                                 
                                 d = duration.Duration(quarter_length * multiplier)
                                 n = None
-                                if updated_acc == "_":
+                                if str(updated_acc) == "_":
                                     accidental = "-"
-                                elif updated_acc == "None":
-                                    accidental = ""
-                                    n = note.Note(str(tuplet_expr.pitch) + str(accidental) + str(tuplet_expr.num))
+                                elif str(updated_acc) == "#":
+                                    accidental = "#"
                                 else:
-                                    n = note.Note(str(tuplet_expr.pitch) + str(tuplet_expr.num))
+                                    accidental = ""
+                                n = note.Note(str(tuplet_expr.pitch) + str(accidental) + str(tuplet_expr.num))
                                 n.duration = d
                                 if tuplet_expr.dotted:
                                     n.quarterLength = n.quarterLength + (n.quarterLength / 2)
