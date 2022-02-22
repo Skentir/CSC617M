@@ -34,8 +34,6 @@ staff(4, 4) {
         full(rest)
     }
 
-    accidental((_B, 3), (_E, 4))
-
     sampleChord
 
     measureUp {

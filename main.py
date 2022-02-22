@@ -4,6 +4,7 @@ from antlr4.tree.Trees import Trees
 from MyGrammerLexer import MyGrammerLexer
 from MyGrammerParser import MyGrammerParser
 from MyGrammerVisitor import MyGrammerVisitor
+from ErrorStrategy import DefaultErrorStrategy
 # from dist2.MyGrammerListener import MyGrammerListener
 # from MusicNodes import *
 from music21 import *
@@ -32,6 +33,8 @@ if __name__ == "__main__":
     # parser
 
     parser = MyGrammerParser(stream)
+    des = DefaultErrorStrategy()
+    parser._errHandler = des
     tree = parser.prog()
     valid = True
     if parser._syntaxErrors == 0:
