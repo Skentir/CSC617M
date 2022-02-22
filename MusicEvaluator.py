@@ -37,7 +37,11 @@ def createTupletNote(num, accidental, pitch, dotted, quarterLength):
     m_note = note.Note(pitch + accidental + num)
     d = duration.Duration(quarterLength)
     m_note.duration = d
-    
+    print(pitch + accidental + num)
+    print(m_note, m_note.duration)
+    print(m_note.duration.type, m_note.duration.dots, m_note.duration.quarterLength)
+    print(m_note.fullName)
+    input()
 
     if dotted:
         m_note.quarterLength = m_note.quarterLength + (m_note.quarterLength / 2)
@@ -858,7 +862,7 @@ class MusicEvaluator(MyGrammerVisitor):
                             new_duration = quarter_length * multiplier
                             # modify each duration of each note in tuplet to the corresponding value
 
-                            cur_beats += new_duration *2
+                            cur_beats += new_duration * 2
                             # print("NEW DURATION CURBEATS", cur_beats)
                             # input()
                             if cur_beats > float(beats_per_measure):
@@ -884,16 +888,19 @@ class MusicEvaluator(MyGrammerVisitor):
                                     updated_acc = tuplet_expr.accidental
                                 
                                 
-                                measureDown.append(
-                                    createTupletNote(
-                                        str(tuplet_expr.num),
-                                        str(updated_acc
-                                            ),
-                                        str(tuplet_expr.pitch),
-                                        str(tuplet_expr.dotted),
-                                        new_duration
-                                        
-                                    ))
+                                d = duration.Duration(quarter_length * multiplier)
+                                n = None
+                                if updated_acc == "_":
+                                    accidental = "-"
+                                elif updated_acc == "None":
+                                    accidental = ""
+                                    n = note.Note(str(tuplet_expr.pitch) + str(accidental) + str(tuplet_expr.num))
+                                else:
+                                    n = note.Note(str(tuplet_expr.pitch) + str(tuplet_expr.num))
+                                n.duration = d
+                                if tuplet_expr.dotted:
+                                    n.quarterLength = n.quarterLength + (n.quarterLength / 2)
+                                measureDown.append(n)
 
                             else:
 
@@ -907,17 +914,31 @@ class MusicEvaluator(MyGrammerVisitor):
                                 else:
                                     updated_acc = tuplet_expr.accidental
                                 
-                              
-                                measureUp.append(
-                                    createTupletNote(
-                                        str(tuplet_expr.num),
-                                        str(updated_acc
-                                            ),
-                                        str(tuplet_expr.pitch),
-                                        str(tuplet_expr.dotted),
-                                        new_duration
+
+                                
+                                d = duration.Duration(quarter_length * multiplier)
+                                n = None
+                                if updated_acc == "_":
+                                    accidental = "-"
+                                elif updated_acc == "None":
+                                    accidental = ""
+                                    n = note.Note(str(tuplet_expr.pitch) + str(accidental) + str(tuplet_expr.num))
+                                else:
+                                    n = note.Note(str(tuplet_expr.pitch) + str(tuplet_expr.num))
+                                n.duration = d
+                                if tuplet_expr.dotted:
+                                    n.quarterLength = n.quarterLength + (n.quarterLength / 2)
+                                measureUp.append(n)
+                                # measureUp.append(
+                                #     createTupletNote(
+                                #         str(tuplet_expr.num),
+                                #         str(updated_acc
+                                #             ),
+                                #         str(tuplet_expr.pitch),
+                                #         str(tuplet_expr.dotted),
+                                #         new_duration
                                         
-                                    ))
+                                #     ))
                                         # printExprNote(tuplet_expr)
 
                            
@@ -1147,6 +1168,7 @@ class MusicEvaluator(MyGrammerVisitor):
                 else:
                     end_value += 1
         self.music_stream.write('midi', fp='test.midi')
+        self.music_stream.show('t')
         sp = midi.realtime.StreamPlayer(self.music_stream)
         sp.play()
         return "MIDI FILE"
