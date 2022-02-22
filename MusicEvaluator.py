@@ -6,6 +6,8 @@ from MusicNodes import *
 from music21 import *
 import string
 
+
+
 def createTupletNote(num, accidental, pitch, dotted, quarterLength):
     if accidental == "_":
         accidental = "-"
@@ -24,6 +26,8 @@ def createTupletNote(num, accidental, pitch, dotted, quarterLength):
 
 def getNoteDuration(note):
     val = 0
+    if note == "quarter":
+        val = 1.0
     if note == "eighth":
         d = duration.Duration(type="eighth")
         val = d.quarterLength
@@ -651,28 +655,29 @@ class MusicEvaluator(MyGrammerVisitor):
                                         col = tuplet_expr.note_value.getSymbol().column
                                
                                         raise Exception("Tuplet note does not match other notes", line, col)
-                        cur_beats += valToBeat(
-                                        str(tuplet_expr.note_value),
-                                        float(note_value),
-                                        bool(tuplet_expr.dotted))
-                        if cur_beats > float(beats_per_measure):
-                            line = tuplet_expr.note_value.getSymbol(
-                            ).line
-                            col = tuplet_expr.note_value.getSymbol(
-                            ).column
-                    
-                            raise Exception(
-                                "Number of beats in measure has exceeded amount required within staff",
-                                line, col)
+                        
+                       
                         else:
                             
                             # check noteval of those isnside tuple i.e. quarter => 1.0 quarter length
                             quarter_length = getNoteDuration(note_val)
                             # get total number of notes in tuplet
-                            total_num_notes = len(m_expr.expressions)
+                            multiplier = len(m_expr.expressions) -1 / len(m_expr.expressions)
+
                             # divide quarterlength  by total number of notes in tuplet
-                            new_duration = quarter_length/total_num_notes
+                            new_duration = quarter_length * multiplier
                             # modify each duration of each note in tuplet to the corresponding value
+
+                            cur_beats += new_duration
+                            if cur_beats > float(beats_per_measure):
+                                line = tuplet_expr.note_value.getSymbol(
+                                ).line
+                                col = tuplet_expr.note_value.getSymbol(
+                                ).column
+                        
+                                raise Exception(
+                                    "Number of beats in measure has exceeded amount required within staff",
+                                    line, col)
                            
                             # add each note to measure
                             if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
