@@ -89,7 +89,7 @@ class AccidentalNode():
         self.octave = octave
 
 
-class DeclareContinousNode():
+class DeclarePatternNode():
     def __init__(self, expressions):
         self.expressions = expressions
 

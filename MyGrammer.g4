@@ -47,7 +47,7 @@ REPEND: R E P E N D;
 
 CHORD: C H O R D;
 
-CONTINUOUS: C O N T I N U O U S;
+TUPLET: T U P L E T;
 
 DOUBLE: D O U B L E;
 
@@ -153,8 +153,10 @@ declare_note: IDENTIFIER EQUAL_OPER expr_note;
 declare_chord: IDENTIFIER EQUAL_OPER expr_chord;
 declare_melody:
 	MELODY IDENTIFIER OPEN_BRACKET (declare_staff)+ CLOSE_BRACKET;
-declare_continuous:
-	CONTINUOUS OPEN_BRACKET (expr)+ CLOSE_BRACKET;
+declare_pattern:
+	TUPLET OPEN_BRACKET (expr_note | expr_var)+ CLOSE_BRACKET;
+
+
 // declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
 
 declare_measures:
@@ -165,7 +167,7 @@ declare_measures_down:
 	MEASUREDOWN OPEN_BRACKET measure_block CLOSE_BRACKET;
 // repeat_measure_block: declare_repeat measure_block declare_repeat_end;
 measure_block:
-	declare_repeat? (expr | declare_continuous)+ declare_repeat_end?;
+	declare_repeat? (expr | declare_pattern)+ declare_repeat_end?;
 
 //Expresions
 expr:

@@ -6,6 +6,38 @@ from MusicNodes import *
 from music21 import *
 import string
 
+def createTupletNote(num, accidental, pitch, dotted, quarterLength):
+    if accidental == "_":
+        accidental = "-"
+    elif accidental == "None":
+        accidental = ""
+
+    m_note = note.Note(pitch + accidental + num)
+ 
+    m_note.quarterLength = quarterLength
+
+    if dotted:
+        m_note.quarterLength = m_note.quarterLength + (m_note.quarterLength /
+                                                       2)
+    return m_note
+
+
+def getNoteDuration(note):
+    val = 0
+    if note == "eighth":
+        d = duration.Duration(type="eighth")
+        val = d.quarterLength
+    if note == "sixteenth":
+        val = 0.25
+    if note == "full":
+        d = duration.Duration(type="whole")
+        val = d.quarterLength
+    if note == "double":
+        val = 2.0
+    if note == "half":
+        d = duration.Duration(type="half")
+        val = d.quarterLength
+    return val
 
 def createChord(note_arr, val):
     arr = []
@@ -452,15 +484,21 @@ class MusicEvaluator(MyGrammerVisitor):
                                 "measureUp and measureDown pairs must both have repend",
                                 line, col)
 
-                if x.repeat_start is None and isinstance(
-                        x, DeclareMeasuresGrandNode) and x.direction == "UP":
+                if x.repeat_start is None and isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
                     expDown = ctx[idx + 1]
+                   
                     if expDown.repeat_start is not None:
-                        line = x.expressions[0].note_value.getSymbol().line - 1
-                        col = x.expressions[0].note_value.getSymbol().column
+                        if not isinstance(x.expressions[0], DeclarePatternNode): 
+                            line = x.expressions[0].note_value.getSymbol().line - 1
+                            col = x.expressions[0].note_value.getSymbol().column
+                        else:
+                            print("error is ", type(x.expressions[0].expressions), len(x.expressions[0].expressions))
+                            line = x.expressions[0].expressions[0].note_value.getSymbol().line - 1
+                            col = x.expressions[0].expressions[0].note_value.getSymbol().column
                         raise Exception(
                             "measureUp and measureDown pairs must both have repend",
                             line, col)
+                            
 
                 if x.repeat_end is None and isinstance(
                         x, DeclareMeasuresGrandNode) and x.direction == "UP":
@@ -597,179 +635,72 @@ class MusicEvaluator(MyGrammerVisitor):
                             #       staff_accidentals[(i.pitch, i.octave)],
                             #       i.pitch, i.octave)
 
-                    elif isinstance(m_expr, DeclareContinousNode):
-                        for continuous_expr in m_expr.expressions:
-                            if isinstance(continuous_expr, ExprNoteNode):
-                                cur_beats += valToBeat(
-                                    str(continuous_expr.note_value),
-                                    float(note_value),
-                                    bool(continuous_expr.dotted))
-                                if cur_beats > float(beats_per_measure):
-                                    line = continuous_expr.note_value.getSymbol(
-                                    ).line
-                                    col = continuous_expr.note_value.getSymbol(
-                                    ).column
-
-                                    raise Exception(
-                                        "Number of beats in measure has exceeded amount required within staff",
-                                        line, col)
+                    elif isinstance(m_expr, DeclarePatternNode):
+                        first = 1
+                        note_val = ""
+                        for tuplet_expr in m_expr.expressions:
+                            if isinstance(tuplet_expr, ExprNoteNode):
+                                # initialize note_value 
+                                if first ==1:
+                                    note_val = str(tuplet_expr.note_value)
+                                    first = 0
                                 else:
-                                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
-                                        measureDown.append(
-                                            createNote(
-                                                str(continuous_expr.num),
-                                                str(continuous_expr.accidental
-                                                    ),
-                                                str(continuous_expr.pitch),
-                                                str(continuous_expr.note_value)
-                                            ))
-                                    else:
-                                        measureUp.append(
-                                            createNote(
-                                                str(continuous_expr.num),
-                                                str(continuous_expr.accidental
-                                                    ),
-                                                str(continuous_expr.pitch),
-                                                str(continuous_expr.note_value)
-                                            ))
-                                    # printExprNote(continuous_expr)
-
-                            elif isinstance(continuous_expr, ExprChordNode):
-                                expected_note_val, is_dotted = processExprChord(
-                                    continuous_expr.notes, "EXPR")
-                                cur_beats += valToBeat(expected_note_val,
-                                                       float(note_value),
-                                                       is_dotted)
-                                if cur_beats > float(beats_per_measure):
-                                    line = m_expr.notes[0].note_value.getSymbol().line
-                                    col = m_expr.notes[0].note_value.getSymbol().column
-
-                                    raise Exception(
-                                        "Number of beats in measure has exceeded amount required within staff",
-                                        line, col)
-                                else:
-                                    new_notes = []
-                                    for n in continuous_expr.notes:
-                                        new_notes.append(
-                                            (str(n.num), str(n.pitch)))
-                                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
-                                        measureDown.append(
-                                            createChord(
-                                                new_notes, expected_note_val))
-                                    else:
-                                        measureUp.append(
-                                            createChord(
-                                                new_notes, expected_note_val))
-                                    printExprChord(continuous_expr)
-
-                            elif isinstance(continuous_expr, AccidentalExpressionNode):
-                                print("Continuous Accidental")
+                                    #check if notevalue matches with initial (for homogeneity)
+                                    if str(tuplet_expr.note_value) != note_val:
+                                        line = tuplet_expr.note_value.getSymbol().line
+                                        col = tuplet_expr.note_value.getSymbol().column
+                               
+                                        raise Exception("Tuplet note does not match other notes", line, col)
+                        cur_beats += valToBeat(
+                                        str(tuplet_expr.note_value),
+                                        float(note_value),
+                                        bool(tuplet_expr.dotted))
+                        if cur_beats > float(beats_per_measure):
+                            line = tuplet_expr.note_value.getSymbol(
+                            ).line
+                            col = tuplet_expr.note_value.getSymbol(
+                            ).column
+                    
+                            raise Exception(
+                                "Number of beats in measure has exceeded amount required within staff",
+                                line, col)
+                        else:
+                            
+                            # check noteval of those isnside tuple i.e. quarter => 1.0 quarter length
+                            quarter_length = getNoteDuration(note_val)
+                            # get total number of notes in tuplet
+                            total_num_notes = len(m_expr.expressions)
+                            # divide quarterlength  by total number of notes in tuplet
+                            new_duration = quarter_length/total_num_notes
+                            # modify each duration of each note in tuplet to the corresponding value
+                           
+                            # add each note to measure
+                            if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                measureDown.append(
+                                    createTupletNote(
+                                        str(tuplet_expr.num),
+                                        str(tuplet_expr.accidental
+                                            ),
+                                        str(tuplet_expr.pitch),
+                                        str(tuplet_expr.dotted),
+                                        new_duration
+                                        
+                                    ))
 
                             else:
-                                if (not self.checkInListNode(continuous_expr)):  # Error checking identifier and if melody
-                                    if isinstance(
-                                            self.variables[
-                                                continuous_expr.getText()][0],
-                                            Staff):
-                                        line = continuous_expr.getSymbol().line
-                                        col = continuous_expr.getSymbol(
-                                        ).column
-                                        raise Exception(
-                                            "Variable must be note or chord but a melody is called",
-                                            line, col)
+                                measureUp.append(
+                                    createTupletNote(
+                                        str(tuplet_expr.num),
+                                        str(tuplet_expr.accidental
+                                            ),
+                                        str(tuplet_expr.pitch),
+                                        str(tuplet_expr.dotted),
+                                        new_duration
+                                        
+                                    ))
+                                        # printExprNote(tuplet_expr)
 
-                                    elif self.variables[
-                                            continuous_expr.getText(
-                                            )][0] == "NOTE":
-                                        cur_beats += valToBeat(
-                                            str(self.variables[
-                                                continuous_expr.getText()][1]),
-                                            float(note_value),
-                                            bool(self.variables[
-                                                continuous_expr.getText()][4]))
-                                        if cur_beats > float(beats_per_measure):
-                                            line = continuous_expr.getSymbol().line
-                                            col = continuous_expr.getSymbol().column
-
-                                            raise Exception(
-                                                "Number of beats in measure has exceeded amount required within staff",
-                                                line, col)
-                                        else:
-                                            if isinstance(
-                                                    x, DeclareMeasuresGrandNode
-                                            ) and x.direction == "DOWN":
-                                                measureDown.append(
-                                                    createNote(
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][4]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][2]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][3]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][1])))
-                                            else:
-                                                measureUp.append(
-                                                    createNote(
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][4]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][2]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][3]),
-                                                        str(self.variables[
-                                                            continuous_expr.
-                                                            getText()][1])))
-
-                                    elif self.variables[
-                                            continuous_expr.getText(
-                                            )][0] == "CHORD":
-                                        expected_note_val, is_dotted = processExprChord(
-                                            self.variables[
-                                                continuous_expr.getText()][1],
-                                            "VAR")
-                                        cur_beats += valToBeat(
-                                            expected_note_val,
-                                            float(note_value), is_dotted)
-                                        if cur_beats > float(
-                                                beats_per_measure):
-                                            line = continuous_expr.getSymbol(
-                                            ).line
-                                            col = continuous_expr.getSymbol(
-                                            ).column
-
-                                            raise Exception(
-                                                "Number of beats in measure has exceeded amount required within staff",
-                                                line, col)
-                                        else:
-                                            new_notes = []
-                                            for n in self.variables[
-                                                    continuous_expr.getText(
-                                                    )][1]:
-                                                new_notes.append(
-                                                    (str(n[2]), str(n[1])))
-                                            if isinstance(
-                                                    x, DeclareMeasuresGrandNode
-                                            ) and x.direction == "DOWN":
-                                                measureDown.append(
-                                                    createChord(
-                                                        new_notes,
-                                                        expected_note_val))
-                                            else:
-                                                measureUp.append(
-                                                    createChord(
-                                                        new_notes,
-                                                        expected_note_val))
-
-                        # print(m_expr.expressions)
-                        # print(m_expr)
+                           
                     else:
                         if (not self.checkInListNode(m_expr)
                             ):  # Error checking identifier and if melody
@@ -870,16 +801,19 @@ class MusicEvaluator(MyGrammerVisitor):
 
                 if mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):
                     # If not a terminal node 
-                    if x.expressions[0].__class__.__name__ != "TerminalNodeImpl":
-                        line = x.expressions[0].note_value.getSymbol().line - 1
-                        col = x.expressions[0].note_value.getSymbol().column
-                    else:
+                    if x.expressions[0].__class__.__name__ == "TerminalNodeImpl":
                         line = x.expressions[0].getSymbol().line - 1
                         col = x.expressions[0].getSymbol().column
-
-                    raise Exception(
-                        "Number of beats in measure did not meet amount required within staff",
-                        line, col)
+                        raise Exception(
+                            "Number of beats in measure did not meet amount required within staff",
+                            line, col)
+                    elif isinstance(x.expressions[0], DeclareStaffNode) or isinstance(x.expressions[0], ExprNoteNode) or isinstance(x.expressions[0], ExprRestNode):
+                        line = x.expressions[0].note_value.getSymbol().line - 1
+                        col = x.expressions[0].note_value.getSymbol().column
+                    
+                        raise Exception(
+                            "Number of beats in measure did not meet amount required within staff",
+                            line, col)
                 if first_measure:
                     first_measure = False
                 if last_measure:

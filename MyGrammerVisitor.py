@@ -98,27 +98,20 @@ class MyGrammerVisitor(ParseTreeVisitor):
         node = DeclareMelodyNode(ctx.IDENTIFIER(), staffs)
         return node
 
-    # Visit a parse tree produced by MyGrammerParser#declare_continuous.
-    def visitDeclare_continuous(
-            self, ctx: MyGrammerParser.Declare_continuousContext):
-
+    # Visit a parse tree produced by MyGrammerParser#declare_pattern.
+    def visitDeclare_pattern(self, ctx: MyGrammerParser.Declare_patternContext):
         expr_list = []
-        for child_node in ctx.expr():
+        for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
-            if node_type == "NoteExpressionContext":
+            print(node_type)
+            if node_type == "Expr_noteContext":
                 # Obtain the pitch and num values
-                expr = child_node.expr_note()
-                note = self.visitExpr_note(expr)  # ExprNoteNode() object
+                note = self.visitExpr_note(child_node)  # ExprNoteNode() object
                 expr_list.append(note)
-            elif node_type == "ChordExpressionContext":
-                expr = child_node.expr_chord()
-                chord = self.visitExpr_chord(expr)  # ExprChordNode() object
-                expr_list.append(chord)
-            elif node_type == "VariableExpressionContext":
-                expr = child_node.expr_var()
-                var = self.visitExpr_var(expr)  # IDENTFIER, TerminalNodeImpl
-                expr_list.append(var)
-        node = DeclareContinousNode(expr_list)
+
+       
+        print("visitor pattern", len(expr_list))
+        node = DeclarePatternNode(expr_list)
         return node
 
     # Visit a parse tree produced by MyGrammerParser#declare_measures.
@@ -199,14 +192,15 @@ class MyGrammerVisitor(ParseTreeVisitor):
                 expr = child_node.expr_var()
                 var = self.visitExpr_var(expr)  # IDENTIFIER, TerminalNodeImpl
                 expr_list.append(var)
-            elif node_type == "Declare_continuousContext":
-                cont = self.visitDeclare_continuous(child_node)
+            elif node_type == "Declare_patternContext":
+                print("measure found pattern", node_type)
+                cont = self.visitDeclare_pattern(child_node)
                 expr_list.append(cont)
             elif node_type == "AccidentalExpressionContext":
                 res = self.visitAccidentalExpression(child_node)
                 expr_list.append(res)
             else:
-                # print("Unknown Measure_block", node_type)
+                print("Unknown Measure_block", node_type)
                 pass
 
         # node = DeclareMeasuresNode(expr_list, 0)
