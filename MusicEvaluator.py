@@ -677,10 +677,21 @@ class MusicEvaluator(MyGrammerVisitor):
                            
                             # add each note to measure
                             if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                                pitch  = tuplet_expr.pitch.getText()
+                                octave =  tuplet_expr.num.getText()
+                                
+                                if (pitch, octave) in measure_accidentals:
+                                    updated_acc = measure_accidentals[((pitch, octave))]
+                                elif (pitch,octave) in staff_accidentals:
+                                    updated_acc = staff_accidentals[((pitch, octave))]
+                                else:
+                                    updated_acc = tuplet_expr.accidental
+                                
+                                
                                 measureDown.append(
                                     createTupletNote(
                                         str(tuplet_expr.num),
-                                        str(tuplet_expr.accidental
+                                        str(updated_acc
                                             ),
                                         str(tuplet_expr.pitch),
                                         str(tuplet_expr.dotted),
@@ -689,10 +700,22 @@ class MusicEvaluator(MyGrammerVisitor):
                                     ))
 
                             else:
+
+                                pitch  = tuplet_expr.pitch.getText()
+                                octave =  tuplet_expr.num.getText()
+                                
+                                if (pitch, octave) in measure_accidentals:
+                                    updated_acc = measure_accidentals[((pitch, octave))]
+                                elif (pitch,octave) in staff_accidentals:
+                                    updated_acc = staff_accidentals[((pitch, octave))]
+                                else:
+                                    updated_acc = tuplet_expr.accidental
+                                
+                              
                                 measureUp.append(
                                     createTupletNote(
                                         str(tuplet_expr.num),
-                                        str(tuplet_expr.accidental
+                                        str(updated_acc
                                             ),
                                         str(tuplet_expr.pitch),
                                         str(tuplet_expr.dotted),
