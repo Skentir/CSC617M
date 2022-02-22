@@ -35,8 +35,9 @@ def createTupletNote(num, accidental, pitch, dotted, quarterLength):
         accidental = ""
 
     m_note = note.Note(pitch + accidental + num)
- 
-    m_note.quarterLength = quarterLength
+    d = duration.Duration(quarterLength)
+    m_note.duration = d
+    
 
     if dotted:
         m_note.quarterLength = m_note.quarterLength + (m_note.quarterLength / 2)
@@ -233,7 +234,7 @@ def processExprChord(chord_notes, type):
                         "Mismatch in note values, all notes within a chord must have the same note value",
                         line, col)
         else:
-            if bool(n[3]):
+            if bool(n[4]):
                 is_dotted = True
 
             if idx == 0:
@@ -857,7 +858,9 @@ class MusicEvaluator(MyGrammerVisitor):
                             new_duration = quarter_length * multiplier
                             # modify each duration of each note in tuplet to the corresponding value
 
-                            cur_beats += new_duration
+                            cur_beats += new_duration *2
+                            # print("NEW DURATION CURBEATS", cur_beats)
+                            # input()
                             if cur_beats > float(beats_per_measure):
                                 line = tuplet_expr.note_value.getSymbol(
                                 ).line
@@ -1021,6 +1024,8 @@ class MusicEvaluator(MyGrammerVisitor):
                 if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
                     cur_beats_up = cur_beats
                 elif isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
+                    # print("CURBREATS", cur_beats)
+                    # print("CURBEATSUP", cur_beats_up)
                     if cur_beats != cur_beats_up:
                         if x.expressions[0].__class__.__name__ == "ExprChordNode":
                             line = x.expressions[0].notes[0].note_value.getSymbol().line - 1
@@ -1032,26 +1037,10 @@ class MusicEvaluator(MyGrammerVisitor):
                             line = x.expressions[0].getSymbol().line - 1
                             col = x.expressions[0].getSymbol().column
                         raise Exception("Number of beats are unequal between grand measures", line, col)
-                # if mIdx == len(x.expressions) - 1 and cur_beats < float(beats_per_measure):
-                #     # If not a terminal node 
-                #     if x.expressions[0].__class__.__name__ == "TerminalNodeImpl":
-                #         line = x.expressions[0].getSymbol().line - 1
-                #         col = x.expressions[0].getSymbol().column
-                #         raise Exception(
-                #             "Number of beats in measure did not meet amount required within staff",
-                #             line, col)
-                #     elif isinstance(x.expressions[0], DeclareStaffNode) or isinstance(x.expressions[0], ExprNoteNode) or isinstance(x.expressions[0], ExprRestNode):
-                #         line = x.expressions[0].note_value.getSymbol().line - 1
-                #         col = x.expressions[0].note_value.getSymbol().column
-                    
-                #         raise Exception(
-                #             "Number of beats in measure did not meet amount required within staff",
-                #             line, col)
+               
                 if first_measure:
                     if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                         first_measure = False
-                        # measureUp.padAsAnacrusis(useGaps=True)
-                        # measureDown.padAsAnacrusis(useGaps=True)
                 if last_measure:
                     if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                         last_measure = False
@@ -1109,14 +1098,14 @@ class MusicEvaluator(MyGrammerVisitor):
         down_idx = None
         endingNumber = []
         print(self.ending_id)
-        input()
+        # input()
         for id in self.ending_id:
             if id[0] == "UP_START":
                 up_idx = self.right.index(id[1])
                 endingNumber = id[2]
             elif id[0] == "UP_END":
                 print(up_idx, self.right.index(id[1]))
-                input()
+                # input()
                 repeat.insertRepeatEnding(self.right, up_idx, self.right.index(id[1]), endingNumber=endingNumber)
         down_idx = None
         endingNumber = []
@@ -1148,7 +1137,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     end_value = 2
                 else:
                     end_value += 1
-        self.music_stream.write('midi', fp='fur_elise.midi')
+        self.music_stream.write('midi', fp='test.midi')
         sp = midi.realtime.StreamPlayer(self.music_stream)
         sp.play()
         return "MIDI FILE"

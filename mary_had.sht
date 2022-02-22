@@ -1,5 +1,5 @@
 bpm(123)
-instrument(Piano)
+instrument(Flute)
 
 staff(4,4){
     measure{
