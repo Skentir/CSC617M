@@ -239,14 +239,6 @@ def processExprChord(chord_notes, type):
 
             if idx == 0:
                 expected_note_val = str(n[0])
-            else:
-                if str(n[0]) != expected_note_val:
-                    line = chord_notes.getSymbol().line
-                    col = chord_notes.getSymbol().column
-
-                    raise Exception(
-                        "Mismatch in note values, all notes within a chord must have the same note value",
-                        line, col)
 
     return expected_note_val, is_dotted
 
@@ -308,16 +300,28 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateDeclaredChords(self,
                                ctx: MyGrammerParser.Declare_chordContext):
-        notes = []
 
         for chord in ctx:
+            notes = []
             temp = MyGrammerVisitor().visitDeclare_chord(chord)
 
             if temp.identifier.getText() not in self.variables:
                 # TODO: CHECK IF ERROR WHEN DECLARING FIXED CHORD
                 if isinstance(temp.chord, ExprChordNode):
-                    for x in temp.chord.notes:
+                    expected_note_val = ""
+                    for idx2, x in enumerate(temp.chord.notes):
                         notes.append(self.evaluateExprNoteNode(x))
+                        if idx2 == 0:
+                            expected_note_val = x.note_value.getText()
+                        else:
+                            if str(x.note_value.getText()) != expected_note_val:
+                                line = x.note_value.getSymbol().line
+                                col = x.note_value.getSymbol().column
+
+                                raise Exception(
+                                    "Mismatch in note values, all notes within a chord must have the same note value",
+                                    line, col)
+                    print("shit " + temp.identifier.getText() + " " + str(notes))
                     self.variables[temp.identifier.getText()] = ("CHORD", notes)
                 else: # FIXED CHORD
                     self.variables[temp.identifier.getText()] = ("FIXED_CHORD", temp.chord)
@@ -613,9 +617,9 @@ class MusicEvaluator(MyGrammerVisitor):
                             DeclareMeasuresGrandNode) and x.direction == "UP":
                         expDown = ctx[idx + 1]
                         if expDown.repeat_start is None:
-                            line = expDown.expressions[0].note_value.getSymbol(
+                            line = expDown.expressions[0].getSymbol(
                             ).line - 1
-                            col = expDown.expressions[0].note_value.getSymbol(
+                            col = expDown.expressions[0].getSymbol(
                             ).column
                             raise Exception(
                                 "measureUp and measureDown pairs must both have repstart",
@@ -647,9 +651,9 @@ class MusicEvaluator(MyGrammerVisitor):
                             DeclareMeasuresGrandNode) and x.direction == "UP":
                         expDown = ctx[idx + 1]
                         if expDown.repeat_end is None:
-                            line = expDown.expressions[0].note_value.getSymbol(
+                            line = expDown.expressions[0].getSymbol(
                             ).line - 1
-                            col = expDown.expressions[0].note_value.getSymbol(
+                            col = expDown.expressions[0].getSymbol(
                             ).column
                             raise Exception(
                                 "measureUp and measureDown pairs must both have repend",
@@ -924,15 +928,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     else:
                         if (not self.checkInListNode(m_expr)
                             ):  # Error checking identifier and if melody
-                            if isinstance(self.variables[m_expr.getText()][0],
-                                          Staff):
-                                line = m_expr.getSymbol().line
-                                col = m_expr.getSymbol().column
-                                raise Exception(
-                                    "Variable must be note or chord but a melody is called",
-                                    line, col)
-
-                            elif self.variables[m_expr.getText()][0] == "NOTE":
+                            if self.variables[m_expr.getText()][0] == "NOTE":
                                 # print(self.variables[m_expr.getText()])
                                 cur_beats += valToBeat(
                                     str(self.variables[m_expr.getText()][1]),
@@ -989,6 +985,10 @@ class MusicEvaluator(MyGrammerVisitor):
 
                             elif self.variables[m_expr.getText()][0] == "CHORD":
                                 expected_note_val, is_dotted = processExprChord(self.variables[m_expr.getText()][1], "VAR")
+                                print("here1 " + str(self.variables[m_expr.getText()][1][0]))
+                                print("here2 " + str(valToBeat(expected_note_val,
+                                                       float(note_value),
+                                                       is_dotted)))
                                 cur_beats += valToBeat(expected_note_val,
                                                        float(note_value),
                                                        is_dotted)
@@ -1002,7 +1002,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                 else:
                                     new_notes = []
                                     for n in self.variables[m_expr.getText()][1]:
-                                        new_notes.append((str(n[3])),(str(n[2]), str(n[1])))
+                                        new_notes.append((str(n[3]),str(n[2]), str(n[1])))
                                     if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                                         measureDown.append(createChord(new_notes, expected_note_val, is_dotted))
                                     else:
@@ -1019,6 +1019,12 @@ class MusicEvaluator(MyGrammerVisitor):
                                         measureDown.append(createFixedChord(str(fixed.note_value), str(fixed.num), str(fixed.fixed_chord), bool(fixed.dotted)))
                                     else:
                                         measureUp.append(createFixedChord(str(fixed.note_value), str(fixed.num), str(fixed.fixed_chord), bool(fixed.dotted)))
+                            else:
+                                line = m_expr.getSymbol().line
+                                col = m_expr.getSymbol().column
+                                raise Exception(
+                                    "Variable must be note or chord but a melody is called",
+                                    line, col)
                         print(m_expr)
 
                 if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
@@ -1030,12 +1036,14 @@ class MusicEvaluator(MyGrammerVisitor):
                         if x.expressions[0].__class__.__name__ == "ExprChordNode":
                             line = x.expressions[0].notes[0].note_value.getSymbol().line - 1
                             col = x.expressions[0].notes[0].note_value.getSymbol().column
-                        elif x.expressions[0].__class__.__name__ == "ExprNoteNode":
+                        elif x.expressions[0].__class__.__name__ == "ExprNoteNode" or x.expressions[0].__class__.__name__ == "ExprRestNode":
                             line = x.expressions[0].note_value.getSymbol().line - 1
                             col = x.expressions[0].note_value.getSymbol().column
                         else:
                             line = x.expressions[0].getSymbol().line - 1
                             col = x.expressions[0].getSymbol().column
+                        print("hereUp " + str(cur_beats_up))
+                        print("hereDown " + str(cur_beats))
                         raise Exception("Number of beats are unequal between grand measures", line, col)
                
                 if first_measure:

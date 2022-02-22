@@ -1,0 +1,68 @@
+bpm(72)
+instrument(Piano)
+
+sampleNote = eighth(F, 4)
+
+bflat = chord(eighth(B, 2),eighth(D, 3), eighth (F, 3), eighth (B, 3))
+sampleChord = chord(quarter(B, 3), quarter(B, 4))
+wrongChord = chord(quarter(C, 4), half(A, 3))
+
+melody intro {
+    staff(4, 4) {
+        measureUp {
+            sampleChord
+            sampleChord
+            sampleChord
+            sampleChord
+        }
+        measureDown {
+            full(rest)
+        }
+    }
+}
+
+intro
+sampleNote
+
+staff(4, 4) {
+    measureUp {
+        sampleChord
+        sampleChord
+        intro
+    }
+    measureDown {
+        full(rest)
+    }
+
+    accidental((_B, 3), (_E, 4))
+
+    sampleChord
+
+    measureUp {
+        repstart
+        eighth(rest)
+        sixteenth(B, 3)
+        sixteenth(D, 4)
+        eighth(F, 4)
+        eighth(F, 4)*
+        eighth(E, 4)
+        eighth(D, 4)*
+        repend(2)
+    }
+
+    measure {
+        sixteenth(B, 3)
+        sixteenth(D, 4)
+    }
+
+    measureDown {
+        bflat
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
+  
+}
