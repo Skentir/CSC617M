@@ -5,6 +5,14 @@ sample_note = quarter(C, 2)
 staff (2,4) {
 
     measure {
+         accidental((#C, 2))
+        TUPLET{
+            quarter(C,2)
+            quarter(C,2)
+        }
+    }
+
+    measure {
         sample_note
         sample_note
     }
@@ -21,5 +29,7 @@ staff (2,4) {
      measure {
         sample_note
     }
+
+    
     
 }

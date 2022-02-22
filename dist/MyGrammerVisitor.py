@@ -1,4 +1,4 @@
-# Generated from MyGrammer.g4 by ANTLR 4.9.3
+# Generated from MyGrammer.g4 by ANTLR 4.9.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .MyGrammerParser import MyGrammerParser
@@ -49,8 +49,8 @@ class MyGrammerVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MyGrammerParser#declare_continuous.
-    def visitDeclare_continuous(self, ctx:MyGrammerParser.Declare_continuousContext):
+    # Visit a parse tree produced by MyGrammerParser#declare_pattern.
+    def visitDeclare_pattern(self, ctx:MyGrammerParser.Declare_patternContext):
         return self.visitChildren(ctx)
 
 
@@ -121,11 +121,6 @@ class MyGrammerVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MyGrammerParser#expr_acc.
     def visitExpr_acc(self, ctx:MyGrammerParser.Expr_accContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MyGrammerParser#expr_base_acc.
-    def visitExpr_base_acc(self, ctx:MyGrammerParser.Expr_base_accContext):
         return self.visitChildren(ctx)
 
 

@@ -51,7 +51,7 @@ ENDEND: E N D I N G E N D;
 
 CHORD: C H O R D;
 
-CONTINUOUS: C O N T I N U O U S;
+TUPLET: T U P L E T;
 
 DOUBLE: D O U B L E;
 
@@ -73,10 +73,30 @@ DOTTED: '*';
 
 REST: R E S T;
 
-note_value: DOUBLE | FULL | HALF | QUARTER | EIGHTH | SIXTEENTH | THIRTYSECOND;
+note_value:
+	DOUBLE
+	| FULL
+	| HALF
+	| QUARTER
+	| EIGHTH
+	| SIXTEENTH
+	| THIRTYSECOND;
 // NOTE_VALUE: D O U B L E | F U L L | H A L F | Q U A R T E R | E I G H T H | S I X T E E N T H;
 
-FIXED_CHORD: (C | C '#' | D | E '_' | E | F | F '#' | G | A '_' | A | B '_' | B) (M A J '7'? | M | M '7' | M '7_5' | 'dim' | 'dom7');
+FIXED_CHORD: (
+		C
+		| C '#'
+		| D
+		| E '_'
+		| E
+		| F
+		| F '#'
+		| G
+		| A '_'
+		| A
+		| B '_'
+		| B
+	) (M A J '7'? | M | M '7' | M '7_5' | 'dim' | 'dom7');
 
 CLARINET: C L A R I N E T;
 
@@ -147,23 +167,19 @@ bpm: BPM OPEN_PAR INTEGER CLOSE_PAR;
 
 instrument: INSTRUMENT OPEN_PAR instruments CLOSE_PAR;
 
-// prog: bpm (declare_note | declare_chord | declare_melody)* (declare_staff | expr_var)+;
 prog:
 	bpm instrument (
 		declare_note
 		| declare_chord
 		| declare_melody
 	)* (declare_staff | expr_var)+ EOF;
-// prog: bpm (declare_note | declare_chord)*;
 
 //Declaration
 declare_note: IDENTIFIER EQUAL_OPER expr_note;
 declare_chord: IDENTIFIER EQUAL_OPER expr_chord;
 declare_melody:
 	MELODY IDENTIFIER OPEN_BRACKET (declare_staff)+ CLOSE_BRACKET;
-declare_continuous:
-	CONTINUOUS OPEN_BRACKET (expr)+ CLOSE_BRACKET;
-// declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
+declare_pattern: TUPLET OPEN_BRACKET (expr_note)+ CLOSE_BRACKET;
 
 declare_measures:
 	MEASURE OPEN_BRACKET measure_block CLOSE_BRACKET;
@@ -173,7 +189,8 @@ declare_measures_down:
 	MEASUREDOWN OPEN_BRACKET measure_block CLOSE_BRACKET;
 // repeat_measure_block: declare_repeat measure_block declare_repeat_end;
 measure_block:
-	declare_ending? declare_repeat? (expr | declare_continuous)+ declare_repeat_end? declare_ending_end?;
+	declare_ending? declare_repeat? (expr | declare_pattern)+ declare_repeat_end? declare_ending_end
+		?;
 
 //Expresions
 expr:
@@ -183,11 +200,12 @@ expr:
 	| expr_acc		# AccidentalExpression
 	| expr_rest		# RestExpression;
 
-expr_note: note_value OPEN_PAR ACCIDENTAL? PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED?;
+expr_note:
+	note_value OPEN_PAR ACCIDENTAL? PITCH COMMA_SEP INTEGER CLOSE_PAR DOTTED?;
 
-//expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR;
-expr_chord: CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR
-    | CHORD OPEN_PAR note_value OPEN_PAR FIXED_CHORD CLOSE_PAR DOTTED? COMMA_SEP INTEGER CLOSE_PAR;
+expr_chord:
+	CHORD OPEN_PAR expr_note expr_add_note CLOSE_PAR
+	| CHORD OPEN_PAR note_value OPEN_PAR FIXED_CHORD CLOSE_PAR DOTTED? COMMA_SEP INTEGER CLOSE_PAR;
 
 expr_add_note:
 	COMMA_SEP expr_note
@@ -196,22 +214,21 @@ expr_add_note:
 expr_var: IDENTIFIER;
 
 expr_acc: ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
-// accidental((A#, 6), (B, 3))
-expr_base_acc:
-	OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR;
 
 expr_add_acc:
-	expr_base_acc
-	| expr_base_acc COMMA_SEP expr_add_acc;
+	ACCIDENTAL PITCH
+	| ACCIDENTAL PITCH COMMA_SEP expr_add_acc
+	| PITCH
+	| PITCH COMMA_SEP expr_add_acc;
 
-// | PITCH | PITCH COMMA_SEP expr_add_acc;
 expr_rest: note_value OPEN_PAR REST CLOSE_PAR DOTTED?;
 
 // Iteratives
 
 declare_repeat: REPSTART;
 declare_repeat_end: REPEND | REPEND OPEN_PAR INTEGER? CLOSE_PAR;
-declare_ending: ENDSTART OPEN_PAR INTEGER (COMMA_SEP INTEGER)* CLOSE_PAR;
+declare_ending:
+	ENDSTART OPEN_PAR INTEGER (COMMA_SEP INTEGER)* CLOSE_PAR;
 declare_ending_end: ENDEND;
 
 // Functions
