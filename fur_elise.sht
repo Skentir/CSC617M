@@ -1034,25 +1034,8 @@ staff(3, 8){
         eighth(rest)
     }
 
-    measureUp{
-        eighth(A, 4)
-        eighth(rest)
-        eighth(rest)
-    }
-    measureDown{
-        chord(eighth(A, 1), eighth(A, 2))
-        eighth(rest)
-        eighth(rest)
-    }
+  
 }
-
-
-
-
-
-
-
-
 
 
 chorus1
