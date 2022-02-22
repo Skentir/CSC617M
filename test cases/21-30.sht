@@ -1,0 +1,98 @@
+
+measureUp {
+    eighth(E, 5)
+    eighth(D, 5)
+    sixteenth(_B, 5)*
+    thirtysecond(A, 5)
+}
+
+measureDown {
+    sixteenth(F, 3)
+    sixteenth(_B, 3)
+    sixteenth(D, 4)
+    sixteenth(B, 3)
+    sixteenth(D, 4)
+    sixteenth(B, 3)
+}
+
+measureUp {
+    sixteenth(A, 5)
+    sixteenth(G, 5)
+    sixteenth(F, 5)
+    sixteenth(E, 5)
+    sixteenth(D, 5)
+    sixteenth(C, 5)
+}
+
+measureDown {
+    sixteenth(F, 3)
+    sixteenth(E, 4)
+    chord(sixteenth(F, 3), sixteenth(G, 3), sixteenth(_B, 3))
+    sixteenth(E, 4)
+    chord(sixteenth(F, 3), sixteenth(G, 3), sixteenth(B, 3))
+    sixteenth(E, 4)
+}
+
+measureUp {
+    eighth(_B, 4)
+    eighth(A, 4)
+    thirtysecond(A, 4)
+    thirtysecond(G, 4)
+    thirtysecond(A, 4)
+    thirtysecond(B, 4)  
+}
+
+measureDown {
+    sixteenth(F, 3)
+    sixteenth(A, 3)
+    sixteenth(B, 3)
+    sixteenth(A, 3)
+    sixteenth(B, 3)
+    sixteenth(A, 3)
+}
+
+measureUp {
+    quarter(C, 5)
+    sixteenth(D, 5)
+    sixteenth(_D, 5)
+}
+
+measureDown {
+    sixteenth(F, 3)
+    sixteenth(A, 3)
+    sixteenth(B, 3)
+    sixteenth(A, 3)
+    sixteenth(B, 3)
+    sixteenth(A, 3)
+}
+
+measureUp {
+    sixteenth(E, 5)*
+    sixteenth(E, 5)
+    sixteenth(F, 5)
+    sixteenth(A, 4)
+}
+
+measureDown {
+    sixteenth(E, 3)
+    sixteenth(A, 3)
+    sixteenth(C, 4)
+    sixteenth(A, 3)
+    chord(sixteenth(D, 3), sixteenth(D, 4))
+    sixteenth(F, 3)
+}
+
+measureUp {
+    quarter(C, 5)
+    sixteenth(D, 5)*
+    thirtysecond(B, 4)
+}
+
+measureDown {
+    sixteenth(G, 3)
+    sixteenth(E, 4)
+    sixteenth(G, 3)
+    sixteenth(F, 4)
+    sixteenth(G, 3)
+    sixteenth(F, 4)
+}

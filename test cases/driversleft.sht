@@ -8,11 +8,11 @@ eflat = chord(eighth(B, 2), eighth(E, 3), eighth(G, 3), eighth(B, 3))
 left
 staff(4/4) {
     accidentals (_B, _E)
-    measure {
+    measure1 {
         whole (rest)
     }
 
-    measure {
+    measure2 {
         bflat
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -23,7 +23,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure3 {
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -34,7 +34,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure4 {
         gm
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -45,7 +45,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure5 {
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -56,7 +56,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure6 {
         eflat
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -67,7 +67,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure7 {
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -78,8 +78,8 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    repstart
-    measure {
+   
+    measure8 {
         bflat
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -90,9 +90,19 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    repend
+    measure9 {
+        bflat
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+        chord(eighth(B, 2), eighth(B, 3))
+    }
 
-    measure {
+
+    measure10 {
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -103,7 +113,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure11 {
         gm
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -114,7 +124,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure12 {
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -125,7 +135,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure13 {
         eflat
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -136,7 +146,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure14 {
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -147,8 +157,8 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
-        chord(eighth(G, 4), eighth(B, 4), eighth(D, 5), eighth(G, 5))
+    measure15 {
+        bflat
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -160,8 +170,7 @@ staff(4/4) {
 
     [CHORUS]
 
-    repstart
-    measure {
+    measure16 {
         chord(eighth(E, 3), eighth(B, 3))
         eighth(G, 3)
         eighth(D, 4) 
@@ -172,7 +181,7 @@ staff(4/4) {
         eighth(G, 3)
     }
 
-    measure {
+    measure17 {
         chord(eighth(E, 3), eighth(B, 3))
         eighth(G, 3)
         eighth(D, 4) 
@@ -184,7 +193,7 @@ staff(4/4) {
         eighth(G, 3)
     }
 
-    measure {
+    measure18 {
         chord(eighth(B, 2), eighth(B, 3))
         eighth(F, 3)
         eighth(D, 4)
@@ -194,9 +203,43 @@ staff(4/4) {
         eighth(D, 4)
         eighth(F, 3)
     }
-    repend
 
-    measure {
+    measure19 {
+        chord(eighth(E, 3), eighth(B, 3))
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(G, 3)
+        eighth(B, 3)
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(G, 3)
+    }
+
+    measure20 {
+        chord(eighth(E, 3), eighth(B, 3))
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(C, 4)
+        eighth(G, 3) 
+        eighth(D, 4)
+        eighth(G, 3) 
+        eighth(E, 4)
+        eighth(G, 3)
+    }
+
+    measure21 {
+        chord(eighth(B, 2), eighth(B, 3))
+        eighth(F, 3)
+        eighth(D, 4)
+        eighth(F, 3)
+        eighth(B, 3)
+        eighth(F, 3)
+        eighth(D, 4)
+        eighth(F, 3)
+    }
+
+
+    measure22 {
         chord(eighth(G, 3), eighth(D, 4))
         eighth(F, 3)
         chord(eighth(D, 3), eighth(C, 4))
@@ -207,7 +250,7 @@ staff(4/4) {
         eighth(F, 3)
     }
 
-    measure {
+    measure23 {
         chord(eighth(G, 3), eighth(B, 3))
         eighth(E, 3)
         chord(eighth(G, 3), eighth(B, 3))
@@ -218,18 +261,18 @@ staff(4/4) {
         eighth(E, 3)
     }
 
-    measure {
+    measure24 {
         chord(half(C, 3), half(E, 3), half(G, 3))
         chord (half(A, 2), half(C, 3), half(F, 3))
     }
 
-    measure {
+    measure25 {
         chord (whole(B, 2), whole(F, 3))
     }
 
     [END OF CHORUS]
 
-    measure {
+    measure26 {
         bflat
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -240,7 +283,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure27 {
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -251,7 +294,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure28 {
         gm
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -262,7 +305,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure29 {
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -273,7 +316,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure30 {
         eflat
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -284,7 +327,7 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    measure {
+    measure31 {
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
         chord(eighth(B, 2), eighth(B, 3))
@@ -309,7 +352,7 @@ staff(4/4) {
 
     [CHORUS]
 
-    repstart
+    
     measure {
         chord(eighth(E, 3), eighth(B, 3))
         eighth(G, 3)
@@ -343,7 +386,40 @@ staff(4/4) {
         eighth(D, 4)
         eighth(F, 3)
     }
-    repend
+    
+    measure {
+        chord(eighth(E, 3), eighth(B, 3))
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(G, 3)
+        eighth(B, 3)
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(G, 3)
+    }
+
+    measure {
+        chord(eighth(E, 3), eighth(B, 3))
+        eighth(G, 3)
+        eighth(D, 4) 
+        eighth(C, 4)
+        eighth(G, 3) 
+        eighth(D, 4)
+        eighth(G, 3) 
+        eighth(E, 4)
+        eighth(G, 3)
+    }
+
+    measure {
+        chord(eighth(B, 2), eighth(B, 3))
+        eighth(F, 3)
+        eighth(D, 4)
+        eighth(F, 3)
+        eighth(B, 3)
+        eighth(F, 3)
+        eighth(D, 4)
+        eighth(F, 3)
+    }
 
     measure {
         chord(eighth(G, 3), eighth(D, 4))
@@ -381,7 +457,7 @@ staff(4/4) {
     [BRIDGE]
     repstart 
 
-    meaure {
+    meaure43 {
         chord(eighth(G, 3), eighth(B, 3), eighth(D, 4))
         chord(eighth(B, 3), eighth(D, 4))
         eighth(G, 3)
@@ -390,7 +466,7 @@ staff(4/4) {
         eighth(G, 3)
     }
 
-    measure {
+    measure44 {
         chord(quarter(E, 3), quarter(G, 3), quarter(B, 3))
         chord(quarter(G, 3), quarter(B, 3))
         eighth(E, 4)
@@ -399,7 +475,7 @@ staff(4/4) {
         eighth(E, 4)
     }
 
-    measure {
+    measure45 {
         chord(quarter(B, 2), quarter(D, 3), quarter(F, 3))
         chord(eighth(D, 3), eighth(F, 3))
         eighth(B, 2)
@@ -408,7 +484,7 @@ staff(4/4) {
         eighth(B, 2)
     }
 
-    measure {
+    measure46 {
         chord(quarter(D, 3), quarter(A, 3), quarter(C, 4))
         chord(eighth(A, 3), eighth(C, 4))
         eighth(D, 3)
@@ -417,7 +493,7 @@ staff(4/4) {
         eighth(D, 3)
     }
 
-    meaure {
+    meaure47 {
         chord(eighth(G, 3), eighth(B, 3), eighth(D, 4))
         chord(eighth(B, 3), eighth(D, 4))
         eighth(G, 3)
@@ -426,7 +502,7 @@ staff(4/4) {
         eighth(G, 3)
     }
 
-    measure {
+    measure48 {
         chord(quarter(E, 3), quarter(G, 3), quarter(B, 3))
         chord(quarter(G, 3), quarter(B, 3))
         eighth(E, 4)
@@ -435,7 +511,7 @@ staff(4/4) {
         eighth(E, 4)
     }
 
-    measure {
+    measure49 {
         chord(quarter(B, 2), quarter(D, 3), quarter(F, 3))
         chord(eighth(D, 3), eighth(F, 3))
         eighth(B, 2)
@@ -444,7 +520,7 @@ staff(4/4) {
         eighth(B, 2)
     }
 
-    measure {
+    measure50 {
         chord(quarter(D, 3), quarter(A, 3), quarter(C, 4))
         chord(eighth(A, 3), eighth(C, 4))
         eighth(D, 3)
@@ -456,43 +532,59 @@ staff(4/4) {
 
     [END OF BRIDGE]
 
-    repstart
-    measure {
+   
+    measure51 {
         chord(half(E, 3), half(G, 3), half(B, 3))
         chord(half(E, 3), half(G, 3), half(C, 4))
     }
 
-    measure {
+    measure52 {
         chord(half(E, 3), half(G, 3), half(D, 4))
         chord(half(E, 3), half(G, 3), half(E, 4))
     }
 
-    measure {
+    measure53 {
         chord(half(D, 3), half(F, 3), half(B, 3))
         chord(quarter(D, 3), quarter(F, 3), quarter(C, 4))
         eighth(D, 4)
         eighth(B, 2)
     }
-    repend
+    
+    measure54 {
+        chord(half(E, 3), half(G, 3), half(B, 3))
+        chord(half(E, 3), half(G, 3), half(C, 4))
+    }
 
-    measure {
+    measure55 {
+        chord(half(E, 3), half(G, 3), half(D, 4))
+        chord(half(E, 3), half(G, 3), half(E, 4))
+    }
+
+    measure56 {
+        chord(half(D, 3), half(F, 3), half(B, 3))
+        chord(quarter(D, 3), quarter(F, 3), quarter(C, 4))
+        eighth(D, 4)
+        eighth(B, 2)
+    }
+
+    measure57 {
         chord(quarter(G, 3), quarter(D, 4))
         chord(quarter(F, 3), quarter(C, 4))
         chord(quarter(E, 3), quarter(B, 3))
         chord(quarter(D, 3), quarter(A, 3))
     }
 
-    measure {
+    measure58 {
         chord(whole(B, 2), whole(E, 3), whole(G, 3))
     }
 
     repstart
-    measure {
+    measure59 {
         chord(half(C, 3), half(E, 3), half(G, 3))
         chord(half(C, 3), half(F, 3), half(A, 3))
     }
 
-    measure {
+    measure60 {
         chord(whole(B, 2), whole(F, 3S))
     }
     repend
