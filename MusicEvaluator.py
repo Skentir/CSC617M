@@ -325,7 +325,7 @@ class MusicEvaluator(MyGrammerVisitor):
                                 raise Exception(
                                     "Mismatch in note values, all notes within a chord must have the same note value",
                                     line, col)
-                    print("shit " + temp.identifier.getText() + " " + str(notes))
+                   
                     self.variables[temp.identifier.getText()] = ("CHORD", notes)
                 else: # FIXED CHORD
                     self.variables[temp.identifier.getText()] = ("FIXED_CHORD", temp.chord)
@@ -662,12 +662,12 @@ class MusicEvaluator(MyGrammerVisitor):
                             raise Exception(
                                 "measureUp and measureDown pairs must both have repend",
                                 line, col)
-                        repeat_times = None
+                        repeat_times_down = None
                         if expDown.repeat_end.INTEGER() is None:
-                            repeat_times = 1
+                            repeat_times_down = 1
                         else:
-                            repeat_times = int(expDown.repeat_end.INTEGER().getText())
-                        if repeat_times != repeat_times:
+                            repeat_times_down = int(expDown.repeat_end.INTEGER().getText())
+                        if repeat_times_down != repeat_times:
                             
                             line = expDown.repeat_end.REPEND().getSymbol(
                             ).line
