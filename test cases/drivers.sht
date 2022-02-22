@@ -1,7 +1,5 @@
-title:Driver's license
-instrument(Piano)
 bpm(72)
-
+instrument(Piano)
 bflat = chord (eighth(B, 2) eighth(D, 3), eighth (F, 3), eighth (B, 3))
 gm = chord(eighth(B, 2), eighth(D, 3), eighth(G, 3), eighth (B, 3))
 eflat = chord(eighth(B, 2), eighth(E, 3), eighth(G, 3), eighth(B, 3))
@@ -328,7 +326,6 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    [CHORUS]
     measureUp {
         eighth(G, 4)
         eighth(G, 4)
@@ -533,9 +530,6 @@ staff(4/4) {
     measureDown {
         chord (whole(B, 2), whole(F, 3))
     }
-
-
-    [END OF CHORUS]
 
     measureUp { 
         eighth (rest)
@@ -696,7 +690,6 @@ staff(4/4) {
         chord(eighth(B, 2), eighth(B, 3))
     }
 
-    [CHORUS]
     measureUp {
         eighth(G, 4)
         eighth(G, 4)
@@ -902,10 +895,6 @@ staff(4/4) {
         chord (whole(B, 2), whole(F, 3))
     }
 
-    [END OF CHORUS]
-
-
-    [BRIDGE 1]
     repstart
     measureUp {
         quarter (D, 5)
@@ -1054,7 +1043,6 @@ staff(4/4) {
         eighth(D, 3)
     }
     repend
-    [END OF BRIDGE]
 
     measureUp {
         eighth(G, 4)
