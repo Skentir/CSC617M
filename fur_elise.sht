@@ -1,7 +1,242 @@
 bpM(68)
 instrument(piano)
 
-staff (3,8) {
+melody chorus1{
+    staff(3, 8){
+        measureUp {
+            sixteenth(E, 5)
+            sixteenth(#D, 5)
+            sixteenth(E, 5)
+            sixteenth(B, 4)
+            sixteenth(D, 5)
+            sixteenth(C, 5) 
+        }
+
+        measureDown{
+            eighth(rest)
+            eighth(rest)
+            eighth(rest)
+        }
+
+        measureUp{
+            eighth(A, 4)
+            sixteenth(rest)
+            sixteenth(C, 4)
+            sixteenth(E, 4)
+            sixteenth(A, 4)
+        }
+
+        measureDown{
+            sixteenth(A, 2)
+            sixteenth(E, 3)
+            sixteenth(A, 3)
+            sixteenth(rest)
+            eighth(rest)
+        }
+
+        measureUp{
+            eighth(B, 4)
+            sixteenth(rest)
+            sixteenth(E, 4)
+            sixteenth(#G, 4)
+            sixteenth(B, 4)
+        }
+
+        measureDown{
+            sixteenth(E, 2)
+            sixteenth(E, 3)
+            sixteenth(#G, 3)
+            sixteenth(rest)
+            eighth(rest)
+        }
+
+        measureUp{
+            eighth(C, 5)
+            sixteenth(rest)
+            sixteenth(E, 4)
+            sixteenth(E, 5)
+            sixteenth(#D, 5)
+        }
+        measureDown{
+            sixteenth(A, 2)
+            sixteenth(E, 3)
+            sixteenth(A, 3)
+            sixteenth(rest)
+            eighth(rest)
+        }
+
+        measureUp {
+        
+            sixteenth(E, 5)
+            sixteenth(#D, 5)    
+            sixteenth(E, 5)
+            sixteenth(B, 4)
+            sixteenth(D, 5)
+            sixteenth(C, 5) 
+        
+        }
+
+        measureDown{
+            eighth(rest)
+            eighth(rest)
+            eighth(rest)
+        }
+
+        measureUp{
+            eighth(A, 4)
+            sixteenth(rest)
+            sixteenth(C, 4)
+            sixteenth(E, 4)
+            sixteenth(A, 4)
+        }
+
+        measureDown{
+            sixteenth(A, 2)
+            sixteenth(E, 3)
+            sixteenth(A, 3)
+            sixteenth(rest)
+            eighth(rest)
+        }
+
+        measureUp{
+            eighth(B, 4)
+            sixteenth (rest)
+            sixteenth(D, 4)
+            sixteenth(C, 5)
+            sixteenth(B, 4)
+        }
+
+        measureDown{
+            sixteenth(E, 2)
+            sixteenth(E, 3)
+            sixteenth(#G, 3)
+            sixteenth(rest)
+            eighth(rest)
+        }
+    }
+}
+
+melody chorus2{
+    staff(3, 8){
+
+        measureUp{
+            eighth(D, 5)*
+            sixteenth(F, 4)
+            sixteenth(E, 5)
+            sixteenth(D, 5)
+        }
+        
+        measureDown{
+            sixteenth(G, 3)
+            sixteenth(G, 4)
+            sixteenth(B, 4)
+            sixteenth(rest)
+            eighth(rest)
+        }
+
+        measureUp{
+            eighth(C, 5)*
+            sixteenth(E, 4)
+            sixteenth(D, 5)
+            sixteenth(C, 5)
+        }
+
+        measureDown{
+            sixteenth(A,2)
+            sixteenth(E,3)
+            sixteenth(A,3)
+            sixteenth(rest)
+            eighth(rest)
+        }
+
+        measureUp{
+            eighth(B, 4)
+            sixteenth(rest)
+            sixteenth(E, 4)
+            sixteenth(E, 5)
+            sixteenth(rest)
+        }
+
+        measureDown{
+            sixteenth(E,2)
+            sixteenth(E,3)
+            sixteenth(E,4)
+            sixteenth(E,4)
+            sixteenth(rest)
+            sixteenth(E,4)
+        }
+
+        measureUp{
+            sixteenth(rest)
+            sixteenth(E, 5)
+            sixteenth(E, 6)
+            sixteenth(rest)
+            sixteenth(rest)
+            sixteenth(#D, 5)
+        }
+
+        measureDown{
+            sixteenth(E, 5)
+            sixteenth(E, 5)
+            sixteenth(rest)
+            sixteenth(#D, 5)
+            sixteenth(E, 5)
+            sixteenth(rest)
+        }
+
+        measureUp{
+            eighth(E, 5)
+            sixteenth(rest)
+            sixteenth(#D, 5)
+            sixteenth(E, 5)
+            sixteenth(#D, 5)
+        }
+
+        measureDown{
+            sixteenth(rest)
+            sixteenth(#D, 5)
+            sixteenth(E, 5)
+            sixteenth(rest)
+            eighth(rest)
+        }
+    }
+}
+
+melody transition{
+    staff(3, 8){
+
+        measureUp {
+            eighth(A, 4)
+            sixteenth(rest)
+            sixteenth(B, 4)
+            sixteenth(C, 5)
+            sixteenth(D, 5)
+        }
+        measureDown {
+            sixteenth(A, 2)
+            sixteenth(E, 3)
+            sixteenth(A, 3)
+            sixteenth(rest)
+            eighth(rest)
+        }
+
+        measureUp {
+            eighth(E, 5)*
+            sixteenth(G, 4)
+            sixteenth(F, 5)
+            sixteenth(E, 5)
+        }
+        measureDown {
+            sixteenth(C, 3)
+            sixteenth(G, 3)
+            sixteenth(C, 4)
+            sixteenth(rest)
+            eighth(rest)
+        }
+    }
+}
+
+staff (3, 8) {
 
     measureUp{
         sixteenth(E, 5)
@@ -11,117 +246,11 @@ staff (3,8) {
     measureDown{
         eighth(rest)
     }
+}
 
-    measureUp {
-        sixteenth(E, 5)
-        sixteenth(#D, 5)
-        sixteenth(E, 5)
-        sixteenth(B, 4)
-        sixteenth(D, 5)
-        sixteenth(C, 5) 
-    }
+chorus1
 
-    measureDown{
-        eighth(rest)
-        eighth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(A, 4)
-        sixteenth(rest)
-        sixteenth(C, 4)
-        sixteenth(E, 4)
-        sixteenth(A, 4)
-    }
-
-    measureDown{
-        sixteenth(A, 2)
-        sixteenth(E, 3)
-        sixteenth(A, 3)
-        sixteenth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(B, 4)
-        sixteenth(rest)
-        sixteenth(E, 4)
-        sixteenth(#G, 4)
-        sixteenth(B, 4)
-    }
-
-    measureDown{
-        sixteenth(E, 2)
-        sixteenth(E, 3)
-        sixteenth(#G, 3)
-        sixteenth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(C, 5)
-        sixteenth(rest)
-        sixteenth(E, 4)
-        sixteenth(E, 5)
-        sixteenth(#D, 5)
-    }
-    measureDown{
-        sixteenth(A, 2)
-        sixteenth(E, 3)
-        sixteenth(A, 3)
-        sixteenth(rest)
-        eighth(rest)
-    }
-
-    measureUp {
-    
-        sixteenth(E, 5)
-        sixteenth(#D, 5)    
-        sixteenth(E, 5)
-        sixteenth(B, 4)
-        sixteenth(D, 5)
-        sixteenth(C, 5) 
-    
-    }
-
-    measureDown{
-        eighth(rest)
-        eighth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(A, 4)
-        sixteenth(rest)
-        sixteenth(C, 4)
-        sixteenth(E, 4)
-        sixteenth(A, 4)
-    }
-
-    measureDown{
-        sixteenth(A, 2)
-        sixteenth(E, 3)
-        sixteenth(A, 3)
-        sixteenth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(B, 4)
-        sixteenth (rest)
-        sixteenth(D, 4)
-        sixteenth(C, 5)
-        sixteenth(B, 4)
-    }
-
-    measureDown{
-        sixteenth(E, 2)
-        sixteenth(E, 3)
-        sixteenth(#G, 3)
-        sixteenth(rest)
-        eighth(rest)
-    }
+staff(3, 8){
 
     measureUp{
         endingstart(1)
@@ -129,7 +258,6 @@ staff (3,8) {
         repend
         endingend
     }
-    
 
     measureDown{
         endingstart(1)
@@ -142,23 +270,19 @@ staff (3,8) {
     }
 
     measureUp{
-        endingstart(2)
         eighth(A, 4)
         sixteenth(rest)
         sixteenth(B,4)
         sixteenth(C,5)
         sixteenth(D,5)
-        endingend
     }
 
     measureDown{
-        endingstart(2)
         sixteenth(A, 2)
         sixteenth(E, 3)
         sixteenth(A, 3)
         sixteenth(rest)
         eighth(rest)
-        endingend
     }
     
     measureUp{
@@ -177,199 +301,13 @@ staff (3,8) {
         sixteenth(rest)
         eighth(rest)
     }
+}
 
-    measureUp{
-        eighth(D, 5)*
-        sixteenth(F, 4)
-        sixteenth(E, 5)
-        sixteenth(D, 5)
-    }
-    
-    measureDown{
-        sixteenth(G, 3)
-        sixteenth(G, 4)
-        sixteenth(B, 4)
-        sixteenth(rest)
-        eighth(rest)
-    }
+chorus2
 
-    measureUp{
-        eighth(C, 5)*
-        sixteenth(E, 4)
-        sixteenth(D, 5)
-        sixteenth(C, 5)
-    }
+chorus1
 
-    measureDown{
-        sixteenth(A,2)
-        sixteenth(E,3)
-        sixteenth(A,3)
-        sixteenth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(B, 4)
-        sixteenth(rest)
-        sixteenth(E, 4)
-        sixteenth(E, 5)
-        sixteenth(rest)
-    }
-
-    measureDown{
-        sixteenth(E,2)
-        sixteenth(E,3)
-        sixteenth(E,4)
-        sixteenth(rest)
-        sixteenth(rest)
-        sixteenth(E,4)
-    }
-
-
-
-    measureUp{
-        sixteenth(rest)
-        sixteenth(E, 5)
-        sixteenth(E, 6)
-        sixteenth(rest)
-        sixteenth(rest)
-        sixteenth(#D, 5)
-    }
-
-    measureDown{
-        sixteenth(E, 5)
-        sixteenth(rest)
-        sixteenth(rest)
-        sixteenth(#D, 5)
-        sixteenth(E, 5)
-        sixteenth(rest)
-    }
-
-    measureUp{
-        eighth(E, 5)
-        sixteenth(rest)
-        sixteenth(#D, 5)
-        sixteenth(E, 5)
-        sixteenth(#D, 5)
-    }
-
-    measureDown{
-        sixteenth(rest)
-        sixteenth(#D, 5)
-        sixteenth(E, 5)
-        sixteenth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        sixteenth(E, 5)
-        sixteenth(#D, 5)
-        sixteenth(E, 5)
-        sixteenth(B, 4)
-        sixteenth(D, 5)
-        sixteenth(C, 5) 
-    }
-
-    measureDown{
-        eighth(rest)
-        eighth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(A, 4)
-        sixteenth(rest)
-        sixteenth(C, 4)
-        sixteenth(E, 4)
-        sixteenth(A, 4)
-    }
-
-    measureDown{
-        sixteenth(A, 2)
-        sixteenth(E, 3)
-        sixteenth(A, 3)
-        sixteenth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(B, 4)
-        sixteenth(rest)
-        sixteenth(E, 4)
-        sixteenth(#G, 4)
-        sixteenth(B, 4)
-    }
-
-    measureDown{
-        sixteenth(E, 2)
-        sixteenth(E, 3)
-        sixteenth(#G, 3)
-        sixteenth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(C, 5)
-        sixteenth(rest)
-        sixteenth(E, 4)
-        sixteenth(E, 5)
-        sixteenth(#D, 5)
-    }
-
-    measureDown{
-        sixteenth(A, 2)
-        sixteenth(E, 3)
-        sixteenth(A, 3)
-        sixteenth(rest)
-        eighth(rest)
-    }
-
-    measureUp {
-        sixteenth(E, 5)
-        sixteenth(#D, 5)    
-        sixteenth(E, 5)
-        sixteenth(B, 4)
-        sixteenth(D, 5)
-        sixteenth(C, 5) 
-    }
-
-    measureDown{
-        eighth(rest)
-        eighth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(A, 4)
-        sixteenth(rest)
-        sixteenth(C, 4)
-        sixteenth(E, 4)
-        sixteenth(A, 4)
-    }
-
-    measureDown{
-        sixteenth(A, 2)
-        sixteenth(E, 3)
-        sixteenth(A, 3)
-        sixteenth(rest)
-        eighth(rest)
-    }
-
-    measureUp{
-        eighth(B, 4)
-        sixteenth (rest)
-        sixteenth(D, 4)
-        sixteenth(C, 5)
-        sixteenth(B, 4)
-    }
-
-    measureDown{
-        sixteenth(E, 2)
-        sixteenth(E, 3)
-        sixteenth(#G, 3)
-        sixteenth(rest)
-        eighth(rest)
-    }
+staff(3, 8){
 
     measureUp{
         eighth(A, 4)
@@ -419,5 +357,593 @@ staff (3,8) {
         sixteenth(A, 3)
         sixteenth(C, 4)
         sixteenth(A, 3)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    measureUp {
+        eighth(E, 5)
+        eighth(D, 5)
+        sixteenth(_B, 5)*
+        thirtysecond(A, 5)
+    }
+
+    measureDown {
+        sixteenth(F, 3)
+        sixteenth(_B, 3)
+        sixteenth(D, 4)
+        sixteenth(_B, 3)
+        sixteenth(D, 4)
+        sixteenth(_B, 3)
+    }
+
+    measureUp {
+        sixteenth(A, 5)
+        sixteenth(G, 5)
+        sixteenth(F, 5)
+        sixteenth(E, 5)
+        sixteenth(D, 5)
+        sixteenth(C, 5)
+    }
+
+    measureDown {
+        sixteenth(F, 3)
+        sixteenth(E, 4)
+        chord(sixteenth(F, 3), sixteenth(G, 3), sixteenth(_B, 3))
+        sixteenth(E, 4)
+        chord(sixteenth(F, 3), sixteenth(G, 3), sixteenth(_B, 3))
+        sixteenth(E, 4)
+    }
+
+    measureUp {
+        eighth(_B, 4)
+        eighth(A, 4)
+        thirtysecond(A, 4)
+        thirtysecond(G, 4)
+        thirtysecond(A, 4)
+        thirtysecond(_B, 4)  
+    }
+
+    measureDown {
+        sixteenth(F, 3)
+        sixteenth(A, 3)
+        sixteenth(C, 4)
+        sixteenth(A, 3)
+        sixteenth(C, 4)
+        sixteenth(A, 3)
+    }
+
+    measureUp {
+        quarter(C, 5)
+        sixteenth(D, 5)
+        sixteenth(_D, 5)
+    }
+
+    measureDown {
+        sixteenth(F, 3)
+        sixteenth(A, 3)
+        sixteenth(C, 4)
+        sixteenth(A, 3)
+        sixteenth(C, 4)
+        sixteenth(A, 3)
+    }
+
+    measureUp {
+        eighth(E, 5)*
+        sixteenth(E, 5)
+        sixteenth(F, 5)
+        sixteenth(A, 4)
+    }
+
+    measureDown {
+        sixteenth(E, 3)
+        sixteenth(A, 3)
+        sixteenth(C, 4)
+        sixteenth(A, 3)
+        chord(sixteenth(D, 3), sixteenth(D, 4))
+        sixteenth(F, 3)
+    }
+
+    measureUp {
+        quarter(C, 5)
+        sixteenth(D, 5)*
+        thirtysecond(B, 4)
+    }
+
+    measureDown {
+        sixteenth(G, 3)
+        sixteenth(E, 4)
+        sixteenth(G, 3)
+        sixteenth(F, 4)
+        sixteenth(G, 3)
+        sixteenth(F, 4)
+    }
+
+    measureUp{
+        thirtysecond(C, 5)
+        thirtysecond(G, 5)
+        thirtysecond(G, 4)
+        thirtysecond(G, 5)
+        thirtysecond(A, 4)
+        thirtysecond(G, 5)
+        thirtysecond(B, 4)
+        thirtysecond(G, 5)
+        thirtysecond(C, 5)
+        thirtysecond(G, 5)
+        thirtysecond(D, 5)
+        thirtysecond(G, 5)
+    }
+
+    measureDown{
+        chord(eighth(C, 4), eighth(E, 4))
+        sixteenth(rest)
+        chord(sixteenth(F, 4), sixteenth(G, 4))
+        chord(sixteenth(E, 4), sixteenth(G, 4))
+        chord(sixteenth(D, 4), sixteenth(F, 4), sixteenth(G, 4))
+    }
+
+    measureUp {
+        thirtysecond(E, 5)
+        thirtysecond(G, 5)
+        thirtysecond(C, 6)
+        thirtysecond(B, 5)
+        thirtysecond(A, 5)
+        thirtysecond(G, 5)
+        thirtysecond(F, 5)
+        thirtysecond(E, 5)
+        thirtysecond(D, 5)
+        thirtysecond(G, 5)
+        thirtysecond(F, 5)
+        thirtysecond(D, 5)
+    }
+
+    measureDown {
+        chord(eighth(C, 4), eighth(E, 4), eighth(G, 4))
+        chord(eighth(F, 3), eighth(A, 3))
+        chord(eighth(G, 3), eighth(B, 3))
+    }
+
+    measureUp {
+        thirtysecond(C, 5)
+        thirtysecond(G, 5)
+        thirtysecond(G, 4)
+        thirtysecond(G, 5)
+        thirtysecond(A, 4)
+        thirtysecond(G, 5)
+        thirtysecond(B, 4)
+        thirtysecond(G, 5)
+        thirtysecond(C, 5)
+        thirtysecond(G, 5)
+        thirtysecond(D, 5)
+        thirtysecond(G, 5)
+    }
+
+    measureDown {
+        eighth(C, 4)
+        sixteenth(rest)
+        chord(sixteenth(F, 4), sixteenth(G, 4))
+        chord(sixteenth(E, 4), sixteenth(G, 4))
+        chord(sixteenth(D, 4), sixteenth(F, 4), sixteenth(G, 4))
+    }
+
+    measureUp {
+        thirtysecond(E, 5)
+        thirtysecond(G, 5)
+        thirtysecond(C, 6)
+        thirtysecond(B, 5)
+        thirtysecond(A, 5)
+        thirtysecond(G, 5)
+        thirtysecond(F, 5)
+        thirtysecond(E, 5)
+        thirtysecond(D, 5)
+        thirtysecond(G, 5)
+        thirtysecond(F, 5)
+        thirtysecond(D, 5)
+    }
+
+    measureDown {
+        chord(eighth(C, 4), eighth(E, 4))
+        chord(eighth(F, 3), eighth(A, 3))
+        chord(eighth(G, 3), eighth(B, 3))
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    measureUp {
+        thirtysecond(E, 5)
+        thirtysecond(F, 5)
+        thirtysecond(E, 5)
+        thirtysecond(#D, 5)
+        thirtysecond(E, 5)
+        thirtysecond(B, 4)
+        thirtysecond(E, 5)
+        thirtysecond(#D, 5)
+        thirtysecond(E, 5)
+        thirtysecond(B, 4)
+        thirtysecond(E, 5)
+        thirtysecond(#D, 5)
+    }
+    measureDown {
+        chord(eighth(B, 3), eighth(#G, 3))
+        eighth(rest)
+        eighth(rest)
+    }
+
+    measureUp {
+        eighth(E, 5)*
+        sixteenth(B, 4)
+        sixteenth(E, 5)
+        sixteenth(#D, 5)
+    }
+    measureDown {
+        eighth(rest)
+        eighth(rest)
+        eighth(rest)
+    }
+
+    measureUp {
+        eighth(E, 5)*
+        sixteenth(B, 4)
+        sixteenth(E, 5)
+        sixteenth(#D, 5)
+    }
+    measureDown {
+        eighth(rest)
+        eighth(rest)
+        eighth(rest)
+    }
+
+    measureUp {
+        sixteenth(E, 5)
+        sixteenth(#D, 5)
+        sixteenth(E, 5)
+        sixteenth(#D, 5)
+        sixteenth(E, 5)
+        sixteenth(#D, 5)
+    }
+    measureDown {
+        eighth(rest)
+        eighth(rest)
+        eighth(rest)
+    }
+
+}
+
+chorus1
+
+transition
+
+chorus2
+
+chorus1
+
+
+
+
+
+
+
+
+
+
+
+
+
+staff(3, 8){
+
+    measureUp{
+        eighth(A, 4)
+        eighth(rest)
+        eighth(rest)
+    }
+
+    measureDown{
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+    }
+    measureUp{
+        chord(quarter(E, 4)*, quarter(G, 4)*, quarter(_B, 4)*, quarter(#C, 5)*)
+    }
+
+    measureDown{
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+    }
+    measureUp{
+        chord(quarter(F, 4), quarter(A, 4), quarter(D, 5))
+        chord(sixteenth(#C, 5), sixteenth(E, 5))
+        chord(sixteenth(D, 5), sixteenth(F, 5))
+    }
+
+    measureDown{
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+    }
+    measureUp{
+        chord(quarter(#G, 4), quarter(D, 5), quarter(F, 5))
+        chord(eighth(#G, 4), eighth(D, 5), eighth(F, 5))
+    }
+
+    measureDown{
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+    }
+    
+    measureUp{
+        chord(quarter(A, 4)*, quarter(C, 5)*, quarter(E, 5)*)
+    }
+
+    measureDown{
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+    }
+
+    measureUp{
+        chord(quarter(F, 4), quarter(D, 5))
+        chord(sixteenth(E, 4), sixteenth(C, 5))
+        chord(sixteenth(D, 4), sixteenth(B, 4))
+    }
+
+    measureDown{
+        chord(sixteenth(D, 2), sixteenth(A, 2))
+        chord(sixteenth(D, 2), sixteenth(A, 2))
+        chord(sixteenth(D, 2), sixteenth(A, 2))
+        chord(sixteenth(D, 2), sixteenth(A, 2))
+        chord(sixteenth(D, 2), sixteenth(A, 2))
+        chord(sixteenth(D, 2), sixteenth(A, 2))
+    }
+    
+    measureUp{
+        chord(quarter(C, 4), quarter(#F, 4), quarter(A, 4))
+        chord(eighth(C, 4), eighth(A, 4))
+    }
+
+    measureDown{
+        chord(sixteenth(#D, 2), sixteenth(A, 2))
+        chord(sixteenth(#D, 2), sixteenth(A, 2))
+        chord(sixteenth(#D, 2), sixteenth(A, 2))
+        chord(sixteenth(#D, 2), sixteenth(A, 2))
+        chord(sixteenth(#D, 2), sixteenth(A, 2))
+        chord(sixteenth(#D, 2), sixteenth(A, 2))
+    }
+    
+    measureUp{
+        chord(eighth(C, 4), eighth(A, 4))
+        chord(eighth(E, 4), eighth(C, 5))
+        chord(eighth(D, 4), eighth(B, 4))
+    }
+
+    measureDown{
+        chord(sixteenth(E, 2), sixteenth(A, 2))
+        chord(sixteenth(E, 2), sixteenth(A, 2))
+        chord(sixteenth(E, 2), sixteenth(A, 2))
+        chord(sixteenth(E, 2), sixteenth(A, 2))
+        chord(sixteenth(E, 2), sixteenth(#G, 2))
+        chord(sixteenth(E, 2), sixteenth(#G, 2))
+    }
+    
+    measureUp{
+        chord(quarter(C, 4)*, quarter(A, 4)*)
+    }
+
+    measureDown{
+        chord(sixteenth(A, 1), sixteenth(A, 2))
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+    }
+
+    measureUp{
+        chord(quarter(E, 4)*, quarter(G, 4)*, quarter(_B, 4)*, quarter(#C, 5)*)
+    }
+
+    measureDown{
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+    }
+    measureUp{
+        chord(quarter(F, 4), quarter(A, 4), quarter(D, 5))
+        chord(sixteenth(#C, 5), sixteenth(E, 5))
+        chord(sixteenth(D, 5), sixteenth(F, 5))
+    }
+
+    measureDown{
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+    }
+    measureUp{
+        chord(quarter(D, 5), quarter(F, 5))
+        chord(eighth(D, 5), eighth(F, 5))
+    }
+
+    measureDown{
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+        sixteenth(A, 2)
+    }
+    
+    measureUp{
+        chord(quarter(D, 5)*, quarter(F, 5)*)
+    }
+
+    measureDown{
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+    }
+    
+    measureUp{
+        chord(quarter(G, 4), quarter(_E, 5))
+        chord(sixteenth(F, 4), sixteenth(D, 5))
+        chord(sixteenth(_E, 4), sixteenth(C, 5))
+    }
+
+    measureDown{
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+    }
+    
+    measureUp{
+        chord(quarter(D, 4), quarter(F, 4), quarter(_B, 4))
+        chord(eighth(D, 4), eighth(F, 4), eighth(A, 4))
+    }
+
+    measureDown{
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+        sixteenth(_B, 2)
+    }
+    
+    measureUp{
+        chord(quarter(D, 4), quarter(F, 4), quarter(#G, 4))
+        chord(eighth(D, 4), eighth(F, 4), eighth(#G, 4))
+    }
+
+    measureDown{
+        sixteenth(B, 2)
+        sixteenth(B, 2)
+        sixteenth(B, 2)
+        sixteenth(B, 2)
+        sixteenth(B, 2)
+        sixteenth(B, 2)
+    }
+
+    measureUp{
+        chord(quarter(C, 4), quarter(E, 4), quarter(A, 4))
+        eighth(rest)
+    }
+    measureDown{
+        quarter(C, 3)
+        eighth(rest)
+    }
+
+    measureUp{
+        chord(eighth(E, 4), eighth(B, 4))
+        eighth(rest)
+        eighth(rest)
+    }
+    measureDown{
+        chord(eighth(E, 3), eighth(#G, 3))
+        eighth(rest)
+        eighth(rest)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+chorus1
+
+transition
+
+chorus2
+
+chorus1
+
+staff(3, 8){
+    measureUp{
+        eighth(A, 4)
+        eighth(rest)
+        eighth(rest)
+    }
+    measureDown{
+        chord(eighth(A, 1), eighth(A, 2))
+        eighth(rest)
+        eighth(rest)
     }
 }

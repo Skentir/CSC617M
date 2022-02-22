@@ -47,5 +47,11 @@ measure1.append(n12)
 part.append(measure1)
 stream1.append(part)
 
-sp = midi.realtime.StreamPlayer(stream1)
+us = environment.UserSettings()
+us['musicxmlPath'] = 'C:/Program Files/MuseScore 3/bin/MuseScore3.exe'
+us['musescoreDirectPNGPath'] = 'C:/Program Files/MuseScore 3/bin/MuseScore3.exe'
+
+
+sp = converter.parse('test.midi')
+sp = midi.realtime.StreamPlayer(sp)
 sp.play()

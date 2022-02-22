@@ -26,7 +26,7 @@ def appendInstrument(part, instru):
     }
     part.append(switcher[instru.getText().lower()])
 
-def createChord(note_arr, val):
+def createChord(note_arr, val, is_dotted):
     arr = []
     for num, pitch, accidental in note_arr:
         if accidental == "_":
@@ -53,6 +53,8 @@ def createChord(note_arr, val):
     if val == "half":
         d = duration.Duration(type="half")
         new_chord.duration = d
+    if is_dotted:
+        new_chord.quarterLength = new_chord.quarterLength + (new_chord.quarterLength / 2)
     return new_chord
 
 
@@ -232,6 +234,9 @@ class MusicEvaluator(MyGrammerVisitor):
     repeat_ctr = []
     ending_ctr = []
     ending_values = []
+    ending_id = []
+    right = stream.Part()
+    left = stream.Part()
 
     def evaluateExprNoteNode(self, ctx: ExprNoteNode):
         note_value = ctx.note_value.getText()
@@ -289,10 +294,6 @@ class MusicEvaluator(MyGrammerVisitor):
 
     def evaluateDeclaredStaffs(self, ctx: list, instru):
         # print("Declaring Staff", len(ctx.getChildren(), " found"))
-        right = stream.Part()
-        left = stream.Part()
-        appendInstrument(right, instru)
-        appendInstrument(left, instru)
 
         for idx, i in enumerate(ctx):
             # Gets a staff from music sheet
@@ -321,49 +322,34 @@ class MusicEvaluator(MyGrammerVisitor):
 
                 staffUp = Staff(top.getText(), bottom.getText(), None)
                 staffDown = Staff(top.getText(), bottom.getText(), None)
-                ending_id = []
                 for expr in staff.expressions:
                     self.evaluateStaffBlock(expr, top.getText(),
                                             bottom.getText(), staffUp,
-                                            staffDown, first_staff, last_staff, ending_id)
+                                            staffDown, first_staff, last_staff, self.ending_id)
                     # for x in expr:
                     #     newStaff.expressions.append(x)
                 for measure in staffUp.expressions:
-                    right.append(measure)
+                    self.right.append(measure)
                 for measure in staffDown.expressions:
-                    left.append(measure)
-
-                up_idx = None
-                down_idx = None
-                for id in ending_id:
-                    if id[0] == "UP_START":
-                        up_idx = right.index(id[1])
-                    elif id[0] == "UP_END":
-                        print(id)
-                        print(up_idx)
-                        print(right.index(id[1]))
-                        repeat.insertRepeatEnding(right, up_idx, right.index(id[1]), endingNumber=id[2])
-                for id in ending_id:
-                    if id[0] == "DOWN_START":
-                        down_idx = left.index(id[1])
-                    elif id[0] == "DOWN_END":
-                        repeat.insertRepeatEnding(left, down_idx, left.index(id[1]), endingNumber=id[2])
-
-                print(ending_id)
+                    self.left.append(measure)
+                # up_idx = None
+                # down_idx = None
+                # for id in self.ending_id:
+                #     if id[0] == "UP_START":
+                #         up_idx = self.right.index(id[1])
+                #     elif id[0] == "UP_END":
+                #         repeat.insertRepeatEnding(self.right, up_idx, self.right.index(id[1]), endingNumber=id[2])
+                # for id in self.ending_id:
+                #     if id[0] == "DOWN_START":
+                #         down_idx = self.left.index(id[1])
+                #     elif id[0] == "DOWN_END":
+                #         repeat.insertRepeatEnding(self.left, down_idx, self.left.index(id[1]), endingNumber=id[2])
 
                 # self.staffs.append(staff1)
 
             else:  # Variable Expression checking
                 melodyVariable = MyGrammerVisitor().visitExpr_var(i)
                 if (not self.checkInListContext(i)):
-                    # if isinstance(self.variables[melodyVariable.getText()], tuple): #note
-                    #     line = i.IDENTIFIER().getSymbol().line
-                    #     col = i.IDENTIFIER().getSymbol().column
-                    #     raise Exception("Variable must be melody but a note is called", line, col)
-                    # elif isinstance(self.variables[melodyVariable.getText()][0], tuple): #chord:
-                    #     line = i.IDENTIFIER().getSymbol().line
-                    #     col = i.IDENTIFIER().getSymbol().column
-                    #     raise Exception("Variable must be melody but a chord is called", line, col)
                     if self.variables[melodyVariable.getText()][0] == "NOTE":  #note
                         line = i.IDENTIFIER().getSymbol().line
                         col = i.IDENTIFIER().getSymbol().column
@@ -383,16 +369,16 @@ class MusicEvaluator(MyGrammerVisitor):
                         self.variables[melodyVariable.getText()]):
                     # melodyStaffUp = self.variables[melodyVariable.getText()][0][0]
                     # melodyStaffDown = self.variables[melodyVariable.getText()][0][1]
-                    right.append(copy.deepcopy(pair[0]))
-                    left.append(copy.deepcopy(pair[1]))
+                    for i in pair[0]:
+                        self.right.append(copy.deepcopy(i))
+                    for i in pair[1]:
+                        self.left.append(copy.deepcopy(i))
 
                 # self.staffs.append(Staff(None, None, melodyVariable.getText()))
 
-        self.music_stream.insert(0, right)
-        for i in right[1]:
-            print(i)
-        if self.checkInst in self.grandInst:
-            self.music_stream.insert(0, left)
+        # self.music_stream.insert(0, right)
+        # if self.checkInst in self.grandInst:
+        #     self.music_stream.insert(0, left)
 
     def checkInListContext(self, ctx):
         line = ctx.IDENTIFIER().getSymbol().line
@@ -439,17 +425,14 @@ class MusicEvaluator(MyGrammerVisitor):
 
                     staffUp = Staff(top.getText(), bottom.getText(), None)
                     staffDown = Staff(top.getText(), bottom.getText(), None)
-                    ending_id = []
                     for expr in staff.expressions:
                         self.evaluateStaffBlock(expr, top.getText(),
                                                 bottom.getText(), staffUp,
-                                                staffDown, False, False, ending_id)
+                                                staffDown, False, False, self.ending_id)
                         # for x in expr:
                         #     newStaff.expressions.append(x)
                     right = stream.Part()
                     left = stream.Part()
-                    appendInstrument(right, instru)
-                    appendInstrument(left, instru)
                     for measure in staffUp.expressions:
                         right.append(measure)
                     for measure in staffDown.expressions:
@@ -457,12 +440,12 @@ class MusicEvaluator(MyGrammerVisitor):
 
                     up_idx = None
                     down_idx = None
-                    for id in ending_id:
+                    for id in self.ending_id:
                         if id[0] == "UP_START":
                             up_idx = right.index(id[1])
                         elif id[0] == "UP_END":
                             repeat.insertRepeatEnding(right, up_idx, right.index(id[1]), endingNumber=id[2])
-                    for id in ending_id:
+                    for id in self.ending_id:
                         if id[0] == "DOWN_START":
                             down_idx = left.index(id[1])
                         elif id[0] == "DOWN_END":
@@ -561,9 +544,9 @@ class MusicEvaluator(MyGrammerVisitor):
                         x,
                         DeclareMeasuresGrandNode):
                         if x.direction == "UP":
-                            ending_id.append(("UP_END", measureUp, [int(ending.getText()) for ending in x.ending_start.INTEGER()]))
+                            ending_id.append(("UP_END", measureUp))
                         else:
-                            ending_id.append(("DOWN_END", measureDown, [int(ending.getText()) for ending in x.ending_start.INTEGER()]))
+                            ending_id.append(("DOWN_END", measureDown))
                     else:
                         ending_id.append(measureUp)
 
@@ -759,9 +742,9 @@ class MusicEvaluator(MyGrammerVisitor):
                     
                                 new_notes.append((str(n.num), str(n.pitch), str(n.accidental)))
                             if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
-                                measureDown.append(createChord(new_notes, expected_note_val))
+                                measureDown.append(createChord(new_notes, expected_note_val, is_dotted))
                             else:
-                                measureUp.append(createChord(new_notes, expected_note_val))
+                                measureUp.append(createChord(new_notes, expected_note_val, is_dotted))
                             printExprChord(m_expr)
 
                     elif isinstance(m_expr, ExprFixedChordNode):
@@ -1103,7 +1086,10 @@ class MusicEvaluator(MyGrammerVisitor):
                     cur_beats_up = cur_beats
                 elif isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                     if cur_beats != cur_beats_up:
-                        if x.expressions[0].__class__.__name__ != "TerminalNodeImpl":
+                        if x.expressions[0].__class__.__name__ == "ExprChordNode":
+                            line = x.expressions[0].notes[0].note_value.getSymbol().line - 1
+                            col = x.expressions[0].notes[0].note_value.getSymbol().column
+                        elif x.expressions[0].__class__.__name__ == "ExprNoteNode":
                             line = x.expressions[0].note_value.getSymbol().line - 1
                             col = x.expressions[0].note_value.getSymbol().column
                         else:
@@ -1115,12 +1101,15 @@ class MusicEvaluator(MyGrammerVisitor):
                 if first_measure:
                     if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                         first_measure = False
-                        measureUp.padAsAnacrusis(useGaps=True)
-                        measureDown.padAsAnacrusis(useGaps=True)
+                        # measureUp.padAsAnacrusis(useGaps=True)
+                        # measureDown.padAsAnacrusis(useGaps=True)
                 if last_measure:
                     if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                         last_measure = False
-
+                if len(measureUp) > 1:
+                    staffUp.expressions.append(measureUp)
+                if len(measureDown) > 1:
+                    staffDown.expressions.append(measureDown)
             elif isinstance(x, AccidentalExpressionNode):
                 print("accidental")
                 for acc_expr in x.accidentals:
@@ -1134,8 +1123,6 @@ class MusicEvaluator(MyGrammerVisitor):
                     #                        acc_expr.octave.getText())],
                     #     acc_expr.pitch.getText(), acc_expr.octave.getText())
 
-            staffUp.expressions.append(measureUp)
-            staffDown.expressions.append(measureDown)
 
     def evaluate(self, node):
         self.bpm = node.bpm
@@ -1158,6 +1145,8 @@ class MusicEvaluator(MyGrammerVisitor):
             print("bpm (" + str(self.bpm) + ")")
 
         print(node.instrument.getText())
+        appendInstrument(self.right, self.instrument)
+        appendInstrument(self.left, self.instrument)
         self.music_stream.append(tempo.MetronomeMark(number=int(self.bpm.getText())))
 
         self.evaluateDeclaredNotes(
@@ -1166,6 +1155,33 @@ class MusicEvaluator(MyGrammerVisitor):
             node.chords)  # Returns ChordExpression Objects
         self.evaluateDeclaredMelody(node.melodies, self.instrument)
         self.evaluateDeclaredStaffs(node.staffs, self.instrument)
+
+
+        self.music_stream.insert(0, self.right)
+        if self.checkInst in self.grandInst:
+            self.music_stream.insert(0, self.left)
+
+            
+        down_idx = None
+        endingNumber = []
+        print(self.ending_id)
+        input()
+        for id in self.ending_id:
+            if id[0] == "UP_START":
+                up_idx = self.right.index(id[1])
+                endingNumber = id[2]
+            elif id[0] == "UP_END":
+                print(up_idx, self.right.index(id[1]))
+                input()
+                repeat.insertRepeatEnding(self.right, up_idx, self.right.index(id[1]), endingNumber=endingNumber)
+        down_idx = None
+        endingNumber = []
+        for id in self.ending_id:
+            if id[0] == "DOWN_START":
+                down_idx = self.left.index(id[1])
+                endingNumber = id[2]
+            elif id[0] == "DOWN_END":
+                repeat.insertRepeatEnding(self.left, down_idx, self.left.index(id[1]), endingNumber=endingNumber)
 
         if len(self.repeat_ctr):
             rep = self.repeat_ctr[0]
@@ -1188,8 +1204,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     end_value = 2
                 else:
                     end_value += 1
-        # self.music_stream.write('midi', fp='test.midi')
-
+        self.music_stream.write('midi', fp='test.midi')
         sp = midi.realtime.StreamPlayer(self.music_stream)
         sp.play()
         return "MIDI FILE"

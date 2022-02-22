@@ -1,0 +1,128 @@
+
+
+    measureUp{
+        triplet{
+            sixteenth(A, 3)
+            sixteenth(C, 4)
+            sixteenth(E, 4)
+        }
+        triplet{
+            sixteenth(A, 4)
+            sixteenth(C, 5)
+            sixteenth(E, 5)
+        }
+        triplet{
+            sixteenth(D, 5)
+            sixteenth(C, 5)
+            sixteenth(B, 4)
+        }
+    }
+    measureDown{
+        eighth(A, 1)
+        eighth(rest)
+        chord(eighth(A, 3), eighth(C, 4), eighth(E, 5))
+    }
+
+    measureUp{
+        triplet{
+            sixteenth(A, 4)
+            sixteenth(C, 5)
+            sixteenth(E, 5)
+        }
+        triplet{
+            sixteenth(A, 5)
+            sixteenth(C, 6)
+            sixteenth(E, 6)
+        }
+        triplet{
+            sixteenth(D, 6)
+            sixteenth(C, 6)
+            sixteenth(B, 5)
+        }
+    }
+    measureDown{
+        chord(eighth(A, 3), eighth(C, 4), eighth(E, 5))
+        eighth(rest)
+        chord(eighth(A, 3), eighth(C, 4), eighth(E, 5))
+    }
+
+    measureUp{
+        triplet{
+            sixteenth(A, 5)
+            sixteenth(C, 6)
+            sixteenth(E, 6)
+        }
+        triplet{
+            sixteenth(A, 6)
+            sixteenth(C, 7)
+            sixteenth(E, 7)
+        }
+        triplet{
+            sixteenth(D, 7)
+            sixteenth(C, 7)
+            sixteenth(B, 6)
+        }
+    }
+    measureDown{
+        chord(eighth(A, 3), eighth(C, 4), eighth(E, 5))
+        eighth(rest)
+        chord(eighth(A, 3), eighth(C, 4), eighth(E, 5))
+    }
+
+    measureUp{
+        triplet{
+            sixteenth(_B, 6)
+            sixteenth(A, 6)
+            sixteenth(#G, 6)
+        }
+        triplet{
+            sixteenth(G, 6)
+            sixteenth(#F, 6)
+            sixteenth(F, 6)
+        }
+        triplet{
+            sixteenth(E, 6)
+            sixteenth(#D, 6)
+            sixteenth(D, 6)
+        }
+    }
+    measureDown{
+        chord(eighth(A, 3), eighth(C, 4), eighth(E, 5))
+        eighth(rest)
+    }
+
+    measureUp{
+        triplet{
+            sixteenth(#C, 6)
+            sixteenth(C, 6)
+            sixteenth(B, 5)
+        }
+        triplet{
+            sixteenth(_B, 5)
+            sixteenth(A, 5)
+            sixteenth(#G, 5)
+        }
+        triplet{
+            sixteenth(G, 5)
+            sixteenth(#F, 5)
+            sixteenth(F, 5)
+        }
+    }
+    measureDown{
+        eighth(rest)
+        eighth(rest)
+        eighth(rest)
+    }
+
+
+
+    measureUp{
+        eighth(A, 4)
+        eighth(rest)
+        eighth(rest)
+    }
+    measureDown{
+        chord(eighth(A, 1), eighth(A, 2))
+        eighth(rest)
+        eighth(rest)
+    }
