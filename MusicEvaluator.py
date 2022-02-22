@@ -1002,6 +1002,15 @@ class MusicEvaluator(MyGrammerVisitor):
                                 else:
                                     new_notes = []
                                     for n in self.variables[m_expr.getText()][1]:
+                                        pitch = str(n[2])
+                                        octave = str(n[3])
+                                        if pitch in measure_accidentals:
+                                            updated_acc = measure_accidentals[(pitch)]
+                                        elif pitch in staff_accidentals:
+                                            updated_acc = staff_accidentals[(pitch)]
+                                        else:
+                                            updated_acc = str(n[1])
+
                                         new_notes.append((str(n[3])),(str(n[2]), str(n[1])))
                                     if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                                         measureDown.append(createChord(new_notes, expected_note_val, is_dotted))
