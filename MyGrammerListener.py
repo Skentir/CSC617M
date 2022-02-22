@@ -215,15 +215,6 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MyGrammerParser#expr_base_acc.
-    def enterExpr_base_acc(self, ctx:MyGrammerParser.Expr_base_accContext):
-        pass
-
-    # Exit a parse tree produced by MyGrammerParser#expr_base_acc.
-    def exitExpr_base_acc(self, ctx:MyGrammerParser.Expr_base_accContext):
-        pass
-
-
     # Enter a parse tree produced by MyGrammerParser#expr_add_acc.
     def enterExpr_add_acc(self, ctx:MyGrammerParser.Expr_add_accContext):
         pass

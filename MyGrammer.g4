@@ -154,7 +154,7 @@ declare_chord: IDENTIFIER EQUAL_OPER expr_chord;
 declare_melody:
 	MELODY IDENTIFIER OPEN_BRACKET (declare_staff)+ CLOSE_BRACKET;
 declare_pattern:
-	TUPLET OPEN_BRACKET (expr_note | expr_var)+ CLOSE_BRACKET;
+	TUPLET OPEN_BRACKET (expr_note)+ CLOSE_BRACKET;
 
 
 // declare_measures: MEASURE OPEN_BRACKET (expr | declare_continuous)+ CLOSE_BRACKET;
@@ -191,13 +191,9 @@ expr_add_note:
 expr_var: IDENTIFIER;
 
 expr_acc: ACCIDENTAL_KEY OPEN_PAR expr_add_acc CLOSE_PAR;
-// accidental((A#, 6), (B, 3))
-expr_base_acc:
-	OPEN_PAR (ACCIDENTAL)? PITCH COMMA_SEP INTEGER CLOSE_PAR;
 
-expr_add_acc:
-	expr_base_acc
-	| expr_base_acc COMMA_SEP expr_add_acc;
+
+expr_add_acc: ACCIDENTAL PITCH | ACCIDENTAL PITCH COMMA_SEP expr_add_acc | PITCH | PITCH COMMA_SEP expr_add_acc;
 
 // | PITCH | PITCH COMMA_SEP expr_add_acc;
 expr_rest: note_value OPEN_PAR REST CLOSE_PAR DOTTED?;

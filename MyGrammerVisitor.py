@@ -301,13 +301,7 @@ class MyGrammerVisitor(ParseTreeVisitor):
         node = AccidentalExpressionNode(add_acc)
         return node
 
-    # Visit a parse tree produced by MyGrammerParser#expr_base_acc.
-    def visitExpr_base_acc(self, ctx: MyGrammerParser.Expr_base_accContext):
-        accidental = ctx.ACCIDENTAL() if ctx.ACCIDENTAL() else None
-        pitch = ctx.PITCH()
-        octave = ctx.INTEGER()
-        node = AccidentalNode(pitch, accidental, octave)
-        return node
+
         # return self.visitChildren(ctx)  return p a o
 
     # Visit a parse tree produced by MyGrammerParser#expr_add_acc.
@@ -315,9 +309,8 @@ class MyGrammerVisitor(ParseTreeVisitor):
                           accs):
         #copy the list of accidental nodes
         accList = accs
-
-        base = ctx.expr_base_acc()
-        node = self.visitExpr_base_acc(base)
+        node = AccidentalNode(ctx.PITCH(), ctx.ACCIDENTAL())
+      
         accList.append(node)
 
         if ctx.expr_add_acc() is not None:

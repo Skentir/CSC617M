@@ -80,12 +80,12 @@ class MyGrammerListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MyGrammerParser#declare_continuous.
-    def enterDeclare_continuous(self, ctx:MyGrammerParser.Declare_continuousContext):
+    # Enter a parse tree produced by MyGrammerParser#declare_pattern.
+    def enterDeclare_pattern(self, ctx:MyGrammerParser.Declare_patternContext):
         pass
 
-    # Exit a parse tree produced by MyGrammerParser#declare_continuous.
-    def exitDeclare_continuous(self, ctx:MyGrammerParser.Declare_continuousContext):
+    # Exit a parse tree produced by MyGrammerParser#declare_pattern.
+    def exitDeclare_pattern(self, ctx:MyGrammerParser.Declare_patternContext):
         pass
 
 

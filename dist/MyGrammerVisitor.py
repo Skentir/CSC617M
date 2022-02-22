@@ -49,8 +49,8 @@ class MyGrammerVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MyGrammerParser#declare_continuous.
-    def visitDeclare_continuous(self, ctx:MyGrammerParser.Declare_continuousContext):
+    # Visit a parse tree produced by MyGrammerParser#declare_pattern.
+    def visitDeclare_pattern(self, ctx:MyGrammerParser.Declare_patternContext):
         return self.visitChildren(ctx)
 
 

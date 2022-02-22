@@ -549,26 +549,26 @@ class MusicEvaluator(MyGrammerVisitor):
                                 pitch  = m_expr.pitch.getText()
                                 octave =  m_expr.num.getText()
                                 
-                                if (pitch, octave) in measure_accidentals:
-                                    updated_acc = measure_accidentals[((pitch, octave))]
-                                elif (pitch,octave) in staff_accidentals:
-                                    updated_acc = staff_accidentals[((pitch, octave))]
+                                if pitch in measure_accidentals:
+                                    updated_acc = measure_accidentals[(pitch)]
+                                elif pitch in staff_accidentals:
+                                    updated_acc = staff_accidentals[(pitch)]
                                 else:
                                     updated_acc = m_expr.accidental
                                 
                                 measureDown.append(
                                     createNote(str(m_expr.num),
-                                               str(m_expr.accidental),
+                                               str(updated_acc),
                                                str(m_expr.pitch),
                                                str(m_expr.note_value),
                                                bool(m_expr.dotted)))
                             else:
                                 pitch  = m_expr.pitch.getText()
                                 octave =  m_expr.num.getText()
-                                if (pitch, octave) in measure_accidentals:
-                                    updated_acc = measure_accidentals[((pitch, octave))]
-                                elif (pitch,octave) in staff_accidentals:
-                                    updated_acc = staff_accidentals[((pitch, octave))]
+                                if pitch in measure_accidentals:
+                                    updated_acc = measure_accidentals[(pitch)]
+                                elif pitch in staff_accidentals:
+                                    updated_acc = staff_accidentals[(pitch)]
                                 else:
                                     updated_acc = m_expr.accidental
                                 measureUp.append(
@@ -596,10 +596,10 @@ class MusicEvaluator(MyGrammerVisitor):
                                 pitch  = n.pitch.getText()
                                 octave =  n.num.getText()
 
-                                if (pitch, octave) in measure_accidentals:
-                                    n.accidental = measure_accidentals[((pitch, octave))]
-                                elif (pitch,octave) in staff_accidentals:
-                                    n.accidental = staff_accidentals[((pitch, octave))]
+                                if pitch in measure_accidentals:
+                                    n.accidental = measure_accidentals[(pitch)]
+                                elif pitch in staff_accidentals:
+                                    n.accidental = staff_accidentals[(pitch)]
                     
                                 new_notes.append((str(n.num), str(n.pitch), str(n.accidental)))
                             if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
@@ -680,10 +680,10 @@ class MusicEvaluator(MyGrammerVisitor):
                                 pitch  = tuplet_expr.pitch.getText()
                                 octave =  tuplet_expr.num.getText()
                                 
-                                if (pitch, octave) in measure_accidentals:
-                                    updated_acc = measure_accidentals[((pitch, octave))]
-                                elif (pitch,octave) in staff_accidentals:
-                                    updated_acc = staff_accidentals[((pitch, octave))]
+                                if pitch in measure_accidentals:
+                                    updated_acc = measure_accidentals[(pitch)]
+                                elif pitch in staff_accidentals:
+                                    updated_acc = staff_accidentals[(pitch)]
                                 else:
                                     updated_acc = tuplet_expr.accidental
                                 
@@ -704,10 +704,10 @@ class MusicEvaluator(MyGrammerVisitor):
                                 pitch  = tuplet_expr.pitch.getText()
                                 octave =  tuplet_expr.num.getText()
                                 
-                                if (pitch, octave) in measure_accidentals:
-                                    updated_acc = measure_accidentals[((pitch, octave))]
-                                elif (pitch,octave) in staff_accidentals:
-                                    updated_acc = staff_accidentals[((pitch, octave))]
+                                if pitch in measure_accidentals:
+                                    updated_acc = measure_accidentals[(pitch)]
+                                elif pitch in staff_accidentals:
+                                    updated_acc = staff_accidentals[(pitch)]
                                 else:
                                     updated_acc = tuplet_expr.accidental
                                 
@@ -755,10 +755,10 @@ class MusicEvaluator(MyGrammerVisitor):
                                         
                                         pitch = self.variables[m_expr.getText()][3]
                                         octave = self.variables[m_expr.getText()][4]
-                                        if (pitch, octave) in measure_accidentals:
-                                            updated_acc = measure_accidentals[((pitch, octave))]
-                                        elif (pitch,octave) in staff_accidentals:
-                                            updated_acc = staff_accidentals[(pitch, octave)]
+                                        if pitch in measure_accidentals:
+                                            updated_acc = measure_accidentals[(pitch)]
+                                        elif pitch in staff_accidentals:
+                                            updated_acc = staff_accidentals[(pitch)]
                                         else:
                                             updated_acc = self.variables[m_expr.getText()][2]
 
@@ -776,10 +776,10 @@ class MusicEvaluator(MyGrammerVisitor):
                                     else:
                                         pitch = self.variables[m_expr.getText()][3]
                                         octave = self.variables[m_expr.getText()][4]
-                                        if (pitch, octave) in measure_accidentals:
-                                            updated_acc = measure_accidentals[((pitch, octave))]
-                                        elif (pitch,octave) in staff_accidentals:
-                                            updated_acc = staff_accidentals[(pitch, octave)]
+                                        if pitch in measure_accidentals:
+                                            updated_acc = measure_accidentals[(pitch)]
+                                        elif pitch in staff_accidentals:
+                                            updated_acc = staff_accidentals[(pitch)]
                                         else:
                                             updated_acc = self.variables[m_expr.getText()][2]
                                             
@@ -848,9 +848,9 @@ class MusicEvaluator(MyGrammerVisitor):
                 for acc_expr in x.accidentals:
                     # Assign an accidental for a particular pitch and octave
                     pitch = acc_expr.pitch.getText()
-                    octave = acc_expr.octave.getText()
-                    staff_accidentals[(pitch, octave)] = acc_expr.accidental.getText() if acc_expr.accidental is not None else ""
-                    print("out axie", pitch, octave, staff_accidentals[(pitch, octave)])
+                    
+                    staff_accidentals[(pitch)] = acc_expr.accidental.getText() if acc_expr.accidental is not None else ""
+                    
                     # print(
                     #     staff_accidentals[(acc_expr.pitch.getText(),
                     #                        acc_expr.octave.getText())],
@@ -881,6 +881,8 @@ class MusicEvaluator(MyGrammerVisitor):
 
         print(node.instrument.getText())
 
+        self.music_stream.append(tempo.MetronomeMark(number=int(self.bpm.getText())))
+
         self.evaluateDeclaredNotes(
             node.notes)  # Returns NoteExpression Objects
         self.evaluateDeclaredChords(
@@ -896,7 +898,7 @@ class MusicEvaluator(MyGrammerVisitor):
 
         self.music_stream.write('midi', fp='test.midi')
 
-        self.music_stream.show('t')
+        # self.music_stream.show('t')
         sp = midi.realtime.StreamPlayer(self.music_stream)
         sp.play()
 

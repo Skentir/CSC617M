@@ -56,7 +56,7 @@ def serializedATN():
         buf.write("\2\2Z[\5 \21\2[\17\3\2\2\2\\]\7\b\2\2]^\7(\2\2^`\7)\2")
         buf.write("\2_a\5\60\31\2`_\3\2\2\2ab\3\2\2\2b`\3\2\2\2bc\3\2\2\2")
         buf.write("cd\3\2\2\2de\7*\2\2e\21\3\2\2\2fg\7\r\2\2gi\7)\2\2hj\5")
-        buf.write("\34\17\2ih\3\2\2\2jk\3\2\2\2ki\3\2\2\2kl\3\2\2\2lm\3\2")
+        buf.write("\36\20\2ih\3\2\2\2jk\3\2\2\2ki\3\2\2\2kl\3\2\2\2lm\3\2")
         buf.write("\2\2mn\7*\2\2n\23\3\2\2\2op\7\5\2\2pq\7)\2\2qr\5\32\16")
         buf.write("\2rs\7*\2\2s\25\3\2\2\2tu\7\6\2\2uv\7)\2\2vw\5\32\16\2")
         buf.write("wx\7*\2\2xy\5\30\r\2y\27\3\2\2\2z{\7\7\2\2{|\7)\2\2|}")
@@ -146,10 +146,10 @@ class MyGrammerParser ( Parser ):
 
     symbolicNames = [ "<INVALID>", "BPM", "STAFF", "MEASURE", "MEASUREUP", 
                       "MEASUREDOWN", "MELODY", "ACCIDENTAL_KEY", "REPSTART", 
-                      "REPEND", "CHORD", "CONTINUOUS", "DOUBLE", "FULL", 
-                      "HALF", "QUARTER", "EIGHTH", "SIXTEENTH", "INSTRUMENT", 
-                      "DOTTED", "REST", "CLARINET", "FLUTE", "ORGAN", "PIANO", 
-                      "RECORDER", "SAXOPHONE", "TRUMPET", "GUITAR", "ACOUSTICGUITAR", 
+                      "REPEND", "CHORD", "TUPLET", "DOUBLE", "FULL", "HALF", 
+                      "QUARTER", "EIGHTH", "SIXTEENTH", "INSTRUMENT", "DOTTED", 
+                      "REST", "CLARINET", "FLUTE", "ORGAN", "PIANO", "RECORDER", 
+                      "SAXOPHONE", "TRUMPET", "GUITAR", "ACOUSTICGUITAR", 
                       "ELECTRICGUITAR", "UKULELE", "VIOLIN", "XYLOPHONE", 
                       "INTEGER", "FRACTION", "PITCH", "ACCIDENTAL", "IDENTIFIER", 
                       "OPEN_BRACKET", "CLOSE_BRACKET", "COMMA_SEP", "OPEN_PAR", 
@@ -163,7 +163,7 @@ class MyGrammerParser ( Parser ):
     RULE_declare_note = 5
     RULE_declare_chord = 6
     RULE_declare_melody = 7
-    RULE_declare_continuous = 8
+    RULE_declare_pattern = 8
     RULE_declare_measures = 9
     RULE_declare_measures_up = 10
     RULE_declare_measures_down = 11
@@ -182,7 +182,7 @@ class MyGrammerParser ( Parser ):
     RULE_staff_block = 24
 
     ruleNames =  [ "note_value", "instruments", "bpm", "instrument", "prog", 
-                   "declare_note", "declare_chord", "declare_melody", "declare_continuous", 
+                   "declare_note", "declare_chord", "declare_melody", "declare_pattern", 
                    "declare_measures", "declare_measures_up", "declare_measures_down", 
                    "measure_block", "expr", "expr_note", "expr_chord", "expr_add_note", 
                    "expr_var", "expr_acc", "expr_add_acc", "expr_rest", 
@@ -200,7 +200,7 @@ class MyGrammerParser ( Parser ):
     REPSTART=8
     REPEND=9
     CHORD=10
-    CONTINUOUS=11
+    TUPLET=11
     DOUBLE=12
     FULL=13
     HALF=14
@@ -872,15 +872,15 @@ class MyGrammerParser ( Parser ):
         return localctx
 
 
-    class Declare_continuousContext(ParserRuleContext):
+    class Declare_patternContext(ParserRuleContext):
         __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def CONTINUOUS(self):
-            return self.getToken(MyGrammerParser.CONTINUOUS, 0)
+        def TUPLET(self):
+            return self.getToken(MyGrammerParser.TUPLET, 0)
 
         def OPEN_BRACKET(self):
             return self.getToken(MyGrammerParser.OPEN_BRACKET, 0)
@@ -888,42 +888,42 @@ class MyGrammerParser ( Parser ):
         def CLOSE_BRACKET(self):
             return self.getToken(MyGrammerParser.CLOSE_BRACKET, 0)
 
-        def expr(self, i:int=None):
+        def expr_note(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(MyGrammerParser.ExprContext)
+                return self.getTypedRuleContexts(MyGrammerParser.Expr_noteContext)
             else:
-                return self.getTypedRuleContext(MyGrammerParser.ExprContext,i)
+                return self.getTypedRuleContext(MyGrammerParser.Expr_noteContext,i)
 
 
         def getRuleIndex(self):
-            return MyGrammerParser.RULE_declare_continuous
+            return MyGrammerParser.RULE_declare_pattern
 
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterDeclare_continuous" ):
-                listener.enterDeclare_continuous(self)
+            if hasattr( listener, "enterDeclare_pattern" ):
+                listener.enterDeclare_pattern(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitDeclare_continuous" ):
-                listener.exitDeclare_continuous(self)
+            if hasattr( listener, "exitDeclare_pattern" ):
+                listener.exitDeclare_pattern(self)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitDeclare_continuous" ):
-                return visitor.visitDeclare_continuous(self)
+            if hasattr( visitor, "visitDeclare_pattern" ):
+                return visitor.visitDeclare_pattern(self)
             else:
                 return visitor.visitChildren(self)
 
 
 
 
-    def declare_continuous(self):
+    def declare_pattern(self):
 
-        localctx = MyGrammerParser.Declare_continuousContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 16, self.RULE_declare_continuous)
+        localctx = MyGrammerParser.Declare_patternContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 16, self.RULE_declare_pattern)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 100
-            self.match(MyGrammerParser.CONTINUOUS)
+            self.match(MyGrammerParser.TUPLET)
             self.state = 101
             self.match(MyGrammerParser.OPEN_BRACKET)
             self.state = 103 
@@ -931,11 +931,11 @@ class MyGrammerParser ( Parser ):
             _la = self._input.LA(1)
             while True:
                 self.state = 102
-                self.expr()
+                self.expr_note()
                 self.state = 105 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << MyGrammerParser.ACCIDENTAL_KEY) | (1 << MyGrammerParser.CHORD) | (1 << MyGrammerParser.DOUBLE) | (1 << MyGrammerParser.FULL) | (1 << MyGrammerParser.HALF) | (1 << MyGrammerParser.QUARTER) | (1 << MyGrammerParser.EIGHTH) | (1 << MyGrammerParser.SIXTEENTH) | (1 << MyGrammerParser.IDENTIFIER))) != 0)):
+                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << MyGrammerParser.DOUBLE) | (1 << MyGrammerParser.FULL) | (1 << MyGrammerParser.HALF) | (1 << MyGrammerParser.QUARTER) | (1 << MyGrammerParser.EIGHTH) | (1 << MyGrammerParser.SIXTEENTH))) != 0)):
                     break
 
             self.state = 107
@@ -1162,11 +1162,11 @@ class MyGrammerParser ( Parser ):
                 return self.getTypedRuleContext(MyGrammerParser.ExprContext,i)
 
 
-        def declare_continuous(self, i:int=None):
+        def declare_pattern(self, i:int=None):
             if i is None:
-                return self.getTypedRuleContexts(MyGrammerParser.Declare_continuousContext)
+                return self.getTypedRuleContexts(MyGrammerParser.Declare_patternContext)
             else:
-                return self.getTypedRuleContext(MyGrammerParser.Declare_continuousContext,i)
+                return self.getTypedRuleContext(MyGrammerParser.Declare_patternContext,i)
 
 
         def declare_repeat_end(self):
@@ -1219,9 +1219,9 @@ class MyGrammerParser ( Parser ):
                     self.state = 128
                     self.expr()
                     pass
-                elif token in [MyGrammerParser.CONTINUOUS]:
+                elif token in [MyGrammerParser.TUPLET]:
                     self.state = 129
-                    self.declare_continuous()
+                    self.declare_pattern()
                     pass
                 else:
                     raise NoViableAltException(self)
@@ -1229,7 +1229,7 @@ class MyGrammerParser ( Parser ):
                 self.state = 132 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << MyGrammerParser.ACCIDENTAL_KEY) | (1 << MyGrammerParser.CHORD) | (1 << MyGrammerParser.CONTINUOUS) | (1 << MyGrammerParser.DOUBLE) | (1 << MyGrammerParser.FULL) | (1 << MyGrammerParser.HALF) | (1 << MyGrammerParser.QUARTER) | (1 << MyGrammerParser.EIGHTH) | (1 << MyGrammerParser.SIXTEENTH) | (1 << MyGrammerParser.IDENTIFIER))) != 0)):
+                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << MyGrammerParser.ACCIDENTAL_KEY) | (1 << MyGrammerParser.CHORD) | (1 << MyGrammerParser.TUPLET) | (1 << MyGrammerParser.DOUBLE) | (1 << MyGrammerParser.FULL) | (1 << MyGrammerParser.HALF) | (1 << MyGrammerParser.QUARTER) | (1 << MyGrammerParser.EIGHTH) | (1 << MyGrammerParser.SIXTEENTH) | (1 << MyGrammerParser.IDENTIFIER))) != 0)):
                     break
 
             self.state = 135

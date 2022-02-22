@@ -83,10 +83,10 @@ class AccidentalExpressionNode():
 
 
 class AccidentalNode():
-    def __init__(self, pitch, accidental, octave):
+    def __init__(self, pitch, accidental):
         self.pitch = pitch
         self.accidental = accidental
-        self.octave = octave
+  
 
 
 class DeclarePatternNode():
