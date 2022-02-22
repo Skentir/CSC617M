@@ -3,28 +3,29 @@ import random
 
 
 stream1 = stream.Score()
+stream1.append(tempo.MetronomeMark(number=68))
 part = stream.Part()
 
 d = duration.Duration(0.25 * 2 / 3)
 print(d)
 measure1 = stream.Measure()
-n1 = note.Note('C5')
+n1 = note.Note('B-6')
 n1.duration = d
-n2 = note.Note('D5')
+n2 = note.Note('A6')
 n2.duration = d
-n3 = note.Note('E5')
+n3 = note.Note('G#6')
 n3.duration = d
-n4 = note.Note('F5')
+n4 = note.Note('G6')
 n4.duration = d
-n5 = note.Note('G5')
+n5 = note.Note('F#6')
 n5.duration = d
-n6 = note.Note('F4')
+n6 = note.Note('F6')
 n6.duration = d
 n7 = note.Note('E5')
 n7.duration = d
-n8 = note.Note('F5')
+n8 = note.Note('D#5')
 n8.duration = d
-n9 = note.Note('G5')
+n9 = note.Note('D4')
 n9.duration = d
 measure1.append(n1)
 measure1.append(n2)
