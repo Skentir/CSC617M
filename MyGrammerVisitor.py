@@ -124,16 +124,16 @@ class MyGrammerVisitor(ParseTreeVisitor):
     # Visit a parse tree produced by MyGrammerParser#declare_measures.
     def visitDeclare_measures(self,
                               ctx: MyGrammerParser.Declare_measuresContext):
-        expr_list, repeat_start, repeat_end = None, None, None
+        expr_list, ending_start, ending_end, repeat_start, repeat_end = None, None, None, None, None
         for child_node in ctx.getChildren():
             node_type = child_node.__class__.__name__
             if node_type == 'Measure_blockContext':
-                expr_list, repeat_start, repeat_end = self.visitMeasure_block(
+                expr_list, ending_start, ending_end, repeat_start, repeat_end = self.visitMeasure_block(
                     child_node)
             else:
                 # print("Unknown Declare_measure", node_type)
                 pass
-        node = DeclareMeasuresNode(expr_list, repeat_start, repeat_end)
+        node = DeclareMeasuresNode(expr_list, ending_start, ending_end, repeat_start, repeat_end)
         return node
 
     # Visit a parse tree produced by MyGrammerParser#declare_measures_grand.

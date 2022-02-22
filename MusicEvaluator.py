@@ -38,19 +38,21 @@ def createChord(note_arr, val):
     new_chord = chord.Chord(arr)
     if val == "eighth":
         d = duration.Duration(type="eighth")
-        new_chord.quarterLength = d.quarterLength
+        new_chord.duration = d
     if val == "sixteenth":
-        new_chord.quarterLength = 0.25
+        d = duration.Duration(type="16th")
+        new_chord.duration = d
     if val == "thirtysecond":
-        new_chord.quarterLength = 0.125
+        d = duration.Duration(type="32nd")
+        new_chord.duration = d
     if val == "full":
         d = duration.Duration(type="whole")
-        new_chord.quarterLength = d.quarterLength
+        new_chord.duration = d
     if val == "double":
         new_chord.quarterLength = 2.0
     if val == "half":
         d = duration.Duration(type="half")
-        new_chord.quarterLength = d.quarterLength
+        new_chord.duration = d
     return new_chord
 
 
@@ -73,19 +75,21 @@ def createNote(num, accidental, pitch, val, dotted):
     #update note duration
     if val == "eighth":
         d = duration.Duration(type="eighth")
-        m_note.quarterLength = d.quarterLength
+        m_note.duration = d
     if val == "sixteenth":
-        m_note.quarterLength = 0.25
+        d = duration.Duration(type="16th")
+        m_note.duration = d
     if val == "thirtysecond":
-        m_note.quarterLength = 0.125
+        d = duration.Duration(type="32nd")
+        m_note.duration = d
     if val == "full":
         d = duration.Duration(type="whole")
-        m_note.quarterLength = d.quarterLength
+        m_note.duration = d
     if val == "double":
         m_note.quarterLength = 2.0
     if val == "half":
         d = duration.Duration(type="half")
-        m_note.quarterLength = d.quarterLength
+        m_note.duration = d
     if dotted:
         m_note.quarterLength = m_note.quarterLength + (m_note.quarterLength /
                                                        2)
@@ -335,6 +339,9 @@ class MusicEvaluator(MyGrammerVisitor):
                     if id[0] == "UP_START":
                         up_idx = right.index(id[1])
                     elif id[0] == "UP_END":
+                        print(id)
+                        print(up_idx)
+                        print(right.index(id[1]))
                         repeat.insertRepeatEnding(right, up_idx, right.index(id[1]), endingNumber=id[2])
                 for id in ending_id:
                     if id[0] == "DOWN_START":
@@ -382,6 +389,8 @@ class MusicEvaluator(MyGrammerVisitor):
                 # self.staffs.append(Staff(None, None, melodyVariable.getText()))
 
         self.music_stream.insert(0, right)
+        for i in right[1]:
+            print(i)
         if self.checkInst in self.grandInst:
             self.music_stream.insert(0, left)
 
@@ -626,10 +635,16 @@ class MusicEvaluator(MyGrammerVisitor):
                             raise Exception(
                                 "measureUp and measureDown pairs must both have repend",
                                 line, col)
-                        if repeat_times != int(expDown.repeat_end.INTEGER().getText()):
-                            line = expDown.repeat_end.INTEGER().getSymbol(
+                        repeat_times = None
+                        if expDown.repeat_end.INTEGER() is None:
+                            repeat_times = 1
+                        else:
+                            repeat_times = int(expDown.repeat_end.INTEGER().getText())
+                        if repeat_times != repeat_times:
+                            
+                            line = expDown.repeat_end.REPEND().getSymbol(
                             ).line
-                            col = expDown.repeat_end.INTEGER().getSymbol(
+                            col = expDown.repeat_end.REPEND().getSymbol(
                             ).column
                             raise Exception(
                                 "measureUp and measureDown pairs must both have the same number of repeats",
@@ -642,7 +657,7 @@ class MusicEvaluator(MyGrammerVisitor):
                         line = x.expressions[0].note_value.getSymbol().line - 1
                         col = x.expressions[0].note_value.getSymbol().column
                         raise Exception(
-                            "measureUp and measureDown pairs must both have repend",
+                            "measureUp and measureDown pairs must both have repstart",
                             line, col)
 
                 if x.repeat_end is None and isinstance(
@@ -1086,7 +1101,7 @@ class MusicEvaluator(MyGrammerVisitor):
                 #         line, col)
                 if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
                     cur_beats_up = cur_beats
-                else:
+                elif isinstance(x, DeclareMeasuresGrandNode) and x.direction == "DOWN":
                     if cur_beats != cur_beats_up:
                         if x.expressions[0].__class__.__name__ != "TerminalNodeImpl":
                             line = x.expressions[0].note_value.getSymbol().line - 1
@@ -1162,12 +1177,19 @@ class MusicEvaluator(MyGrammerVisitor):
             line = end.REPSTART().getSymbol().line
             col = end.REPSTART().getSymbol().column
             raise Exception("Invalid ending placement", line, col)
-        for idx, i in enumerate(self.ending_values):
-            if idx + 1 != i[0]:
+        end_value = 1
+        for i in self.ending_values:
+            if i[0] != 1 and i[0] != end_value:
                 line = i[1][0].getSymbol().line
                 col = i[1][0].getSymbol().column
                 raise Exception("Invalid ending number", line, col)
+            else:
+                if i[0] == 1:
+                    end_value = 2
+                else:
+                    end_value += 1
+        # self.music_stream.write('midi', fp='test.midi')
 
-        self.music_stream.write('midi', fp='test.midi')
-
+        sp = midi.realtime.StreamPlayer(self.music_stream)
+        sp.play()
         return "MIDI FILE"

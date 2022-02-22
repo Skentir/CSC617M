@@ -1,42 +1,42 @@
-bpM(150)
-instrument(Guitar)
+bpM(25)
+instrument(Piano)
 sample_note = quarter(G, 3)
 sample_chord = chord(quarter(e_maj), 4)
 
-staff (4,4) {
-    measure {
-        sample_chord
-        sample_chord
-        sample_note
-        sample_note
+staff (3,8) {
+    
+    measureUp{
+        eighth(B, 4)
+        sixteenth(rest)
+        sixteenth(rest)
+        sixteenth(E, 5)
+        sixteenth(rest)
     }
-    measure {
-        quarter(A, 3)*
-        eighth(A, 3)
-        half(rest)
+
+    measureDown{
+        sixteenth(E,2)
+        sixteenth(E,3)
+        sixteenth(E,4)
+        sixteenth(E, 4)
+        sixteenth(rest)
+        sixteenth(E,4)
     }
-    measure {
-        quarter(F, 3)
-        quarter(F, 3)
-        quarter(E, 3)
-        quarter(E, 3)
+
+    measureUp{
+        sixteenth(rest)
+        sixteenth(E, 5)
+        sixteenth(E, 6)
+        sixteenth(rest)
+        sixteenth(rest)
+        sixteenth(#D, 5)
     }
-    measure {
-        quarter(D, 3)
-        quarter(D, 3)
-        half(C, 3)
-    }
-    measure {
-        repstart
-        quarter(G, 3)
-        quarter(G, 3)
-        quarter(F, 3)
-        quarter(F, 3)
-    }
-    measure {
-        quarter(E, 3)
-        quarter(E, 3)
-        half(D, 3)
-        repend
+
+    measureDown{
+        sixteenth(E, 5)
+        sixteenth(rest)
+        sixteenth(rest)
+        sixteenth(#D, 5)
+        sixteenth(E, 5)
+        sixteenth(rest)
     }
 }

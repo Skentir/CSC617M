@@ -1,34 +1,38 @@
-bpm(300)
+bpm(40)
 instrument(Piano)
-sample_note = QuArTeR(A, 2)
-sample_kirs = quarter(A, 2)
-sampleChord2 = chord(half(A, 2), half(B, 4), half(C,5))
 
-staff (4,4) {
-    measure {
-        sample_kirs
-        quarter(B, 2)
-        chord(quarter(A, 2), quarter(B, 4), quarter(C, 5))
-        quarter(D, 2)
-    }
-    measure {
-        quarter(A, 2)
-        quarter(B, 2)
-        quarter(C, 2)
-        quarter(D, 2)
-        quarter(D, 2)
-    }
-}
+staff (3,8) {
 
-melody chorus {
-    staff (3,4) {
-        measure {
-            quarter(C, 2)
-            quarter(D, 2)
-            continuous {
-                quarter(C, 2)
-                quarter(D, 2)
-            }
-        }
+    measureUp {
+        eighth(B, 4)
+        sixteenth(rest)
+        sixteenth(E, 4)
+        sixteenth(E, 5)
+        sixteenth(rest)
+    }
+    measureDown {
+        sixteenth(E,2)
+        sixteenth(E,3)
+        sixteenth(E,4)
+        sixteenth(E, 4)
+        sixteenth(rest)
+        sixteenth(E, 4)
+    }
+
+    measureUp {
+        sixteenth(rest)
+        sixteenth(E, 5)
+        sixteenth(E, 6)
+        sixteenth(rest)
+        sixteenth(rest)
+        sixteenth(#D, 5)
+    }
+    measureDown {
+        sixteenth(E, 5)
+        sixteenth(rest)
+        sixteenth(rest)
+        sixteenth(#D, 5)
+        sixteenth(E, 5)
+        sixteenth(rest)
     }
 }
