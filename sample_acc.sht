@@ -1,12 +1,12 @@
 bpM(150)
 instrument(Guitar)
 sample_note = quarter(C, 2)
-
+sample_chord = chord(quarter(A,3), quarter(#A,3))
 staff (2,4) {
 
     measure {
-        sample_note
-        sample_note
+        sample_chord
+        sample_chord
     }
     measure {
         chord(quarter(C,2), quarter(C,2))

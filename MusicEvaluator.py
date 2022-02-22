@@ -870,10 +870,8 @@ class MusicEvaluator(MyGrammerVisitor):
                                         line, col)
                                 else:
                                     new_notes = []
-                                    for n in self.variables[
-                                            m_expr.getText()][1]:
-                                        new_notes.append(
-                                            (str(n[2]), str(n[1])))
+                                    for n in self.variables[m_expr.getText()][1]:
+                                        new_notes.append((str(n[3]), str(n[2]),str(n[1])))
                                     if isinstance(x, DeclareMeasuresGrandNode
                                                   ) and x.direction == "DOWN":
                                         measureDown.append(
