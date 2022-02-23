@@ -140,7 +140,7 @@ def createNote(num, accidental, pitch, val, dotted):
 
 def createFixedChord(note_value, num, fixed_chord, dotted):
     chords = ExprFixedChordNode.chords[fixed_chord.lower()]
-    chords = [chord + num for chord in chords]
+    chords = [chord[0] + str(chord[1] + int(str(num))) for chord in chords]
 
     new_chord = chord.Chord(chords)
     if note_value == "eighth":
