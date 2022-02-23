@@ -611,7 +611,9 @@ class MusicEvaluator(MyGrammerVisitor):
 
 
                 if x.repeat_start is not None:
-                    if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
+                    if isinstance(x, DeclareMeasuresNode):
+                        measureUp.leftBarline = bar.Repeat(direction='start')
+                    elif isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
                         measureUp.leftBarline = bar.Repeat(direction='start')
                     else:
                         measureDown.leftBarline = bar.Repeat(direction='start')
@@ -642,7 +644,10 @@ class MusicEvaluator(MyGrammerVisitor):
                             "Number of repeats must be less than or equal to 10",
                             line, col)
                     else:
-                        if isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
+                        if isinstance(x, DeclareMeasuresNode):
+                            measureUp.rightBarline = bar.Repeat(
+                                direction='end', times = repeat_times + 1)
+                        elif isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
                             measureUp.rightBarline = bar.Repeat(
                                 direction='end', times = repeat_times + 1)
                         else:
@@ -1175,7 +1180,7 @@ class MusicEvaluator(MyGrammerVisitor):
                     end_value = 2
                 else:
                     end_value += 1
-        self.music_stream.write('midi', fp='test.midi')
+        # self.music_stream.write('midi', fp='test.midi')
         self.music_stream.show('t')
         sp = midi.realtime.StreamPlayer(self.music_stream)
         sp.play()
