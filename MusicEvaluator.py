@@ -646,13 +646,13 @@ class MusicEvaluator(MyGrammerVisitor):
                     else:
                         if isinstance(x, DeclareMeasuresNode):
                             measureUp.rightBarline = bar.Repeat(
-                                direction='end', times = repeat_times + 1)
+                                direction='end', times = repeat_times)
                         elif isinstance(x, DeclareMeasuresGrandNode) and x.direction == "UP":
                             measureUp.rightBarline = bar.Repeat(
-                                direction='end', times = repeat_times + 1)
+                                direction='end', times = repeat_times)
                         else:
                             measureDown.rightBarline = bar.Repeat(
-                                direction='end', times = repeat_times + 1)
+                                direction='end', times = repeat_times)
                         if len(self.repeat_ctr) > 0:
                             del self.repeat_ctr[-1]
                     if isinstance(
