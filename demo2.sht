@@ -2,6 +2,7 @@ bpm(72)
 instrument(Piano)
 
 sampleNote = eighth(F, 4)
+sampleNote = half(A, 3)
 
 bflat = chord(eighth(B, 2),eighth(D, 3), eighth (F, 3), eighth (B, 3))
 sampleChord = chord(quarter(B, 3), quarter(B, 4))
